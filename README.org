@@ -1,0 +1,23 @@
+# -*- mode: org; -*-
+#+TITLE: README
+#+DESCRIPTION:
+#+KEYWORDS:
+#+AUTHOR:
+#+email:
+#+INFOJS_OPT:
+#+STARTUP:  content
+
+#+DATE: CREATED: <Wed Jul 28 20:20:51 EEST 2021>
+# Time-stamp: <Последнее обновление -- Wednesday July 28 20:27:29 EEST 2021>
+
+
+Это мои настройки для ~emacs~.
+
+#+begin_src shell
+
+  git clone https://github.com/abunbux/emacs-config.git ~/.emacs.d
+
+#+end_src
+
+После первого запуска ~emacs~ будет загружать необходимые пакеты, остальная часть
+будет загружена при первом использовании - например ~visual-regexp (vr/)~.

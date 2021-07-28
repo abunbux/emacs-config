@@ -1,0 +1,22 @@
+# -*- mode: snippet -*-
+# contributor : abunbux
+# name: lexical-binding-Time-stamp
+# key: lexical-binding-Time-stamp
+# key: lbts
+# --
+;; -*- lexical-binding: t -*-
+
+;;; ${1:created_date}
+;;; Time-stamp: <Последнее обновление -- Thursday March 28 18:55:13 EET 2019>
+
+
+
+;;; Commentary:
+
+
+;; Code:
+
+
+
+(provide '${2:file})
+;;; ${3:file} ends here

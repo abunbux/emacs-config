@@ -1,0 +1,11 @@
+# -*- mode: org; -*-
+#+TITLE: ${1:$$(file-name-base)}
+#+DESCRIPTION:
+#+KEYWORDS:
+#+AUTHOR:
+#+email:
+#+INFOJS_OPT:
+#+STARTUP:  content
+
+#+DATE: `(my/insert-current-date-time)`
+# Time-stamp: <>
