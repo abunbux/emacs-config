@@ -1,7 +1,7 @@
 ;;; smart-mode-line_init.el -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Friday November 27 23:7:47 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Thursday July 29 19:13:47 EEST 2021>
 
 
 
@@ -23,8 +23,8 @@
         sml/no-confirm-load-theme t)
   :config
   (message "Loading \"smart-mode-line\"")
-  ;; (setq sml/theme 'dark)
-  (setq sml/theme 'light)
+  (setq sml/theme 'dark)
+  ;; (setq sml/theme 'light)
   ;; (setq sml/theme 'respectful)
   (require 'smart-mode-line)
   (smart-mode-line-enable)

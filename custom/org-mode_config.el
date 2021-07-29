@@ -1,7 +1,7 @@
 ;;; org-mode_config.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Sat Feb 29 16:27:41 EET 2020>
-;;; Time-stamp: <Последнее обновление -- Sunday July 18 22:21:43 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Thursday July 29 19:43:12 EEST 2021>
 
 
 
@@ -30,6 +30,11 @@
   ;; Hide formatting characters like *, /, _
   (setq org-hide-emphasis-markers t)
 
+  (setq org-fontify-quote-and-verse-blocks t)
+  (setq org-startup-folded 'content)
+
+  ;; fontify code in code blocks
+  (setq org-src-fontify-natively t)
 
   :config
   (message "Loading \"org-mode\"")
@@ -97,14 +102,10 @@
   ;;   (my/hide-headers))
   ;; (advice-add 'org-edit-src-exit :after #'advice/org-edit-src-exit)
 
-
-  ;; (setq org-src-block-faces
-  ;;       '(("emacs-lisp" (:background "#EEE2FF"))
-  ;;         ("python" (:background "#e5ffb8"))))
-
   (font-lock-add-keywords 'org-mode
                           '(("^ *\\([-]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
 
 
   ;;   ;; ;; Настройка взята с https://zzamboni.org/post/beautifying-org-mode-in-emacs/
@@ -252,6 +253,18 @@
   ;; ;; ;; ;;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+  ;; (set-face-attribute 'org-document-title nil :weight 'bold :height 1.1)
+  ;; (dolist (face '((org-level-1 . 1.2)
+  ;;                 (org-level-2 . 1.1)
+  ;;                 (org-level-3 . 1.03)
+  ;;                 (org-level-4 . 1.0)
+  ;;                 (org-level-5 . 1.01)
+  ;;                 (org-level-6 . 1.01)
+  ;;                 (org-level-7 . 1.01)
+  ;;                 (org-level-8 . 1.01)))
+  ;;   ;; (set-face-attribute (car face) nil :font "Dejavu Sans Mono" :weight 'medium ))
+  ;;   ;; (set-face-attribute (car face) nil :font "Comic Sans MS" :weight 'medium ))
+  ;;   (set-face-attribute (car face) nil :font "Fantasque Sans Mono-14" :weight 'medium ))
   )
 
 

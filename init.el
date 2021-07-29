@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday July 22 21:17:6 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Thursday July 29 22:5:21 EEST 2021>
 
 
 
@@ -340,12 +340,14 @@
         (tool-bar-mode -1)
         (tooltip-mode -1)
         (setq-default initial-frame-alist   (quote    ((fullscreen . maximized))))
-        (require 'custom_section_gui)
+        ;; (require 'custom_section_gui)
+        (require 'poet-theme_section_gui)
         (message "Loading \"custom_section_gui\"")
         )
     (progn
       (menu-bar-mode       -1)
-      (require 'custom_section_tty)
+      (load-theme 'leuven t)
+      ;; (require 'custom_section_tty)
       (message "Loading \"custom_section_tty\"")))
 
 
@@ -608,3 +610,15 @@ and M-n or M-<down> for moving down."
 
              (message "        INITIALIZATION COMPLETED")
              (message "-------------------------------------------------------------------")) t)
+
+
+(use-package poet-theme
+  :ensure t
+  :config
+  (message "Loading \"poet-theme\"")
+  )
+
+
+(add-hook 'text-mode-hook
+          (lambda ()
+            (variable-pitch-mode 1)))
