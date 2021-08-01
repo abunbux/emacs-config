@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Wed May 22 21:44:32 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday December 3 21:38:30 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Thursday July 29 23:33:52 EEST 2021>
 
 
 
@@ -481,28 +481,28 @@
 
 
 
-(eval-after-load 'helm
-  (custom-set-faces
-   '(helm-source-header
-     ((t (:foreground "white" :background "#511a1a" :weight bold :height 150))))
-   '(helm-buffer-file         ((t (:foreground "White"))))
-   '(helm-buffer-directory    ((t (:foreground "LimeGreen"))))           ;LimeGreen #32cd32
-   '(helm-ff-denied           ((t (:foreground "red" :background nil :weight bold))))
-   '(helm-ff-directory        ((t (:foreground "LimeGreen"))))           ;LimeGreen #32cd32
-   '(helm-ff-dotted-directory ((t (:foreground "LimeGreen"))))
-   '(helm-ff-dotted-symlink-directory   ((((class color) (background dark)) :foreground "#8b0000"))) ;DarkRed
-   '(helm-ff-file             ((t (:foreground "gray75" :background nil))))
-   '(helm-ff-invalid-symlink            ((((class color) (background dark)) :foreground "black" :background "red")))
-   '(helm-ff-prefix           ((t (:foreground "red" :background nil :weight bold))))
-   '(helm-ff-symlink          ((t (:foreground "blue" :background "DarkOliveGreen"))))
-   '(helm-grep-match          ((t (:foreground "#511a1a"))))
-   '(helm-match               ((t (:foreground "#511a1a"))))
-   '(helm-match-item          ((t (:foreground "#511a1a" :weight bold))))
-   '(helm-non-file-buffer     ((t (:foreground "red"))))
-   '(helm-selection           ((t (:background "#575757" :weight bold))))   ;:foreground "DarkCyan" :background "grey34"
-   '(helm-swoop-line-number-face ((t (:foreground "GreenYellow"))))
-   '(helm-visible-mark        ((t (:foreground "black" :background "goldenrod"))))
-   ))
+;; (eval-after-load 'helm
+;;   (custom-set-faces
+;;    '(helm-source-header
+;;      ((t (:foreground "white" :background "#511a1a" :weight bold :height 150))))
+;;    '(helm-buffer-file         ((t (:foreground "White"))))
+;;    '(helm-buffer-directory    ((t (:foreground "LimeGreen"))))           ;LimeGreen #32cd32
+;;    '(helm-ff-denied           ((t (:foreground "red" :background nil :weight bold))))
+;;    '(helm-ff-directory        ((t (:foreground "LimeGreen"))))           ;LimeGreen #32cd32
+;;    '(helm-ff-dotted-directory ((t (:foreground "LimeGreen"))))
+;;    '(helm-ff-dotted-symlink-directory   ((((class color) (background dark)) :foreground "#8b0000"))) ;DarkRed
+;;    '(helm-ff-file             ((t (:foreground "gray75" :background nil))))
+;;    '(helm-ff-invalid-symlink            ((((class color) (background dark)) :foreground "black" :background "red")))
+;;    '(helm-ff-prefix           ((t (:foreground "red" :background nil :weight bold))))
+;;    '(helm-ff-symlink          ((t (:foreground "blue" :background "DarkOliveGreen"))))
+;;    '(helm-grep-match          ((t (:foreground "#511a1a"))))
+;;    '(helm-match               ((t (:foreground "#511a1a"))))
+;;    '(helm-match-item          ((t (:foreground "#511a1a" :weight bold))))
+;;    '(helm-non-file-buffer     ((t (:foreground "red"))))
+;;    '(helm-selection           ((t (:background "#575757" :weight bold))))   ;:foreground "DarkCyan" :background "grey34"
+;;    '(helm-swoop-line-number-face ((t (:foreground "GreenYellow"))))
+;;    '(helm-visible-mark        ((t (:foreground "black" :background "goldenrod"))))
+;;    ))
 
 
 

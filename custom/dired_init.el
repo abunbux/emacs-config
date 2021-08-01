@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Mon May 27 11:52:22 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Monday December 7 19:48:19 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Sunday August 1 20:47:29 EEST 2021>
 
 
 
@@ -162,8 +162,7 @@ Version 2019-01-18"
          )
 
   :init
-  (setq delete-by-moving-to-trash     t            ; ?  ; Move deleted stuff to trash
-        dired-dwim-target             t                 ; Move files between split panels
+  (setq dired-dwim-target             t                 ; Move files between split panels
         dired-recursive-copies        'always
         ;; чтобы можно было непустые директории удалять...
         ;; 'top means ask for each directory at the top level

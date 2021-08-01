@@ -1,7 +1,7 @@
 ;;; custom_section_gui.el.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Friday March 6 15:45:14 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Friday July 30 20:0:9 EEST 2021>
 
 
 
@@ -119,6 +119,30 @@
  ;; ----------------------------------------------------------------
 
  '(vertical-border ((nil (:foreground "#93a1a1"))))
+
+
+
+ '(org-block ((t (:foreground "#B8B8B8" :background "#003542"))))
+ '(org-block-background ((t (:background "#FFFFE0"))))
+ '(org-block-begin-line ((t (:overline "#A7A6AA" :foreground "#555555" :background "#003542"))))
+ '(org-block-end-line ((t (:extend t :underline "#A7A6AA" :foreground "#555555" :background "#003542"))))
+
+
+ '(org-code ((t (:foreground "#006400" :background "#FDFFF7"))))
+ '(org-default ((t (:foreground "#333333" :background "#FFFFFF"))))
+ '(org-document-info ((t (:foreground "brown"))))
+ '(org-document-info-keyword ((t (:inherit shadow :slant italic))))
+ '(org-document-title ((t (:weight bold :height 1.1))))
+
+ ;; '(org-level-1 ((t (:foreground "#446350"))))
+ ;; '(org-level-2 ((t (:foreground "#446350"))))
+ ;; '(org-level-3 ((t (:foreground "#446350"))))
+ ;; '(org-level-4 ((t (:foreground "#446350"))))
+ ;; '(org-level-5 ((t (:foreground "#446350"))))
+ ;; '(org-level-6 ((t (:foreground "#446350"))))
+ ;; '(org-level-7 ((t (:foreground "#446350"))))
+ ;; '(org-level-8 ((t (:foreground "#446350"))))
+
  )
 
 

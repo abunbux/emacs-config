@@ -1,7 +1,7 @@
 ;;;tramp_init.el -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Thu May 16 09:53:18 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Saturday November 28 15:51:18 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Sunday August 1 21:57:14 EEST 2021>
 
 
 
@@ -18,13 +18,13 @@
   ;;; my/sudired (C-d s d)
   (defun my/sudired ()
     (interactive)
-    (dired "/su::/"))
+    (dired "/sudo::/"))
 
   ;; my/su-find-file ("C-d s f")
   (defun my/su-find-file (file-name)
     "Like find file, but opens the file as root."
     (interactive "FSu Find File: ")
-    (let ((tramp-file-name (concat "/su::" (expand-file-name file-name))))
+    (let ((tramp-file-name (concat "/sudo::" (expand-file-name file-name))))
       (find-file tramp-file-name)))
 
   ;; my/find-alternative-file-with-su ("C-d s a")
@@ -35,7 +35,7 @@
                                        default-directory)))
           (pt (point)))
       (setq bname (or (file-remote-p bname 'localname)
-                      (concat "/su::" bname)))
+                      (concat "/sudo::" bname)))
       (cl-flet ((server-buffer-done
                  (buffer &optional for-killing)
                  nil))
@@ -72,17 +72,17 @@ This function is suitable to add to `find-file-hook'."
          )
   :init
 
-  ;; (defvar tramp-backup-directory "~/.emacs.d/cache/tramp-backups/")
-  ;; (setq tramp-backup-directory-alist `((".*" . ,tramp-backup-directory)))
-  ;; (when (not (file-exists-p tramp-backup-directory))
-  ;;   (make-directory tramp-backup-directory t))
+  (defvar tramp-backup-directory "~/.emacs.d/cache/tramp-backups/")
+  (setq tramp-backup-directory-alist `((".*" . ,tramp-backup-directory)))
+  (when (not (file-exists-p tramp-backup-directory))
+    (make-directory tramp-backup-directory t))
 
-  ;; (setq tramp-persistency-file-name "~/.emacs.d/cache/tramp")
+  (setq tramp-persistency-file-name "~/.emacs.d/cache/tramp")
 
   :config
   (message "Loading \"tramp\"")
 
-  ;; (require 'tramp)
+  (require 'tramp)
 
   (setq tramp-default-method        "ssh"
         ;; password-cache-expiry       nil
@@ -96,9 +96,15 @@ This function is suitable to add to `find-file-hook'."
                '("\\`localhost\\'"
                  "\\`root\\'"
                  "su"
+                 "sudo"
                  ""
                  "abunbux"
-                 "ssh")))
+                 "ssh"))
+  )
+
+(require 'tramp-sh nil t)
+(setf tramp-ssh-controlmaster-options (concat "-o SendEnv TRAMP=yes " tramp-ssh-controlmaster-options))
+
 
 
 (provide 'tramp_init)

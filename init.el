@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday July 29 22:5:21 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Sunday August 1 22:57:15 EEST 2021>
 
 
 
@@ -27,9 +27,6 @@
 
 (when (system-is-linux)
   (load "~/.emacs.d/lisp/benchmark-init.el"
-        'no-error nil 'no-suffix))
-(when (system-is-windows)
-  (load "C:/Documents and Settings/abunb/AppData/Roaming/.emacs.d/lisp/benchmark-init.el"
         'no-error nil 'no-suffix))
 
 
@@ -320,50 +317,36 @@
 (require 'company_init)
 (require 'which-key_init)
 (require 'amx_init)
-(require 'yasnippet_init)
+;; (require 'yasnippet_init)
 
-(defun my/after-init-load ()
-  (require 'smart-mode-line_init)
-  (require 'backup-each-save_init)
-  (require 'search_replace_config)
-  (require 'vimish-fold_init)
+(require 'smart-mode-line_init)
+(require 'search_replace_config)
+;;   (require 'vimish-fold_init)
 
-  (require 'defun_bind)
+(require 'defun_bind)
 
-  (require 'easy-menu_init)
+(require 'easy-menu_init)
 
-  ;; стартуем emacs на весь экран и устанавливаем цветовую тему в зависимости от того,
-  ;; где работаем - гуй или терминал
-  (if (display-graphic-p)
-      (progn
-        (set-scroll-bar-mode    'right)
-        (tool-bar-mode -1)
-        (tooltip-mode -1)
-        (setq-default initial-frame-alist   (quote    ((fullscreen . maximized))))
-        ;; (require 'custom_section_gui)
-        (require 'poet-theme_section_gui)
-        (message "Loading \"custom_section_gui\"")
-        )
+
+
+
+;; стартуем emacs на весь экран и устанавливаем цветовую тему в зависимости от того,
+;; где работаем - гуй или терминал
+(if (display-graphic-p)
     (progn
-      (menu-bar-mode       -1)
-      (load-theme 'leuven t)
-      ;; (require 'custom_section_tty)
-      (message "Loading \"custom_section_tty\"")))
-
-
-  ;; ;; (menu-bar-mode       -1)
-  ;; (when (fboundp 'set-scroll-bar-mode)
-  ;;   (set-scroll-bar-mode    'right))
-  ;; (when (fboundp 'tool-bar-mode)
-  ;;   (tool-bar-mode -1))
-  ;; (when (fboundp 'tooltip-mode)
-  ;;   (tooltip-mode -1))
-
-  )
-
-
-(add-hook 'after-init-hook 'my/after-init-load)
-
+      (set-scroll-bar-mode    'right)
+      (tool-bar-mode -1)
+      (tooltip-mode -1)
+      (setq-default initial-frame-alist   (quote    ((fullscreen . maximized))))
+      (require 'custom_section_gui)
+      ;; (require 'poet-theme_section_gui)
+      (message "Loading \"custom_section_gui\"")
+      )
+  (progn
+    (menu-bar-mode       -1)
+    (load-theme 'leuven t)
+    ;; (require 'custom_section_tty)
+    (message "Loading \"custom_section_tty\"")))
 
 
 
@@ -454,7 +437,6 @@ and M-n or M-<down> for moving down."
 
 (require 'loccur_init)
 (require 'hide-lines_init)
-;; (require 'tramp_init)               ; built-in
 
 
 (require 'web-mode_init)
@@ -467,7 +449,8 @@ and M-n or M-<down> for moving down."
 (require 'multiple-cursors_init)
 
 
-(require 'shell_init)
+;; (require 'shell_init)
+;; (require 'tramp_init)
 
 
 
@@ -512,20 +495,20 @@ and M-n or M-<down> for moving down."
 
 
 
+(require 'backup-each-save_init)
 
 
 ;;; helm-backup.el
 (use-package helm-backup
   :ensure t
-  ;; :defer 5
+  :defer 7
   :init
-  (require 'helm-backup)
   (bind-key "C-c g h" 'helm-backup)
   (setq helm-backup-excluded-entries '("\\/cache/"))
   :config
   (message "Loading \"helm-backup\"")
+  ;; (require 'helm-backup)
   (add-hook 'after-save-hook 'helm-backup-versioning))
-
 
 
 
@@ -577,18 +560,9 @@ and M-n or M-<down> for moving down."
 
 
 
-;; (add-hook 'compilation-mode-hook 'winnow-mode)
+(add-hook 'compilation-mode-hook 'winnow-mode)
 
 
-
-
-
-;;; add-to-list ****************************************************
-;; http://ergoemacs.org/emacs/emacs_auto-activate_a_major-mode.html
-;;
-;; auto-mode-alist - встроенная переменная.
-;; Её значение - список ассоциаций. Каждый ключ представляет собой строку регулярных выражений,
-;; а значение - название режима.
 
 
 (use-package conf-mode
@@ -599,6 +573,15 @@ and M-n or M-<down> for moving down."
   (bind-key "RET" 'newline global-map)
   (bind-key "C-j" 'newline-and-indent global-map)
   )
+
+
+
+;;; add-to-list ****************************************************
+;; http://ergoemacs.org/emacs/emacs_auto-activate_a_major-mode.html
+;;
+;; auto-mode-alist - встроенная переменная.
+;; Её значение - список ассоциаций. Каждый ключ представляет собой строку регулярных выражений,
+;; а значение - название режима.
 
 
 ;;; Finalization
@@ -612,13 +595,13 @@ and M-n or M-<down> for moving down."
              (message "-------------------------------------------------------------------")) t)
 
 
-(use-package poet-theme
-  :ensure t
-  :config
-  (message "Loading \"poet-theme\"")
-  )
+;; (use-package poet-theme
+;;   :ensure t
+;;   :config
+;;   (message "Loading \"poet-theme\"")
+;;   )
 
 
-(add-hook 'text-mode-hook
-          (lambda ()
-            (variable-pitch-mode 1)))
+;; (add-hook 'text-mode-hook
+;;           (lambda ()
+;;             (variable-pitch-mode 1)))

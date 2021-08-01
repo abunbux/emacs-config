@@ -1,7 +1,7 @@
 ;;; ivy_init.el -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Fri May 17 14:23:40 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Tuesday February 25 17:47:47 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Sunday August 1 23:16:23 EEST 2021>
 
 
 
@@ -186,6 +186,8 @@
                    (t counsel-grep-base-command))))
     (setq counsel-grep-base-command cmd))
   (setq counsel-grep-post-action-hook '(recenter))
+
+
   )
 
 

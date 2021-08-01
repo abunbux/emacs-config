@@ -1,7 +1,7 @@
 ;;; setq_built-in_config.el  -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Сб мая 11 07:59:33 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Sunday July 18 17:3:31 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Sunday August 1 23:38:48 EEST 2021>
 
 
 
@@ -47,6 +47,7 @@
       blink-matching-paren-distance     nil
       compilation-always-kill           t
       completion-ignore-case            t
+      delete-by-moving-to-trash         t
       echo-keystrokes                   0.4
       enable-recursive-minibuffers      t
       inhibit-x-resources               t
@@ -776,7 +777,8 @@
 
 ;; Подсвечивать выделенные текст, между двумя метками
 (add-hook 'after-init-hook 'transient-mark-mode)
-
+(setq transient-history-file "~/.emacs.d/cache/history.el")
+(setq-default transient-history-file "~/.emacs.d/cache/history.el")
 
 (defalias 'yes-or-no-p #'y-or-n-p)
 

@@ -1,7 +1,7 @@
 ;;; history_config.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;;
-;;; Time-stamp: <Последнее обновление -- Monday February 24 23:41:58 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Sunday August 1 20:45:56 EEST 2021>
 
 
 
@@ -59,7 +59,6 @@
 (setq backup-by-copying             t
       backup-by-copying-when-linked t
       delete-auto-save-files        nil
-      delete-by-moving-to-trash     t
       delete-old-versions           t
       kept-new-versions             40
       kept-old-versions             10

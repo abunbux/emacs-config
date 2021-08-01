@@ -1,7 +1,7 @@
 ;;; org-mode_config.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Sat Feb 29 16:27:41 EET 2020>
-;;; Time-stamp: <Последнее обновление -- Thursday July 29 19:43:12 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Saturday July 31 22:5:12 EEST 2021>
 
 
 
@@ -73,8 +73,16 @@
 
   (bind-key "M-h o t"   'org-toggle-link-display org-mode-map)
 
-  (require 'org-bullets)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  ;; (require 'org-bullets)
+
+  (use-package org-bullets
+    :ensure nil
+    :init
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+    :config
+    (message "Loading \"org-bullets\"")
+    )
+
 
 
   (defvar my/org-src-block-faces nil)
@@ -110,50 +118,52 @@
 
   ;;   ;; ;; Настройка взята с https://zzamboni.org/post/beautifying-org-mode-in-emacs/
   ;;   ;; ;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  ;;   (let* ((variable-tuple
-  ;;           (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
-  ;;                 ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-  ;;                 ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-  ;;                 ((x-list-fonts "Verdana")         '(:font "Verdana"))
-  ;;                 ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-  ;;                 (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-  ;;          (base-font-color     (face-foreground 'default nil 'default))
-  ;;          (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+  (let* ((variable-tuple
+          (cond
+           ;; ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+           ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+           ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+           ((x-list-fonts "Verdana")         '(:font "Verdana"))
+           ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+           (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+         (base-font-color     (face-foreground 'default nil 'default))
+         ;; (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+         (headline           `(:inherit default :weight bold)))
 
-  ;;     (custom-theme-set-faces
-  ;;      'user
-  ;;      `(org-level-8 ((t (,@headline ,@variable-tuple))))
-  ;;      `(org-level-7 ((t (,@headline ,@variable-tuple))))
-  ;;      `(org-level-6 ((t (,@headline ,@variable-tuple))))
-  ;;      `(org-level-5 ((t (,@headline ,@variable-tuple))))
-  ;;      `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.001))))
-  ;;      `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.01))))
-  ;;      `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.02))))
-  ;;      `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.03))))
-  ;;      `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+    (custom-theme-set-faces
+     'user
+     `(org-level-8 ((t (,@headline ,@variable-tuple))))
+     `(org-level-7 ((t (,@headline ,@variable-tuple))))
+     `(org-level-6 ((t (,@headline ,@variable-tuple))))
+     `(org-level-5 ((t (,@headline ,@variable-tuple))))
+     `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.00001))))
+     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.0001))))
+     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.001 :foreground "peru"))))
+     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.01 :foreground "RosyBrown"))))
+     `(org-document-title ((t (,@headline ,@variable-tuple :height 0.95 :underline nil))))))
 
-  ;;   (custom-theme-set-faces
-  ;;    'user
-  ;;    '(variable-pitch ((t (:family "ETBembo" :height 125 :weight thin))))
-  ;;    '(fixed-pitch ((t ( :family "Fira Code Retina" :height 110)))))
+  (custom-theme-set-faces
+   'user
+   '(variable-pitch ((t (:family "ETBembo" :height 125 :weight thin))))
+   '(fixed-pitch ((t ( :family "Fira Code Retina" :height 110)))))
 
-  ;;   (custom-theme-set-faces
-  ;;    'user
-  ;;    '(org-block ((t (:inherit fixed-pitch))))
-  ;;    '(org-code ((t (:inherit (shadow fixed-pitch)))))
-  ;;    '(org-document-info ((t (:foreground "dark orange"))))
-  ;;    '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-  ;;    '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-  ;;    '(org-link ((t (:foreground "royal blue" :underline t))))
-  ;;    '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-  ;;    '(org-property-value ((t (:inherit fixed-pitch))) t)
-  ;;    '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-  ;;    '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
-  ;;    '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-  ;;    '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+  (custom-theme-set-faces
+   'user
+   '(org-block ((t (:inherit fixed-pitch))))
+   '(org-code ((t (:inherit (shadow fixed-pitch)))))
+   '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+   '(org-document-info ((t (:foreground "dark orange"))))
+   '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+   '(org-link ((t (:foreground "royal blue" :underline t))))
+   '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-property-value ((t (:inherit fixed-pitch))) t)
+   '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+   '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+   '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+   '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 
-  ;;   (add-hook 'org-mode-hook 'variable-pitch-mode)
-  ;;   (add-hook 'org-mode-hook 'visual-line-mode)
+  (add-hook 'org-mode-hook 'variable-pitch-mode)
+  (add-hook 'org-mode-hook 'visual-line-mode)
 
   ;; ;; ;;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -253,7 +263,7 @@
   ;; ;; ;; ;;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
-  ;; (set-face-attribute 'org-document-title nil :weight 'bold :height 1.1)
+
   ;; (dolist (face '((org-level-1 . 1.2)
   ;;                 (org-level-2 . 1.1)
   ;;                 (org-level-3 . 1.03)
@@ -264,7 +274,9 @@
   ;;                 (org-level-8 . 1.01)))
   ;;   ;; (set-face-attribute (car face) nil :font "Dejavu Sans Mono" :weight 'medium ))
   ;;   ;; (set-face-attribute (car face) nil :font "Comic Sans MS" :weight 'medium ))
-  ;;   (set-face-attribute (car face) nil :font "Fantasque Sans Mono-14" :weight 'medium ))
+  ;;   (set-face-attribute (car face) nil :font "Fantasque Sans Mono" :weight 'medium ))
+
+
   )
 
 
