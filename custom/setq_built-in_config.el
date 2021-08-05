@@ -1,7 +1,7 @@
 ;;; setq_built-in_config.el  -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Сб мая 11 07:59:33 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Sunday August 1 23:38:48 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Thursday August 5 19:45:6 EEST 2021>
 
 
 
@@ -12,7 +12,8 @@
 
 
 (setq browse-url-browser-function   'browse-url-generic
-	  browse-url-generic-program    "google-chrome-stable"
+	  ;; browse-url-generic-program    "google-chrome-stable"
+	  browse-url-generic-program    "firefox-bin"
 	  user-full-name                "abunbux"
 	  user-mail-address             "abunbux@gmail.com")
 
