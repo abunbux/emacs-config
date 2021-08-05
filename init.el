@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Sunday August 1 22:57:15 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Thursday August 5 20:13:4 EEST 2021>
 
 
 
@@ -317,9 +317,129 @@
 (require 'company_init)
 (require 'which-key_init)
 (require 'amx_init)
-;; (require 'yasnippet_init)
+(require 'yasnippet_init)
 
-(require 'smart-mode-line_init)
+;; (require 'smart-mode-line_init)
+
+
+(use-package all-the-icons
+  :ensure t
+  ;; :defer t
+  :config
+  (message "Loading \"all-the-icons\"")
+  (unless (find-font (font-spec :name "all-the-icons"))
+	(all-the-icons-install-fonts t))
+  )
+
+(use-package all-the-icons-dired
+  :ensure t
+  :hook
+  (dired-mode . all-the-icons-dired-mode)
+  :config
+  (message "Loading \"all-the-icons-dired\"")
+  )
+
+(use-package all-the-icons-ivy
+  :defer t
+  :ensure t
+  ;; :after ivy
+  :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)
+  ;; :custom
+  ;; (all-the-icons-ivy-buffer-commands '() "Don't use for buffers.")
+  :config
+  (message "Loading \"all-the-icons-ivy\"")
+  ;; (all-the-icons-ivy-setup)
+  )
+
+
+(use-package doom-modeline
+  :ensure t
+  ;; :after (all-the-icons)
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (message "Loading \"doom-modeline\"")
+  (setq doom-modeline-buffer-file-name-style 'auto)
+  ;; Отображать ли значки в строке режима.
+  ;; При использовании режима сервера в графическом интерфейсе необходимо явно установить значение.
+  (setq doom-modeline-icon (display-graphic-p))
+  (setq doom-modeline-major-mode-icon t)
+  )
+
+
+(use-package dashboard
+  :ensure t
+  :config
+  (message "Loading \"dashboard\"")
+  (setq dashboard-items '((recents  . 10)
+                          (bookmarks . 5)
+                          ;; (agenda . 5)
+                          (registers . 5)))
+  (setq dashboard-banner-logo-title "Ну что, пошалим?!")
+  ;; Set the banner:
+  ;; Value can be
+  ;; 'official which displays the official emacs logo
+  ;; 'logo which displays an alternative emacs logo
+  ;; 1, 2 or 3 which displays one of the text banners
+  ;; "path/to/your/image.png" or "path/to/your/text.txt" which displays whatever image/text you would prefer
+  ;; (setq dashboard-startup-banner [VALUE])
+  (setq dashboard-center-content t)
+  (setq dashboard-set-heading-icons nil)
+  (setq dashboard-set-file-icons nil)
+  (setq dashboard-week-agenda nil)
+  (setq dashboard-item-names '(("Recent Files:" . "Последние открытые файлы:")
+                               ("Bookmarks:"    . "Закладки:")
+                               ("Agenda for today:" . "Расписание на сегодня:")
+                               ("Agenda for the coming week:" . "Расписание на грядущую неделю:")
+                               ("Registers:"    . "Регистры:")
+                               ))
+  (setq dashboard-set-init-info t)
+  (setq dashboard-set-navigator t)
+  ;; Format: "(icon title help action face prefix suffix)"
+  (setq dashboard-navigator-buttons
+        `(;; line1
+          ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+            "abunbux on github"
+            "https://github.com/abunbux"
+            (lambda (&rest _) (browse-url "https://github.com/abunbux")))
+           (,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
+            "home"
+            "~/"
+            (lambda (&rest _) (dired "~/")))
+           (,(all-the-icons-fileicon "emacs" :height 1.1 :v-adjust 0.0)
+            "Config"
+            "~/.emacs.d/init.el"
+            (lambda (&rest _) (find-file "~/.emacs.d/init.el")))
+
+
+
+          ;;  ("★" "Star" "Show stars" (lambda (&rest _) (show-stars)) warning)
+          ;;  ("?" "" "?/h" #'show-help nil "<" ">"))
+          ;; ;; line 2
+          ;; ((,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
+          ;;   "home"
+          ;;   "~/"
+          ;;   (lambda (&rest _) (browse-url "homepage")))
+          ;;  ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error))))
+)))
+
+  ;; (setq dashboard-navigator-buttons
+  ;;       `(((,nil
+  ;;   	    "Homepage"
+  ;;   	    "Open Homepage Org File"
+  ;;   	    (lambda (&rest _ ) (find-file "~/.emacs.d/README.org")))
+  ;;          (,nil
+  ;;   	    "Config"
+  ;;   	    "Open File init"
+  ;;   	    (lambda (&rest _ ) (find-file "~/.emacs.d/init.el")))
+  ;;          (,nil
+  ;;   	    "Theme"
+  ;;   	    "Open File init"
+  ;;   	    (lambda (&rest _ ) (find-file "~/.emacs.d/lisp/init-ui.el")))
+  ;;          )))
+  (dashboard-setup-startup-hook)
+  )
+
+
 (require 'search_replace_config)
 ;;   (require 'vimish-fold_init)
 
@@ -338,16 +458,17 @@
       (tool-bar-mode -1)
       (tooltip-mode -1)
       (setq-default initial-frame-alist   (quote    ((fullscreen . maximized))))
-      (require 'custom_section_gui)
+      ;; (require 'custom_section_gui)
+      (load-theme 'abunbux t)
       ;; (require 'poet-theme_section_gui)
       (message "Loading \"custom_section_gui\"")
       )
   (progn
     (menu-bar-mode       -1)
+    ;; (load-theme 'abunbux t)
     (load-theme 'leuven t)
     ;; (require 'custom_section_tty)
     (message "Loading \"custom_section_tty\"")))
-
 
 
 
@@ -359,20 +480,15 @@
 ;;; duplicate-thing.el
 (use-package duplicate-thing
   :ensure t
-  :bind (
-         :map global-map
-         ("C-x <down>" . duplicate-thing)
-         )
-  :config
-  (message "Loading \"duplicate-thing\""))
+  :bind (:map global-map ("C-x <down>" . duplicate-thing))
+  :config (message "Loading \"duplicate-thing\""))
 
 
 
 ;;; elmacro.el
 (use-package elmacro
   :ensure t
-  :hook
-  (after-init . elmacro-mode)
+  :hook (after-init . elmacro-mode)
   :config
   (elmacro-mode)
   (message "Loading \"elmacro-mode\""))
@@ -384,8 +500,7 @@
 ;; up M-<up>" or M-<down>"
 (use-package move-lines
   :quelpa (move-lines :fetcher github :repo "targzeta/move-lines")
-  :hook
-  (after-init . move-lines-binding)
+  :hook (after-init . move-lines-binding)
   :config
   (message "Loading \"move-lines\"")
   ;; (move-lines-binding)
@@ -415,9 +530,7 @@ and M-n or M-<down> for moving down."
 ;;; hydra.el
 (use-package hydra
   :ensure t
-  :config
-  (message "Loading \"hydra\"")
-
+  :config (message "Loading \"hydra\"")
   (require 'hydra-dired_config)       ; переделать под себя
   (require 'hydra-help_config)
   (require 'hydra-highlight_config)
@@ -605,3 +718,21 @@ and M-n or M-<down> for moving down."
 ;; (add-hook 'text-mode-hook
 ;;           (lambda ()
 ;;             (variable-pitch-mode 1)))
+
+
+
+;; (use-package tree-sitter
+;;   :ensure t
+;;   :config
+;;   ;; (message "Loading \"conf-mode\"")
+;;   (require 'tree-sitter)
+;;   (require 'tree-sitter-hl)
+
+;;   (use-package tree-sitter-langs
+;;     :ensure t
+;;     :config
+;;     ;; (message "Loading \"conf-mode\"")
+;;     ;; (require 'tree-sitter-langs)
+;;     )
+
+;;   )
