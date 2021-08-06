@@ -1,7 +1,7 @@
 ;;; setq_built-in_config.el  -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Сб мая 11 07:59:33 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday August 5 19:45:6 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Friday August 6 0:14:24 EEST 2021>
 
 
 
@@ -27,7 +27,11 @@
       ;; split-width-threshold         140
       split-width-threshold             40)
 
-
+;; C-code
+;; Не сжимать кеши шрифтов во время сборки мусора.
+;; Это нужно при «doom-modeline», если есть проблема с притормаживанием.
+;; Я ничего не заметил, но на всякий пожарный случай поставил.
+(setq inhibit-compacting-font-caches    t)
 
 ;; Quiet Startup
 (setq inhibit-default-init              t
@@ -90,17 +94,28 @@
 
 
 
-(setq auto-window-vscroll               nil
-      mouse-drag-copy-region            nil
+;; Mouse & Smooth Scroll
+;; Scroll one line at a time (less "jumpy" than defaults)
+(when (display-graphic-p)
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . hscroll))
+        ;; mouse-wheel-scroll-amount '(1 ((shift) . 1))
+        mouse-wheel-scroll-amount-horizontal 1
+        mouse-wheel-progressive-speed nil))
+
+(setq scroll-step 1
+      scroll-margin 0
+      ;; scroll-margin 3
+      scroll-conservatively 100000
+      ;; scroll-conservatively 10000
+      auto-window-vscroll nil
+      scroll-preserve-screen-position t)
+
+
+
+(setq mouse-drag-copy-region            nil
       mouse-yank-at-point               t
       mouse-wheel-follow-mouse          t
-      mouse-wheel-follow-mouse          't
-      mouse-wheel-progressive-speed     nil
-      mouse-wheel-scroll-amount         '(1 ((shift) . 1))
-      scroll-conservatively             10000
-      scroll-margin                     3
-      scroll-preserve-screen-position   t
-      scroll-step                       1)
+      mouse-wheel-follow-mouse          't)
 
 
 (setq           sentence-end
