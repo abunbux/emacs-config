@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday August 5 20:13:4 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Friday August 6 13:53:20 EEST 2021>
 
 
 
@@ -352,22 +352,47 @@
   )
 
 
+
 (use-package doom-modeline
   :ensure t
   ;; :after (all-the-icons)
   :hook (after-init . doom-modeline-mode)
+  ;; :custom (doom-modeline-minor-modes t)
   :config
   (message "Loading \"doom-modeline\"")
-  (setq doom-modeline-buffer-file-name-style 'auto)
+  ;; (setq doom-modeline-buffer-file-name-style 'auto)
+  (setq doom-modeline-buffer-file-name-style 'buffer-name)
   ;; Отображать ли значки в строке режима.
   ;; При использовании режима сервера в графическом интерфейсе необходимо явно установить значение.
   (setq doom-modeline-icon (display-graphic-p))
-  (setq doom-modeline-major-mode-icon t)
+  ;; (setq doom-modeline-major-mode-icon t)
+  ;; (setq doom-modeline-major-mode-color-icon t)
+  (setq doom-modeline-indent-info t)
+  ;; (doom-modeline-set-timemachine-modeline)
+
+  ;; Как указать специфический шрифт:
+  ;; (setq doom-modeline-height 1)
+  ;; (set-face-attribute 'mode-line nil :family "Noto Sans" :height 120)
+  ;; (set-face-attribute 'mode-line-inactive nil :family "Noto Sans" :height 110)
+  ;; или
+  (custom-set-faces
+   '(mode-line ((t (:family "Noto Sans" :height 1.0))))
+   '(mode-line-inactive ((t (:family "Noto Sans" :height 0.95)))))
+  )
+
+(use-package highlight-parentheses
+  :ensure t
+  :hook (prog-mode . highlight-parentheses-mode)
+  :config
+  (message "Loading \"highlight-parentheses\"")
+  (custom-set-faces
+   '(highlight-parentheses-highlight ((t (:weight bold  :height 1.0 :background "#1d2014" )))))
   )
 
 
 (use-package dashboard
   :ensure t
+  :custom-face (dashboard-heading ((t (:inherit (font-lock-string-face bold)))))
   :config
   (message "Loading \"dashboard\"")
   (setq dashboard-items '((recents  . 10)
@@ -409,18 +434,8 @@
             "Config"
             "~/.emacs.d/init.el"
             (lambda (&rest _) (find-file "~/.emacs.d/init.el")))
-
-
-
-          ;;  ("★" "Star" "Show stars" (lambda (&rest _) (show-stars)) warning)
-          ;;  ("?" "" "?/h" #'show-help nil "<" ">"))
-          ;; ;; line 2
-          ;; ((,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
-          ;;   "home"
-          ;;   "~/"
-          ;;   (lambda (&rest _) (browse-url "homepage")))
-          ;;  ("⚑" nil "Show flags" (lambda (&rest _) (message "flag")) error))))
-)))
+           )
+          ))
 
   ;; (setq dashboard-navigator-buttons
   ;;       `(((,nil
