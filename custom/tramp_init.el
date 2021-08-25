@@ -1,7 +1,7 @@
 ;;;tramp_init.el -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Thu May 16 09:53:18 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Sunday August 1 21:57:14 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Thursday August 19 23:41:36 EEST 2021>
 
 
 
@@ -13,29 +13,30 @@
 
 
 (use-package tramp
+  :defer t
   :preface
 
   ;;; my/sudired (C-d s d)
   (defun my/sudired ()
     (interactive)
-    (dired "/sudo::/"))
+    (dired "/su::/"))
 
   ;; my/su-find-file ("C-d s f")
   (defun my/su-find-file (file-name)
     "Like find file, but opens the file as root."
     (interactive "FSu Find File: ")
-    (let ((tramp-file-name (concat "/sudo::" (expand-file-name file-name))))
+    (let ((tramp-file-name (concat "/su::" (expand-file-name file-name))))
       (find-file tramp-file-name)))
 
-  ;; my/find-alternative-file-with-su ("C-d s a")
+  ;; my/su-find-alternative-file ("C-d s a")
   ;; Открывает уже открытый файл с правами root (su)
-  (defun my/find-alternative-file-with-su ()
+  (defun my/su-find-alternative-file ()
     (interactive)
     (let ((bname (expand-file-name (or buffer-file-name
                                        default-directory)))
           (pt (point)))
       (setq bname (or (file-remote-p bname 'localname)
-                      (concat "/sudo::" bname)))
+                      (concat "/su::" bname)))
       (cl-flet ((server-buffer-done
                  (buffer &optional for-killing)
                  nil))
@@ -65,11 +66,11 @@ This function is suitable to add to `find-file-hook'."
 
 
   :defer t
-  :bind (
-         ("C-d s d" . my/sudired)
-         ("C-d s f" . my/su-find-file)
-         ("C-d s a" . my/find-alternative-file-with-su)
-         )
+  ;; :bind (
+  ;;        ("C-d s d" . my/sudired)
+  ;;        ("C-d s f" . my/su-find-file)
+  ;;        ("C-d s a" . my/su-find-alternative-file)
+  ;;        )
   :init
 
   (defvar tramp-backup-directory "~/.emacs.d/cache/tramp-backups/")
@@ -80,9 +81,9 @@ This function is suitable to add to `find-file-hook'."
   (setq tramp-persistency-file-name "~/.emacs.d/cache/tramp")
 
   :config
-  (message "Loading \"tramp\"")
+  (message "Loading built-in \"tramp\"")
 
-  (require 'tramp)
+  ;; (require 'tramp)
 
   (setq tramp-default-method        "ssh"
         ;; password-cache-expiry       nil

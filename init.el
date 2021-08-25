@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Friday August 6 13:53:20 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Wednesday August 25 8:45:23 EEST 2021>
 
 
 
@@ -9,50 +9,18 @@
 
 ;;; Code:
 
-(setq file-name-handler-alist       nil
-      message-log-max               t
-      gc-cons-threshold             most-positive-fixnum
-      ;; gc-cons-percentage            0.6
-      auto-window-vscroll           nil)
-
-
-;; System-type definition
-(defun system-is-linux()
-  (string-equal system-type "gnu/linux"))
-(defun system-is-windows()
-  (string-equal system-type "windows-nt"))
-
-
-
-
-(when (system-is-linux)
-  (load "~/.emacs.d/lisp/benchmark-init.el"
-        'no-error nil 'no-suffix))
-
-
-
-
-(defvar file-name-handler-alist-old file-name-handler-alist)
-
-
-(add-hook 'after-init-hook
-          `(lambda ()
-             (setq file-name-handler-alist file-name-handler-alist-old
-                   ;; gc-cons-threshold    (* 6 1024 1024)
-                   ;; gc-cons-percentage   0.1
-                   ;; garbage-collection-messages t
-                   )
-             (garbage-collect)) t)
-
-
+;; (debug-on-entry 'package-initialize)
 
 (add-hook 'emacs-startup-hook
           (lambda ()
+            (message "-----------------------------------------------")
             (message "Emacs ready in %s with %d garbage collections."
                      (format "%.2f seconds"
                              (float-time
                               (time-subtract after-init-time before-init-time)))
-                     gcs-done)))
+                     gcs-done)
+            (message "-----------------------------------------------")
+            ))
 
 
 
@@ -62,9 +30,38 @@
 
 ;;; выводим в буфер сообщений
 (message "start .init loading")
+(message "---------------------------------------------------------")
 
 
 (defconst emacs-start-time (current-time))
+
+
+(load "~/.emacs.d/lisp/benchmark-init.el")
+
+
+
+(setq file-name-handler-alist       nil
+      message-log-max               t
+      ;; gc-cons-threshold             most-positive-fixnum
+      gc-cons-threshold             64000000
+      gc-cons-percentage            0.6
+      )
+
+
+(defvar file-name-handler-alist-old file-name-handler-alist)
+(message "file-name-handler-alist-old == file-name-handler-alist")
+
+(add-hook 'after-init-hook
+          `(lambda ()
+             (setq file-name-handler-alist file-name-handler-alist-old
+                   ;; gc-cons-threshold    (* 6 1024 1024)
+                   gc-cons-percentage   0.1
+                   garbage-collection-messages t
+                   )
+             (message "file-name-handler-alist == file-name-handler-alist-old")
+             (garbage-collect)) t)
+
+
 
 
 (eval-and-compile
@@ -74,14 +71,18 @@
   (add-to-list 'load-path (locate-user-emacs-file "themes/"))
   (add-to-list 'custom-theme-load-path (locate-user-emacs-file "themes/")))
 
-
-
-
-
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (condition-case nil
     (load custom-file)
   (error (with-temp-file custom-file)))
+
+
+
+
+
+(when (not (file-directory-p "~/.emacs.d/cache"))
+  (make-directory "~/.emacs.d/cache")
+  (message "make directory \"~/.emacs.d/cache\"" ))
 
 
 
@@ -130,12 +131,12 @@
     (message "EMACS install quelpa-use-package.el")
     (message "-------------------------------------------------------------------")
     ;; `use-package' и `quelpa' ставятся как зависимости `quelpa-use-package'
-    ;; (package-install 'use-package)
-    ;; (message "EMACS install use-package.el")
     ;; (message "-------------------------------------------------------------------")
 
 
-    ))
+    )
+  )
+
 
 (use-package use-package
   :init
@@ -170,7 +171,7 @@
     "Filter the *Packages* buffer by status."
     (interactive
      (list (completing-read
-            "Status: " '("new" "installed" "dependency" "obsolete"))))
+            "Status: " '("new" "installed" "dependency" "obsolete" "built-in"))))
     (package-menu-filter (concat "status:" status)))
 
   (bind-key "s" #'package-menu-filter-by-status   package-menu-mode-map)
@@ -192,11 +193,11 @@
 
   (use-package quelpa
     :init
-    (setq     quelpa-checkout-melpa-p       t)
-    (setq      quelpa-upgrade-p              nil)
-    (setq      quelpa-update-melpa-p         nil)
-    (setq      quelpa-self-upgrade-p         nil)
-    (setq      quelpa-stable-p               t)
+    (setq       quelpa-checkout-melpa-p       t)
+    (setq       quelpa-upgrade-p              nil)
+    (setq       quelpa-update-melpa-p         nil)
+    (setq       quelpa-self-upgrade-p         nil)
+    (setq       quelpa-stable-p               t)
     :config
     (message "Loading \"quelpa\""))
   ;; (add-to-list 'quelpa-melpa-recipe-stores "/path/to/custom/recipe/dir")
@@ -209,6 +210,32 @@
   :ensure t
   :config
   (message "Loading \"benchmark-init\""))
+
+
+
+;; GCMH - the Garbage Collector Magic Hack
+;; Применяйте скрытую стратегию сборки мусора,
+;; чтобы свести к минимуму вмешательство сборщика мусора в действия пользователя.
+(use-package gcmh
+  :ensure t
+  :init
+  (gcmh-mode 1)
+  :config
+  (message "Loading \"gcmh\"")
+  (setq gcmh-verbose t))
+
+
+;; The idea of this simple package was taken from this Reddit post,
+;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/,
+;; all it does is temporary sets file-name-handler-alist to nil (or fnhh-initial-alist customizable)
+;; and restores the value on /’emacs-startup-hook/ (customizable fn-hook),
+;; so it can (sometimes) speed up emacs startup time a little bit.
+(use-package fnhh
+  :quelpa
+  (fnhh :repo "a13/fnhh" :fetcher github :stable nil)
+  :config
+  (message "Loading \"fnhh\"")
+  (fnhh-mode 1))
 
 
 
@@ -280,7 +307,282 @@
 
 
 (require 'setq_built-in_config)
-(require 'history_config)
+
+;; (use-package simple
+;;   :defer 0.1
+;;   :custom
+;;   (global-visual-line-mode   t)             ; simple.el
+;;   (line-number-mode          t)             ; simple.el
+;;   (column-number-mode        t)             ; simple.el
+;;   (size-indication-mode      t)             ; simple.el
+;;   (blink-matching-paren-distance nil)       ; simple.el
+
+;;   (kill-whole-line  t)                   ; simple.el
+;;   (kill-ring-max    1000)                ; simple.el
+
+;;   (next-line-add-newlines   nil)             ; simple.el
+;;   (save-interprogram-paste-before-kill  t)   ; simple.el
+
+;;   ;; Allows navigation through the mark ring by doing C-u C-SPC once, then C-SPC
+;;   ;; C-SPC.  instead of C-u C-SPC C-u C-SPC C-u C-SPC ...
+;;   (set-mark-command-repeat-pop  t)           ; simple.el
+
+
+;;   (interprogram-cut-function (and (fboundp #'x-select-text)         ; simple.el
+;;                                   #'x-select-text))
+;;   (interprogram-paste-function (and (fboundp #'x-selection-value)   ; simple.el
+;;                                     #'x-selection-value))
+
+;;   :bind
+;;   (:map ctl-x-map
+;;         ("C-k" . kill-region)
+;;         ("K" . kill-current-buffer))
+;;   :config
+;;   (message "Loading built-in YASESCAPE34PROTECTGUARDsimpleYASESCAPE34PROTECTGUARD")
+;;   (toggle-truncate-lines 1)                 ; проверить - работает или нет!!!!
+;;   )
+
+
+
+
+;;; files
+(use-package files
+  :hook
+  (before-save . delete-trailing-whitespace)
+  (before-save . force-backup-of-buffer)
+
+  :custom
+  (auto-save-default                nil)
+  (auto-save-list-file-prefix       nil)
+  (backup-by-copying                t)
+  (backup-by-copying-when-linked    t)
+  ;; (confirm-kill-emacs               #'yes-or-no-p)
+  ;; (confirm-nonexistent-file-or-buffer nil)
+  (delete-old-versions              t)
+  (delete-auto-save-files           nil)
+  (kept-new-versions                40)
+  (kept-old-versions                10)
+  (require-final-newline            t)
+  (version-control                  t)
+
+  :config
+  (message "Loading buit-in \"files\"")
+  (setq-default find-file-visit-truename t)
+
+  (when (not (file-directory-p "~/.emacs.d/cache/backup"))
+    (make-directory "~/.emacs.d/cache/backup")
+    (message "make directory \"~/.emacs.d/cache/backup\""))
+  (if (file-directory-p "~/.emacs.d/cache/backup")
+      (setq backup-directory-alist '(("" . "~/.emacs.d/cache/backup"))))
+
+
+  ;; (when (not (file-directory-p "~/.emacs.d/cache/auto-save-list/"))
+  ;;   (make-directory "~/.emacs.d/cache/auto-save-list/")
+  ;;   (message "make directory \"~/.emacs.d/cache/auto-save-list/\""))
+  ;; (if (file-directory-p "~/.emacs.d/cache/auto-save-list/")
+  ;;     (setq auto-save-list-file-prefix "~/.emacs.d/cache/auto-save-list/"))
+
+
+  ;; force-backup-of-buffer ()
+  (defun force-backup-of-buffer ()
+    ;; Make a special "per session" backup at the first save of each
+    ;; emacs session.
+    (when (not buffer-backed-up)
+      ;; Override the default parameters for per-session backups.
+      (let ((backup-directory-alist '(("" . "~/.emacs.d/cache/backup/per-session")))
+            (kept-new-versions 10))
+        (backup-buffer)))
+    ;; Make a "per save" backup on each save.  The first save results in
+    ;; both a per-session and a per-save backup, to keep the numbering
+    ;; of per-save backups consistent.
+    (let ((buffer-backed-up nil))
+      (backup-buffer)))
+
+  (fset 'display-startup-echo-area-message #'ignore)    ; subr.el
+
+  ;; (defalias 'yes-or-no-p #'y-or-n-p)                    ; subr.el
+  (advice-add 'yes-or-no-p :override #'y-or-n-p)
+
+  (defadvice yes-or-no-p (around hack-exit (prompt))
+    (if
+        (string= prompt "Active processes exist; kill them and exit anyway? ") t
+      ad-do-it))
+
+
+  (defun my/y-or-n-p-optional (prompt)
+    "Prompt the user for a yes or no response, but accept any non-y
+response as a no."
+    (let ((query-replace-map (copy-keymap query-replace-map)))
+      (define-key query-replace-map [t] 'skip)
+      (y-or-n-p prompt)))
+
+
+  )
+
+
+
+;;; saveplace
+(use-package saveplace
+  :ensure nil
+  :hook
+  (after-init . save-place-mode)
+
+  :init
+  (setq save-place-file   "~/.emacs.d/cache/saved-places"
+        save-place-forget-unreadable-files    t)
+  ;; (setq-default save-place    t)
+
+  :config
+  (message "Loading built-in \"saveplace\"")
+  ;; (save-place-mode t)
+  )
+
+
+
+;;; savehist
+(use-package savehist
+  :ensure nil
+  :hook
+  (after-init . savehist-mode)
+  :init
+  (setq savehist-additional-variables
+        '(compile-history
+          command-history
+          extended-command-history
+          file-name-history
+          global-mark-ring
+          ido-file-history
+          helm-grep-history
+          helm-M-x-input-history
+          kill-ring
+          log-edit-comment-ring
+          mark-ring
+          minibuffer-history
+          regexp-history
+          read-expression-history
+          regexp-search-ring
+          ring
+          savehist-minibuffer-history-variables
+          search
+          search-ring
+          set-variable-value-history
+          shell-command-history)
+        savehist-save-minibuffer-history  t
+        savehist-autosave-interval        60)
+  (setq savehist-file     "~/.emacs.d/cache/savehist")
+  :config
+  (message "Loading built-in \"savehist\"")
+  ;; (savehist-mode 1)
+  )
+
+
+
+;;; delsel
+(use-package delsel
+  :bind
+  (:map mode-specific-map
+        ("C-g" . minibuffer-keyboard-quit)) ; C-c C-g always quits minubuffer
+
+  :init
+  (delete-selection-mode      -1)                                               ; delsel.el
+
+  :config
+  (message "Loading built-in \"delsel\"")
+  (bind-key
+   (kbd "d")
+   (lambda (arg)
+     (interactive "p")
+     (if (region-active-p)
+         (delete-active-region)
+       (self-insert-command arg))))
+
+  (bind-key
+   (kbd "w")
+   (lambda (arg)
+     (interactive "p")
+     (if (region-active-p)
+         (call-interactively 'kill-ring-save)
+       (self-insert-command arg))))
+
+  (bind-key
+   (kbd "c")
+   (lambda (arg)
+     (interactive "p")
+     (if (region-active-p)
+         (let ((str (buffer-substring-no-properties
+                     (region-beginning)
+                     (region-end))))
+           (goto-char (region-end))
+           (insert "\n" str))
+       (self-insert-command arg))))
+  )
+
+
+
+;;; recentf
+(use-package recentf
+  :ensure nil
+  :bind (
+         :map global-map
+         ("C-c r r" . recentf-open-files)
+         )
+  :hook
+  (after-init . recentf-mode)
+  :init
+  (setq-default recentf-save-file "~/.emacs.d/cache/recentf")
+  (setq
+   recentf-auto-cleanup    "11:00pm"
+   recentf-exclude         '("^/var/folders\\.*"
+                             "COMMIT_EDITMSG\\'"
+                             ".*-autoloads\\.el\\'"
+                             "\\.loaddefs\\.el"
+                             "[/\\]\\.elpa/"
+                             "ido.last"
+                             "\\/cache/")
+   recentf-keep            '(file-remote-p file-readable-p)
+   recentf-max-menu-items  100
+   recentf-max-saved-items 200)
+
+  :config
+  (message "Loading built-in \"recentf\""))
+
+
+
+;; paren
+(use-package paren
+  :ensure nil
+  :hook
+  (after-init . show-paren-mode)
+  :config
+  (message "Loading built-in \"paren\"")
+  (setq show-paren-style  'expression
+        ;; show-paren-style 'mixed
+        show-paren-when-point-inside-paren t
+        show-paren-when-point-in-periphery t
+        show-paren-delay                  0))
+
+
+
+;;; bookmark.el
+;; По-умолчанию команды "bookmark" работают с клавишами ("C-x r {M, b, l, m}")
+(use-package bookmark
+  :ensure nil
+  :preface
+  ;; Put Last-Selected Bookmark on Top
+  ;; Using this method you’ll find frequently used bookmarks easily
+  (defadvice bookmark-jump (after bookmark-jump activate)
+    (let ((latest (bookmark-get-bookmark bookmark)))
+      (setq bookmark-alist (delq latest bookmark-alist))
+      (add-to-list 'bookmark-alist latest)))
+
+  :config
+  (message "Loading built-in \"bookmark\"")
+  (setq-default bookmark-default-file "~/.emacs.d/cache/bookmarks")
+  ;; автоматически сохранять закладки в файл
+  (setq bookmark-save-flag t)
+  )
+
+
 (require 'abbrev_init)              ; built-in
 ;; (require 'encryption_config)     ; built-in
 
@@ -311,24 +613,25 @@
 
 (require 'ivy_init)
 (require 'helm_init)
-
+;; (require 'ido_init)
 
 (require 'smartparens_init)
 (require 'company_init)
+
 (require 'which-key_init)
 (require 'amx_init)
 (require 'yasnippet_init)
 
 ;; (require 'smart-mode-line_init)
 
-
+
 (use-package all-the-icons
   :ensure t
   ;; :defer t
   :config
   (message "Loading \"all-the-icons\"")
-  (unless (find-font (font-spec :name "all-the-icons"))
-	(all-the-icons-install-fonts t))
+  ;; (unless (find-font (font-spec :name "all-the-icons"))
+  ;; (all-the-icons-install-fonts t))
   )
 
 (use-package all-the-icons-dired
@@ -339,25 +642,31 @@
   (message "Loading \"all-the-icons-dired\"")
   )
 
-(use-package all-the-icons-ivy
-  :defer t
-  :ensure t
-  ;; :after ivy
-  :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)
-  ;; :custom
-  ;; (all-the-icons-ivy-buffer-commands '() "Don't use for buffers.")
-  :config
-  (message "Loading \"all-the-icons-ivy\"")
-  ;; (all-the-icons-ivy-setup)
-  )
+;; (use-package all-the-icons-ivy
+;;   :defer t
+;;   :ensure t
+;;   :hook
+;;   (after-init . all-the-icons-ivy-setup)
+;;   ;; :custom
+;;   ;; (all-the-icons-ivy-buffer-commands '() "Don't use for buffers.")
+;;   :config
+;;   (message "Loading \"all-the-icons-ivy\"")
+;;   ;; (all-the-icons-ivy-setup)
+;;   )
 
 
 
+
+
+
 (use-package doom-modeline
   :ensure t
   ;; :after (all-the-icons)
   :hook (after-init . doom-modeline-mode)
   ;; :custom (doom-modeline-minor-modes t)
+  :custom-face
+  (mode-line ((t (:family "Noto Sans" :height 0.95))))
+  (mode-line-inactive ((t (:family "Noto Sans" :height 0.95))))
   :config
   (message "Loading \"doom-modeline\"")
   ;; (setq doom-modeline-buffer-file-name-style 'auto)
@@ -370,93 +679,112 @@
   (setq doom-modeline-indent-info t)
   ;; (doom-modeline-set-timemachine-modeline)
 
+  (setq doom-modeline-height 15)
+
   ;; Как указать специфический шрифт:
   ;; (setq doom-modeline-height 1)
   ;; (set-face-attribute 'mode-line nil :family "Noto Sans" :height 120)
   ;; (set-face-attribute 'mode-line-inactive nil :family "Noto Sans" :height 110)
-  ;; или
-  (custom-set-faces
-   '(mode-line ((t (:family "Noto Sans" :height 1.0))))
-   '(mode-line-inactive ((t (:family "Noto Sans" :height 0.95)))))
   )
 
+
+
+
 (use-package highlight-parentheses
   :ensure t
   :hook (prog-mode . highlight-parentheses-mode)
+  :custom-face
+  (highlight-parentheses-highlight ((t (:weight bold  :height 1.0 :background "#1d2014" ))))
   :config
   (message "Loading \"highlight-parentheses\"")
-  (custom-set-faces
-   '(highlight-parentheses-highlight ((t (:weight bold  :height 1.0 :background "#1d2014" )))))
   )
 
 
-(use-package dashboard
-  :ensure t
-  :custom-face (dashboard-heading ((t (:inherit (font-lock-string-face bold)))))
-  :config
-  (message "Loading \"dashboard\"")
-  (setq dashboard-items '((recents  . 10)
-                          (bookmarks . 5)
-                          ;; (agenda . 5)
-                          (registers . 5)))
-  (setq dashboard-banner-logo-title "Ну что, пошалим?!")
-  ;; Set the banner:
-  ;; Value can be
-  ;; 'official which displays the official emacs logo
-  ;; 'logo which displays an alternative emacs logo
-  ;; 1, 2 or 3 which displays one of the text banners
-  ;; "path/to/your/image.png" or "path/to/your/text.txt" which displays whatever image/text you would prefer
-  ;; (setq dashboard-startup-banner [VALUE])
-  (setq dashboard-center-content t)
-  (setq dashboard-set-heading-icons nil)
-  (setq dashboard-set-file-icons nil)
-  (setq dashboard-week-agenda nil)
-  (setq dashboard-item-names '(("Recent Files:" . "Последние открытые файлы:")
-                               ("Bookmarks:"    . "Закладки:")
-                               ("Agenda for today:" . "Расписание на сегодня:")
-                               ("Agenda for the coming week:" . "Расписание на грядущую неделю:")
-                               ("Registers:"    . "Регистры:")
-                               ))
-  (setq dashboard-set-init-info t)
-  (setq dashboard-set-navigator t)
-  ;; Format: "(icon title help action face prefix suffix)"
-  (setq dashboard-navigator-buttons
-        `(;; line1
-          ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
-            "abunbux on github"
-            "https://github.com/abunbux"
-            (lambda (&rest _) (browse-url "https://github.com/abunbux")))
-           (,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
-            "home"
-            "~/"
-            (lambda (&rest _) (dired "~/")))
-           (,(all-the-icons-fileicon "emacs" :height 1.1 :v-adjust 0.0)
-            "Config"
-            "~/.emacs.d/init.el"
-            (lambda (&rest _) (find-file "~/.emacs.d/init.el")))
-           )
-          ))
+
+;; (use-package centaur-tabs
+;;   :ensure t
+;;   :demand
+;;   :hook
+;;   (dired-mode . centaur-tabs-local-mode)
+;;   :config
+;;   (message "Loading \"centaur-tabs\"")
+;;   (centaur-tabs-mode t)
+;;   (centaur-tabs-headline-match)
+;;   (setq centaur-tabs-style "bar")
+;;   (setq centaur-tabs-set-icons t)
+;;   (setq centaur-tabs-plain-icons t)
+;;   (setq centaur-tabs-gray-out-icons 'buffer)
+;;   (setq centaur-tabs-set-bar 'left)
+;;   (setq centaur-tabs-set-close-button nil)
+;;   (centaur-tabs-change-fonts "arial" 1.0)
 
-  ;; (setq dashboard-navigator-buttons
-  ;;       `(((,nil
-  ;;   	    "Homepage"
-  ;;   	    "Open Homepage Org File"
-  ;;   	    (lambda (&rest _ ) (find-file "~/.emacs.d/README.org")))
-  ;;          (,nil
-  ;;   	    "Config"
-  ;;   	    "Open File init"
-  ;;   	    (lambda (&rest _ ) (find-file "~/.emacs.d/init.el")))
-  ;;          (,nil
-  ;;   	    "Theme"
-  ;;   	    "Open File init"
-  ;;   	    (lambda (&rest _ ) (find-file "~/.emacs.d/lisp/init-ui.el")))
-  ;;          )))
-  (dashboard-setup-startup-hook)
-  )
+;; )
+
+
+;; (use-package dashboard
+;;   :ensure t
+;;   :custom-face (dashboard-heading ((t (:inherit (font-lock-string-face bold)))))
+;;   ;; :init
+;;   ;; (defun my/dashboard-banner ()
+;;   ;;   """Set a dashboard banner including information on package initialization
+;;   ;;  time and garbage collections."""
+;;   ;;   (setq dashboard-banner-logo-title
+;;   ;;         (format "Emacs ready in %.2f seconds with %d garbage collections."
+;;   ;;                 (float-time (time-subtract after-init-time before-init-time)) gcs-done)))
+;;   ;; (add-hook 'after-init-hook 'dashboard-refresh-buffer)
+;;   ;; (add-hook 'dashboard-mode-hook 'my/dashboard-banner)
+
+;;   :config
+;;   (message "Loading \"dashboard\"")
+;;   (setq dashboard-items '((recents  . 10)
+;;                           (bookmarks . 5)
+;;                           ;; (agenda . 5)
+;;                           (registers . 5)))
+;;   (setq dashboard-banner-logo-title "Ну что, пошалим?!")
+;;   ;; Set the banner:
+;;   ;; Value can be
+;;   ;; 'official which displays the official emacs logo
+;;   ;; 'logo which displays an alternative emacs logo
+;;   ;; 1, 2 or 3 which displays one of the text banners
+;;   ;; "path/to/your/image.png" or "path/to/your/text.txt" which displays whatever image/text you would prefer
+;;   ;; (setq dashboard-startup-banner [VALUE])
+;;   ;; (setq dashboard-startup-banner 'logo)
+;;   (setq dashboard-center-content t)
+;;   (setq dashboard-set-heading-icons nil)
+;;   (setq dashboard-set-file-icons nil)
+;;   (setq dashboard-week-agenda nil)
+;;   (setq dashboard-item-names '(("Recent Files:" . "Последние открытые файлы:")
+;;                                ("Bookmarks:"    . "Закладки:")
+;;                                ("Agenda for today:" . "Расписание на сегодня:")
+;;                                ("Agenda for the coming week:" . "Расписание на грядущую неделю:")
+;;                                ("Registers:"    . "Регистры:")
+;;                                ))
+;;   (setq dashboard-set-init-info t)
+;;   (setq dashboard-set-navigator t)
+;;   ;; Format: "(icon title help action face prefix suffix)"
+;;   (setq dashboard-navigator-buttons
+;;         `(;; line1
+;;           ((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust 0.0)
+;;             "abunbux on github"
+;;             "https://github.com/abunbux"
+;;             (lambda (&rest _) (browse-url "https://github.com/abunbux")))
+;;            (,(all-the-icons-octicon "home" :height 1.1 :v-adjust 0.0)
+;;             "home"
+;;             "~/"
+;;             (lambda (&rest _) (dired "~/")))
+;;            (,(all-the-icons-fileicon "emacs" :height 1.1 :v-adjust 0.0)
+;;             "Config"
+;;             "~/.emacs.d/init.el"
+;;             (lambda (&rest _) (find-file "~/.emacs.d/init.el")))
+;;            )
+;;           ))
+;;   (dashboard-setup-startup-hook)
+;;   )
+
 
 
 (require 'search_replace_config)
-;;   (require 'vimish-fold_init)
+(require 'vimish-fold_init)
 
 (require 'defun_bind)
 
@@ -464,7 +792,7 @@
 
 
 
-
+
 ;; стартуем emacs на весь экран и устанавливаем цветовую тему в зависимости от того,
 ;; где работаем - гуй или терминал
 (if (display-graphic-p)
@@ -472,6 +800,10 @@
       (set-scroll-bar-mode    'right)
       (tool-bar-mode -1)
       (tooltip-mode -1)
+      ;; (global-tab-line-mode)
+      ;; Масштабируемые шрифты в графическом интерфейсе
+      ;; C-x C-+ or C-x C--
+      (setq scalable-fonts-allowed t)                          ; C-code (emacs)
       (setq-default initial-frame-alist   (quote    ((fullscreen . maximized))))
       ;; (require 'custom_section_gui)
       (load-theme 'abunbux t)
@@ -487,11 +819,57 @@
 
 
 
+
+;; hl-line.el
+(use-package hl-line
+  :ensure nil
+  :hook
+  (after-init . global-hl-line-mode)
+  :custom-face
+  (hl-line ((((class color) (min-colors 89)) (:inherit t :background "#3d4753" :foreground nil))))
+  (hl-tags-face ((((class color) (min-colors 89)) (:background "#FEFCAE"))))
+
+  :config
+  (message "Loading \"hl-line\""))
+
+
+
+;;; hi-lock.el
+;; built-in
+;; !!! Подправить `face'  !!!
+;; 	* `hi-lock-mode'		* `highlight-lines-matching-regexp'
+;; 	* `hi-lock-find-patterns'	* `unhighlight-regexp'
+;; 	* `highlight-regexp'		* `highlight-phrase'
+;;	* `hi-lock-write-interactive-patterns'
+(use-package hi-lock
+  :ensure nil
+  :commands (hi-lock-write-interactive-patterns
+             unhighlight-regexp
+             highlight-regexp
+             highlight-phrase
+             highlight-lines-matching-regexp
+             hi-lock-find-patterns)
+  :bind (
+         ;; ("C-x w h" . hi-lock-mode)
+         ("C-x w u" . unhighlight-regexp)
+         ("C-x w r" . highlight-regexp)
+         ("C-x w p" . highlight-phrase)
+         ("C-x w l" . highlight-lines-matching-regexp)
+         ("C-x w i" . hi-lock-find-patterns)
+         ("C-x w b" . hi-lock-write-interactive-patterns)
+         )
+  ;; :hook
+  ;; (after-init . global-hi-lock-mode)
+  :config
+  (message "Loading built-in \"hi-lock\""))
+
+
+
 (require 'highlight_init)
 
 
 
-
+
 ;;; duplicate-thing.el
 (use-package duplicate-thing
   :ensure t
@@ -511,6 +889,7 @@
 
 
 
+
 ;;; move-lines.el
 ;; up M-<up>" or M-<down>"
 (use-package move-lines
@@ -542,20 +921,73 @@ and M-n or M-<down> for moving down."
 
 
 
-;;; hydra.el
-(use-package hydra
-  :ensure t
-  :config (message "Loading \"hydra\"")
-  (require 'hydra-dired_config)       ; переделать под себя
-  (require 'hydra-help_config)
-  (require 'hydra-highlight_config)
-  (require 'hydra-info_config)
-  (require 'hydra-insert-unicode_config)
-  (require 'hydra-multiple-cursors_config)
-  (require 'hydra-vimish-fold_config)
-  (require 'hydra-rectangle_config)
-  )
+;; ;;; hydra.el
+;; (use-package hydra
+;;   :ensure t
+;;   :config (message "Loading \"hydra\"")
+;;   (require 'hydra-dired_config)       ; переделать под себя
+;;   (require 'hydra-help_config)
+;;   (require 'hydra-highlight_config)
+;;   (require 'hydra-info_config)
+;;   (require 'hydra-insert-unicode_config)
+;;   (require 'hydra-multiple-cursors_config)
+;;   (require 'hydra-vimish-fold_config)
+;;   (require 'hydra-rectangle_config)
+;;   )
 
+
+;; ;; hydra
+;; (use-package hydra
+;;   ;; :pin melpa-stable
+;;   :config
+;;   (use-package use-package-hydra
+;;     ;; :pin melpa-stable
+;;     :ensure t
+;;     );use-package-hydra
+;;   (use-package hydra-posframe
+;;     :config
+;;     (require 'hydra-posframe)
+;;     :custom
+;;     (hydra-posframe-parameters
+;;      '((left-fringe . 4) (right-fringe . 4) (top-fringe . 4) (bottom-fringe . 4) (height . 18) (width . 105) (min-height . 17) (max-height . 30) (top . 25)))
+;;     :custom-face
+;;     (hydra-posframe-border-face ((t (:background "#ffffff"))))
+;;     (hydra-posframe-face ((t (:background-color "#6272a4"))))
+;;     :hook
+;;     (after-init . hydra-posframe-enable)
+;;     )
+;;   ;; end use-package-hydra-posframe
+;;   )
+;; ;; end use-package hydra
+
+;; ;; Pretty Hydra
+;; (use-package pretty-hydra
+;;   :ensure t
+;;   :config
+;;   (require 'pretty-hydra)
+;;   )
+;; ;; end use package pretty hyrda
+;; ;; title generator
+;; (require 's)
+;; (require 'all-the-icons)
+;; (with-eval-after-load 'all-the-icons
+;;   (declare-function all-the-icons-faicon 'all-the-icons)
+;;   (declare-function all-the-icons-fileicon 'all-the-icons)
+;;   (declare-function all-the-icons-material 'all-the-icons)
+;;   (declare-function all-the-icons-octicon 'all-the-icons)
+;;   )
+
+;; ;; with-faicon function allows an icon in hydra title.
+;; ;; Requires following requires and aliases.
+;; ;; To omit don't include 'with-faicon' in appearance-title
+
+;; ;; define an icon function with all-the-icons-faicon
+;; ;; to use filecon, etc, define same function with icon set%
+;; (defun with-faicon (icon str &rest height v-adjust)
+;;   (s-concat (all-the-icons-faicon icon :v-adjust (or v-adjust 0) :height (or height 1)) " " str))
+;; ;; filecon
+;; (defun with-fileicon (icon str &rest height v-adjust)
+;;   (s-concat (all-the-icons-fileicon icon :v-adjust (or v-adjust 0) :height (or height 1)) " " str))
 
 
 
@@ -578,7 +1010,7 @@ and M-n or M-<down> for moving down."
 
 
 ;; (require 'shell_init)
-;; (require 'tramp_init)
+(require 'tramp_init)
 
 
 
@@ -675,6 +1107,7 @@ and M-n or M-<down> for moving down."
 
 
 
+
 ;;; fill-column-indicator.el
 ;; To toggle graphical indication of the fill column in a buffer,
 ;; use the command fci-mode
@@ -688,7 +1121,14 @@ and M-n or M-<down> for moving down."
 
 
 
-(add-hook 'compilation-mode-hook 'winnow-mode)
+(use-package winnow-mode
+  :defer t
+  :hook
+  (compilation-mode . winnow-mode)
+  :config
+  (message "Loading \"winnow-mode\""))
+
+
 
 
 
@@ -712,15 +1152,19 @@ and M-n or M-<down> for moving down."
 ;; а значение - название режима.
 
 
-;;; Finalization
 
+
+
+;;; Finalization
 (add-hook 'after-init-hook
           `(lambda ()
              (let ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
+	           (message "-------------------------------------------------------------------")
                (message "Loading %s...done (%.3fs) [after-init]" ,load-file-name elapsed))
-
              (message "        INITIALIZATION COMPLETED")
              (message "-------------------------------------------------------------------")) t)
+
+
 
 
 ;; (use-package poet-theme
@@ -736,18 +1180,49 @@ and M-n or M-<down> for moving down."
 
 
 
-;; (use-package tree-sitter
+;; (use-package major-mode-hydra
 ;;   :ensure t
-;;   :config
-;;   ;; (message "Loading \"conf-mode\"")
-;;   (require 'tree-sitter)
-;;   (require 'tree-sitter-hl)
-
-;;   (use-package tree-sitter-langs
-;;     :ensure t
-;;     :config
-;;     ;; (message "Loading \"conf-mode\"")
-;;     ;; (require 'tree-sitter-langs)
-;;     )
-
+;;   ;; :bind
+;;   ;; ("M-SPC" . major-mode-hydra)
 ;;   )
+
+;; (pretty-hydra-define jp-toggles
+;;   (:color amaranth :quit-key "q")
+;;   ("Basic"
+;;    (("n" linum-mode "line number" :toggle t)
+;;     ("w" whitespace-mode "whitespace" :toggle t)
+;;     ("W" whitespace-cleanup-mode "whitespace cleanup" :toggle t)
+;;     ("r" rainbow-mode "rainbow" :toggle t)
+;;     ("L" page-break-lines-mode "page break lines" :toggle t))
+;;    "Highlight"
+;;    (("s" symbol-overlay-mode "symbol" :toggle t)
+;;     ("l" hl-line-mode "line" :toggle t)
+;;     ("x" highlight-sexp-mode "sexp" :toggle t)
+;;     ("t" hl-todo-mode "todo" :toggle t))
+;;    "UI"
+;;    (("d" jp-themes-toggle-light-dark "dark theme" :toggle jp-current-theme-dark-p))
+;;    "Coding"
+;;    (("p" smartparens-mode "smartparens" :toggle t)
+;;     ("P" smartparens-strict-mode "smartparens strict" :toggle t)
+;;     ("S" show-smartparens-mode "show smartparens" :toggle t)
+;;     ("f" flycheck-mode "flycheck" :toggle t))
+;;    "Emacs"
+;;    (("D" toggle-debug-on-error "debug on error" :toggle (default-value 'debug-on-error))
+;;     ("X" toggle-debug-on-quit "debug on quit" :toggle (default-value 'debug-on-quit)))))
+
+
+;; (pretty-hydra-define+ jp-window ()
+;;   (;; these heads are added to the existing "Windows" column
+;;    "Windows"
+;;    (("r" transpose-frame "rotate")
+;;     ("z" zone "zone out!"))
+;;    ;; this is a new column, which gets added
+;;    "Appearance"
+;;    (("f" set-frame-font "font")
+;;     ("t" load-theme "theme"))))
+
+
+
+
+
+;;; init.el ends here

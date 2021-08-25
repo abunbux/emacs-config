@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Tue May 14 05:54:34 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Sunday July 18 13:56:33 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Sunday August 22 18:43:0 EEST 2021>
 
 
 
@@ -9,7 +9,10 @@
   :ensure t
   :diminish yas-minor-mode
   :hook
-  (after-init . yas-minor-mode)
+  ;; (after-init   . yas-minor-mode)
+  ;; (prog-mode    . yas-minor-mode)
+  ;; (org-mode     . yas-minor-mode)
+  (after-init   . yas-global-mode)
   :bind (
          :map yas-keymap
          ("C-g" . yas-exit-all-snippets)
@@ -31,8 +34,8 @@
   ;; (add-hook 'scala-mode-hook                  #'yas-minor-mode)
   ;; (add-hook 'web-mode-hook                    #'yas-minor-mode)
 
-  (add-hook 'prog-mode-hook                   #'yas-minor-mode)
-  (add-hook 'org-mode-hook                    #'yas-minor-mode)
+  ;; (add-hook 'prog-mode-hook                   #'yas-minor-mode)
+  ;; (add-hook 'org-mode-hook                    #'yas-minor-mode)
 
   :config
   (message "Loading \"yas-minor-mode\"")

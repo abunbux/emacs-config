@@ -1,7 +1,7 @@
 ;;; smartparens_init.el -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Fri May 17 08:59:06 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Friday November 27 23:3:42 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Sunday August 22 18:29:52 EEST 2021>
 
 
 
