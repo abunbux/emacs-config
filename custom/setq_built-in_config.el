@@ -1,7 +1,7 @@
 ;;; setq_built-in_config.el  -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Сб мая 11 07:59:33 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Monday August 23 22:2:5 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Sunday August 29 15:17:30 EEST 2021>
 
 
 
@@ -12,6 +12,11 @@
 
 
 
+
+;; Подсвечивать выделенные текст, между двумя метками
+(add-hook 'after-init-hook 'transient-mark-mode)                    ; startup.el
+
+
 (setq browse-url-browser-function   'browse-url-generic             ; browse-url.el
 	  ;; browse-url-generic-program    "google-chrome-stable"       ; browse-url.el
 	  browse-url-generic-program    "firefox-bin"                   ; browse-url.el
@@ -20,34 +25,13 @@
 
 
 
-
-;; Ignore split window vertically
-(setq split-height-threshold            nil                         ; window.el
-      ;; split-height-threshold        48                           ; window.el
-      ;; split-height-threshold        4                            ; window.el
-      ;; split-width-threshold         140                          ; window.el
-      split-width-threshold             40)                         ; window.el
-
-
-
-
-
-
+
 (use-package emacs
   :hook
-  ;; Подсвечивать выделенные текст, между двумя метками
-  (after-init       . transient-mark-mode)                    ; startup.el
   ;; auto-formatting in text-mode
   (text-mode-hook   . turn-on-auto-fill)                      ; text-mode.el
 
   :custom
-  (auto-window-vscroll                  nil)            ; C-code (emacs)
-  ;; Quiet Startup
-  (inhibit-default-init                 t)              ; startup.el
-  (inhibit-startup-echo-area-message    t)              ; startup.el
-  (inhibit-startup-message              t)              ; startup.el
-  (initial-scratch-message              nil)            ; startup.el
-  (inhibit-startup-screen               t)              ; startup.el
   (inhibit-x-resources                  t)              ; C-code (emacs)
   ;; Не сжимать кеши шрифтов во время сборки мусора.
   ;; Это нужно при «doom-modeline», если есть проблема с притормаживанием.
@@ -55,11 +39,9 @@
   (inhibit-compacting-font-caches       t)              ; C-code (emacs)
 
   (bidi-display-reordering              nil)            ; C-code (emacs)
-  (cursor-type                          '(bar . 3))     ; C-code (emacs)
   (completion-ignore-case               t)              ; C-code (emacs)
   (delete-by-moving-to-trash            t)              ; C-code (emacs)
   (echo-keystrokes                      0.4)            ; C-code (emacs)
-  (enable-recursive-minibuffers         t)              ; C-code (emacs)
   (focus-follows-mouse                  t)              ; C-code (emacs)
   (indent-tabs-mode                     nil)            ; C-code (emacs)
   (indicate-empty-lines                 t)              ; C-code (emacs)
@@ -73,7 +55,6 @@
   (read-buffer-completion-ignore-case   t)              ; C-code (emacs)
   (scroll-conservatively                100000)         ; C-code (emacs)
   (scroll-margin                        3)              ; C-code (emacs)
-  (scroll-preserve-screen-position      t)              ; C-code (emacs)
   (scroll-step                          1)              ; C-code (emacs)
   (select-active-regions                t)              ; C-code (emacs)
   (tab-width                            4)              ; C-code (emacs)
@@ -84,116 +65,33 @@
   (use-dialog-box                       nil)            ; C-code (emacs)
 
   :config
-  (message "Loading built-in \"emacs\"")
+  (message "Loading built-in \"C-code\" - \"pseudo-package emacs\"")
   (setq-default indent-tabs-mode        nil            ; C-code (emacs)
                 tab-width               4)             ; C-code (emacs)
   (setq-default fill-column             80)            ; C-code (emacs)
   (setq-default major-mode              'text-mode)    ; C-code (emacs)
+  ;; ignore case
+  (setq-default case-fold-search        t)             ; C-code (emacs)
 
+  (setq history-delete-duplicates     t                ; C-code (emacs)
+        history-length                250)             ; C-code (emacs)
+  (setq create-lockfiles              nil)             ; C-code (emacs)
+  (setq auto-save-list-file-name      nil)             ; C-code (emacs)
+  (setq auto-save-visited-file-name   nil)             ; C-code (emacs)
   )
 
 
 
+;; (display-battery-mode              t)               ; loaddefs.el
+(setq vc-make-backup-files          t)                 ; vc-hooks.el
+
+
+;; C-v и M-v не отменяют друг друга, потому что положение точки не сохраняется.
+;; Исправим это.
+(setq scroll-preserve-screen-position 'always)         ; C-code (emacs)
 
 
 
-(use-package simple
-  :defer t
-  :custom
-  (column-number-indicator-zero-based   nil)                                    ; bindings.el
-  (column-number-mode                   t)                                      ; simple.el
-  (global-visual-line-mode              t)                                      ; simple.el
-
-  (kill-whole-line                      t)                                      ; simple.el
-  (kill-ring-max                        1000)                                   ; simple.el
-  (next-line-add-newlines               nil)                                    ; simple.el
-  (set-mark-command-repeat-pop          t)                                      ; simple.el
-  (save-interprogram-paste-before-kill  t)                                      ; simple.el
-  (blink-matching-paren-distance        nil)                                    ; simple.el
-  (interprogram-cut-function            (and (fboundp #'x-select-text)          ; simple.el
-                                             #'x-select-text))
-  (interprogram-paste-function          (and (fboundp #'x-selection-value)      ; simple.el
-                                             #'x-selection-value))
-  (line-number-mode                     t)                                      ; simple.el
-
-  (size-indication-mode                 t)                                      ; simple.el
-  ;; (mark-ring-max                        16) ; 16 по умолчанию                ; simple.el
-  :config
-  (message "Loading built-in \"simple\"")
-  )
-
-
-
-(use-package frame
-  :custom
-  (blink-cursor-mode          -1)                                     ; frame.el
-  ;; (initial-frame-alist '((vertical-scroll-bars)))
-  :config
-  (message "Loading built-in \"frame\"")
-  ;; Display the name of the current buffer in the title bar
-  (setq frame-title-format
-        '("emacs - %@"
-          (:eval (system-name)) ": " (:eval
-                                      (if (buffer-file-name)
-                                          (abbreviate-file-name (buffer-file-name))
-                                        "%b")) " [%*]"))
-  )
-
-
-
-(use-package time
-  :custom
-  (display-time-default-load-average    nil)
-  (display-time-24hr-format             t)
-  (display-time-day-and-date            t)
-  (display-time-format                  "/ %R %d-%m-%y /")
-  ;; (display-time-mode                    1)
-  ;; (display-time-update)
-
-  :config
-  (message "Loading built-in \"time\"")
-  ;; (display-time-mode t)
-  ;; https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  (setq display-time-world-list '(("Europe/Paris"         "Paris")                ; time.el
-                                  ("Europe/Berlin"        "Berlin")
-                                  ("Europe/Kiev"          "Kiev")
-                                  ("Europe/Zaporozhye"    "Zaporozhye")
-                                  ("Europe/Uzhgorod"      "Uzhgorod")
-                                  ("Europe/Moscow"        "Moscow")
-                                  ("Europe/Minsk"         "Minsk")
-                                  ("Asia/Baku"            "Baku")
-                                  ("Asia/Tbilisi"         "Tbilisi")
-                                  ("Asia/Ashgabat"        "Ashgabat")
-                                  ("Asia/Almaty"          "Almaty")
-                                  ("Asia/Bangkok"         "Bangkok")
-                                  ("Asia/Krasnoyarsk"     "Krasnoyarsk")
-                                  ("Asia/Shanghai"        "China")
-                                  ("Asia/Irkutsk"         "Irkutsk")
-                                  ("Asia/Tokyo"           "Tokyo")
-                                  ("Asia/Vladivostok"     "Vladivostok")
-                                  ("Australia/Melbourne"  "Melbourne")
-                                  ("Asia/Magadan"         "Magadan")))
-
-  )
-
-
-
-;;; Time-stamp
-;; when there is a "Time-stamp:
-;; <Последнее обновление -- Sunday September 24 23:32:21 EEST 2017>"
-;; in the first 15 lines of the file,
-;; emacs will write time-stamp information there when saving the file.
-(use-package time-stamp
-  :hook
-  (before-save . time-stamp)
-  :custom
-  (time-stamp-active         t)
-  ;; check first 15 buffer lines for Time-stamp: <>
-  (time-stamp-line-limit     15)
-  (time-stamp-format "Последнее обновление -- %:a %:b %:d %:H:%:M:%:S %:Z %:Y")
-  :config
-  (message "Loading built-in \"time-stamp\"")
-  )
 
 
 
@@ -214,21 +112,18 @@
       apropos-documentation-sort-by-scores   nil                    ; apropos.el
       auto-revert-verbose               t                           ; autorevert.el
       compilation-always-kill           t                           ; compile.el
-
-
       help-window-select                t                           ; help.el
       kmacro-ring-max                   30                          ; kmacro.el
-      minibuffer-depth-indicate-mode    99                          ; mb-depth.el
-
-      read-file-name-completion-ignore-case t                       ; minibuffer.el
-
-
-      smooth-scroll-margin              5                           ; is a variable without a source file
       x-select-enable-clipboard         t                           ; select.el
       x-select-enable-primary           nil                         ; select.el
-      window-min-height                 7)                          ; window.el
+      )
 
 
+
+(setq read-file-name-completion-ignore-case t)                      ; minibuffer.el
+(setq minibuffer-depth-indicate-mode        99)                     ; mb-depth.el
+(setq  enable-recursive-minibuffers         t)                      ; C-code (emacs))
+(minibuffer-depth-indicate-mode)                                    ; mb-depth.el
 
 
 (setq-default eww-bookmarks-directory           "~/.emacs.d/cache/"
@@ -236,26 +131,16 @@
               projectile-known-projects-file    "~/.emacs.d/cache/projectile/known-projects.eld"
               url-configuration-directory       "~/.emacs.d/cache/url/")
 
-
-(setq history-delete-duplicates     t
-      history-length                250
-      vc-make-backup-files          t)
-
-
-(setq create-lockfiles              nil)
-(setq auto-save-list-file-name      nil)
-(setq auto-save-visited-file-name   nil)
-
-
+(setq column-number-indicator-zero-based   nil)                      ; bindings.el
 
 
 ;; Mouse & Smooth Scroll
 ;; Scroll one line at a time (less "jumpy" than defaults)
 (when (display-graphic-p)
-  (setq mouse-wheel-scroll-amount '(1 ((shift) . hscroll))          ; mwheel.el
-        ;; mouse-wheel-scroll-amount '(1 ((shift) . 1))             ; mwheel.el
-        mouse-wheel-scroll-amount-horizontal 1                     ; is a variable without a source file
-        mouse-wheel-progressive-speed nil))                         ; mwheel.el
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))  ; mwheel.el
+        ;; mouse-wheel-scroll-amount '(1 ((shift) . hscroll))           ; mwheel.el
+        ;; mouse-wheel-scroll-amount '(1 ((shift) . 1))                 ; mwheel.el
+        mouse-wheel-progressive-speed nil))                             ; mwheel.el
 
 
 
@@ -264,6 +149,8 @@
       mouse-yank-at-point               t                           ; mouse.el
       mouse-wheel-follow-mouse          t                           ; mwheel.el
       mouse-wheel-follow-mouse          't)                         ; mwheel.el
+
+;; (mouse-wheel-mode    't)                                         ; mwheel.el
 
 
 (setq           sentence-end                                        ; paragraphs.el
@@ -277,24 +164,15 @@
 
 
 
-(setq
- js-indent-level   4                                           ; is a variable without a source file
- sgml-basic-offset 4                                           ; is a variable without a source file
- )
+(setq js-indent-level   4                                           ; js.el
+      sgml-basic-offset 4                                           ; sgml-mode.el
+      )
 
 
-(setq-default c-basic-offset        4                               ; is a variable without a source file
-		      indent-line-function  'insert-tab                     ; indent.el
-		      sh-basic-offset       4                               ; is a variable without a source file
-		      standart-indent       4                               ; is a variable without a source file
-		      tab-always-indent     nil                             ; indent.el
-		      typescript-indent-level 4)                            ; is a variable without a source file
-
-
-
-
-
-
+(setq-default indent-line-function  'insert-tab                     ; indent.el
+              sh-basic-offset       4                               ; sh-script.el
+              tab-always-indent     nil                             ; indent.el
+              )
 
 
 ;;; https://git.shimmy1996.com/shimmy1996/.emacs.d
@@ -302,25 +180,19 @@
 ;; Enable relative line numbering, and set minimum width to 3.
 (setq-default display-line-numbers-type (quote t))                  ; display-line-numbers.el
 (setq-default display-line-numbers-width 3)                         ; C-code (emacs)
-;; (global-display-line-numbers-mode)                               ; display-line-numbers.el
 
 (electric-indent-mode       -1)                                     ; electric.el
 (global-eldoc-mode          -1)                                     ; eldoc.el
 
-;; (mouse-wheel-mode    't)                                         ; mwheel.el
+
 ;; (desktop-save-mode   t)                                          ; loaddefs.el
-
-
-(file-name-shadow-mode      1)                                      ; rfn-eshadow.el
-(minibuffer-depth-indicate-mode)                                    ; mb-depth.el
-
-;; Высота временного буфера зависит от его содержимого
-(temp-buffer-resize-mode    t)                                      ; help.el
-
 ;; (global-auto-revert-mode 1)                                      ; loaddefs.el
 
 
+(file-name-shadow-mode      1)                                      ; rfn-eshadow.el
 
+;; Высота временного буфера зависит от его содержимого
+(temp-buffer-resize-mode    t)                                      ; help.el
 
 ;; (fringe-mode                '(12 . 0))                           ; fringe.el
 (global-subword-mode        0)                                      ; subword.el
@@ -495,7 +367,7 @@
                 ))
 
 
-;; (display-battery-mode   t)                                                               ; loaddefs.el
+
 
 
 
@@ -503,14 +375,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                                      ;;;
 ;;;                    ПОИСК, ЗАМЕНА                       ;;;
 ;;;                                                      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
 
 ;;; Полезные сочетания в режиме поиска:
 ;;      "М-r" - переключение regexp,
@@ -537,88 +407,94 @@
 ;;          ‘\#’ stands for ‘0’; in the second, for ‘1’; and so on
 ;;      \? — приглашение пользователя к вводу. При каждом переименовании Emacs будет спрашивать, что ему вставить вместо \?
 
-(setq isearch-lax-whitespace        t                                                       ; isearch.el
-      isearch-regexp-lax-whitespace t                                                       ; isearch.el
-      ;; search-default-mode        (quote isearch-symbol-regexp)                           ; isearch.el
-      search-invisible              nil                                                     ; isearch.el
-      search-highlight              t                                                       ; isearch.el
-      query-replace-highlight       t                                                       ; replace.el
-      search-whitespace-regexp      "[ \t\r\n]+"                                            ; isearch.el
-      grep-command    "ack --with-filename --nofilter --nogroup ")                          ; grep.el
-
-(setq-default grep-highlight-matches    t                                                   ; grep.el
-              case-fold-search          t)                                                  ; C-code (emacs)
-
-
-
-;; Allow scrolling while isearch is active
-;; Example: C-s foo C-l (to recenter the point in buffer to center/top/bottom)
-;; http://emacs.stackexchange.com/a/10313/115
-;; Прелесть прокрутки во время поиска в том, что текущее совпадение никогда не идет за кадром.
-;; Таким образом, вы даже можете использовать C-v / M-v.
-(setq isearch-allow-scroll          t)                                                      ; isearch.el
-
 
 
 ;; Следующие два hook-a нарушают работу  `ivy-occur'
 ;; (add-hook 'occur-hook       (lambda () (switch-to-buffer-other-window "*Occur*")))
 ;; (add-hook 'grep-mode-hook   (lambda () (switch-to-buffer-other-window "*grep*")))
+
 ;; Focus on *Occur* window right away.
 (add-hook 'occur-hook (lambda () (other-window 1)))                                         ; replace.el
 
+(setq query-replace-highlight       t)                                                       ; replace.el
 
 
+
 ;; re-builder
-(setq-default reb-re-syntax 'string)                                    ; is a variable without a source file
-(with-eval-after-load 're-builder                                       ; re-builder.el
-  (message "Loading \"re-builder\""))
+(use-package re-builder
+  :defer t
+  :config
+  (message "Loading built-in \"re-builder\"")
+  (setq-default reb-re-syntax 'string)                                    ; re-builder.el
+  )
 
 
+
+;; isearch
+(use-package isearch
+  :defer t
+  :config
+  (message "Loading built-in \"isearch\"")
+  (setq isearch-lax-whitespace        t                                         ; isearch.el
+        ;; Allow scrolling while isearch is active
+        ;; Example: C-s foo C-l (to recenter the point in buffer to center/top/bottom)
+        ;; http://emacs.stackexchange.com/a/10313/115
+        ;; Прелесть прокрутки во время поиска в том, что текущее совпадение никогда не идет за кадром.
+        ;; Таким образом, вы даже можете использовать C-v / M-v.
+        isearch-allow-scroll          t                                         ; isearch.el
+        isearch-regexp-lax-whitespace t                                         ; isearch.el
+        ;; search-default-mode        (quote isearch-symbol-regexp)             ; isearch.el
+        search-highlight              t                                         ; isearch.el
+        search-invisible              nil                                       ; isearch.el
+        search-whitespace-regexp      "[ \t\r\n]+")                             ; isearch.el
+  )
 
-;;; grep.el
+
+
+;; grep.el
 ;; Не использую - есть другие альтернативы, всё использовать невозможно, да и не нужно.
-;; (use-package grep
-;;   ;; :disabled t
-;;   :defer t
-;;   :preface
-;;   ;;; https://github.com/mpolden/emacs.d/blob/master/lisp/init-grep.el
-;;   ;; grep-visit-buffer-other-window ("o")
-;;   ;; grep-visit-buffer-other-window-noselect ("C-o")
-;;   (defun grep-visit-buffer-other-window (&optional event noselect)
-;;     "Visit grep result in another window."
-;;     (interactive)
-;;     (let ((current-window (selected-window)))
-;;       (compile-goto-error event)
-;;       (when noselect
-;;         (select-window current-window))))
-;;
-;;   (defun grep-visit-buffer-other-window-noselect (&optional event)
-;;     "Visit grep result in another window, but don't select it."
-;;     (interactive)
-;;     (grep-visit-buffer-other-window event t))
-;;
-;;   :bind (
-;;          ("M-s g ." . grep-at-point)
-;;          ("M-s g s" . grep-selected-text)
-;;
-;;          :map grep-mode-map
-;;          ;; make C-o and o behave as in dired
-;;          ("o"   . grep-visit-buffer-other-window)
-;;          ("C-o" . grep-visit-buffer-other-window-noselect)
-;;          ;; n and p changes line as in ag-mode
-;;          ("n"   . compilation-next-error)
-;;          ("p"   . compilation-previous-error)
-;;          )
-;;   :init
-;;   :config
-;;   (message "Loading \"grep\"")
-;;
-;;   (add-hook 'grep-mode-hook
-;;             (lambda ()
-;;               ;; wrap lines
-;;               (setq-local truncate-lines nil)))
-;;   (setq grep-host-defaults-alist nil)
+(use-package grep
+  :defer t
+  :preface
+  ;;; https://github.com/mpolden/emacs.d/blob/master/lisp/init-grep.el
+  ;; grep-visit-buffer-other-window ("o")
+  ;; grep-visit-buffer-other-window-noselect ("C-o")
+  (defun grep-visit-buffer-other-window (&optional event noselect)
+    "Visit grep result in another window."
+    (interactive)
+    (let ((current-window (selected-window)))
+      (compile-goto-error event)
+      (when noselect
+        (select-window current-window))))
 
+  (defun grep-visit-buffer-other-window-noselect (&optional event)
+    "Visit grep result in another window, but don't select it."
+    (interactive)
+    (grep-visit-buffer-other-window event t))
+
+  :bind (
+         ("M-s g ." . grep-at-point)
+         ("M-s g s" . grep-selected-text)
+
+         :map grep-mode-map
+         ;; make C-o and o behave as in dired
+         ("o"   . grep-visit-buffer-other-window)
+         ("C-o" . grep-visit-buffer-other-window-noselect)
+         ;; n and p changes line as in ag-mode
+         ("n"   . compilation-next-error)
+         ("p"   . compilation-previous-error)
+         )
+  :init
+  :config
+  (message "Loading built-in \"grep\"")
+  (setq grep-command    "ack --with-filename --nofilter --nogroup ")
+  (setq-default grep-highlight-matches    t)
+  (add-hook 'grep-mode-hook
+            (lambda ()
+              ;; wrap lines
+              (setq-local truncate-lines nil)))
+  (setq grep-host-defaults-alist nil)
+  )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -628,16 +504,15 @@
 
 
 
-
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                                      ;;;
-;;;                    DIFF                       ;;;
+;;;                    DIFF, EDIFF                       ;;;
 ;;;                                                      ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 ;; diff-mode.el
-(use-package diff-mode                                                                          ; diff-mode.el
+(use-package diff-mode
   :ensure nil
   :defer t
   :preface
@@ -673,7 +548,7 @@
   :init
   (autoload 'diff-mode "diff-mode" "Diff major mode" t)
   :config
-  (message "Loading \"diff-mode\"")
+  (message "Loading built-in \"diff-mode\"")
   (setq diff-switches "-u")
   ;; show important whitespace in diff-mode
   (add-hook 'diff-mode-hook
@@ -694,28 +569,14 @@
   )
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;                                                      ;;;
-;;;                    EDIFF                             ;;;
-;;;                                                      ;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
+
 ;; ediff.el
 (use-package ediff
   :ensure nil
   :defer t
   ;; :bind (("----------" . ediff-current-file))
   :config
-  (message "Loading \"ediff\"")
+  (message "Loading built-in \"ediff\"")
   (setq-default ediff-highlight-all-diffs t)
   (setq-default ediff-forward-word-function 'forward-char)
   (setq ediff-diff-options "-w")
@@ -728,45 +589,24 @@
               (progn
                 (set-frame-size(selected-frame) 40 10))))
 
-  (custom-set-faces
-   '(ediff-current-diff-A   ((t (:background "orange"       :foreground "brown"))))
-   '(ediff-current-diff-B   ((t (:background "red"          :foreground "blue"))))
-   '(ediff-current-diff-C   ((t (:background "Pink"         :foreground "Navy"))))
-   '(ediff-even-diff-A      ((t (:background "light grey"   :foreground "Black"))))
-   '(ediff-even-diff-B      ((t (:background "Grey"         :foreground "White"))))
-   '(ediff-even-diff-C      ((t (:background "light grey"   :foreground "Black"))))
-   '(ediff-fine-diff-A      ((t (:background "sky blue"     :foreground "Navy"  :weight bold))))
-   '(ediff-fine-diff-B      ((t (:background "cyan"         :foreground "Black" :weight bold))))
-   '(ediff-fine-diff-C      ((t (:background "Turquoise"    :foreground "Black" :weight bold))))
-   '(ediff-odd-diff-A       ((t (:background "Grey"         :foreground "White"))))
-   '(ediff-odd-diff-B       ((t (:background "light grey"   :foreground "Black"))))
-   '(ediff-odd-diff-C       ((t (:background "Grey"         :foreground "White"))))
-   ))
-
-
-
+  ;; (custom-set-faces
+  ;;  '(ediff-current-diff-A   ((t (:background "orange"       :foreground "brown"))))
+  ;;  '(ediff-current-diff-B   ((t (:background "red"          :foreground "blue"))))
+  ;;  '(ediff-current-diff-C   ((t (:background "Pink"         :foreground "Navy"))))
+  ;;  '(ediff-even-diff-A      ((t (:background "light grey"   :foreground "Black"))))
+  ;;  '(ediff-even-diff-B      ((t (:background "Grey"         :foreground "White"))))
+  ;;  '(ediff-even-diff-C      ((t (:background "light grey"   :foreground "Black"))))
+  ;;  '(ediff-fine-diff-A      ((t (:background "sky blue"     :foreground "Navy"  :weight bold))))
+  ;;  '(ediff-fine-diff-B      ((t (:background "cyan"         :foreground "Black" :weight bold))))
+  ;;  '(ediff-fine-diff-C      ((t (:background "Turquoise"    :foreground "Black" :weight bold))))
+  ;;  '(ediff-odd-diff-A       ((t (:background "Grey"         :foreground "White"))))
+  ;;  '(ediff-odd-diff-B       ((t (:background "light grey"   :foreground "Black"))))
+  ;;  '(ediff-odd-diff-C       ((t (:background "Grey"         :foreground "White"))))
+  ;;  )
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-
-
-
-
-
-
-
-(add-to-list 'display-buffer-alist                                                      ; window.el
-             '("*Apropos*" display-buffer-same-window))                                 ; window.el
-
-
-
-
-
-(setq transient-history-file "~/.emacs.d/cache/history.el")                             ; is a variable without a source file
-(setq-default transient-history-file "~/.emacs.d/cache/history.el")                     ; is a variable without a source file
 
 
 
@@ -777,8 +617,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Default Encoding
-
-
 (use-package mule
   :custom
   (coding-system-for-write              'utf-8)                                     ; C-code (emacs)
@@ -845,6 +683,60 @@
   )
 
 
+(use-package time
+  :custom
+  (display-time-default-load-average    nil)
+  (display-time-24hr-format             t)
+  (display-time-day-and-date            t)
+  (display-time-format                  "/ %R %d-%m-%y /")
+  ;; (display-time-mode                    1)
+  ;; (display-time-update)
+
+  :config
+  (message "Loading built-in \"time\"")
+  ;; (display-time-mode t)
+  ;; https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  (setq display-time-world-list '(("Europe/Paris"         "Paris")                ; time.el
+                                  ("Europe/Berlin"        "Berlin")
+                                  ("Europe/Kiev"          "Kiev")
+                                  ("Europe/Zaporozhye"    "Zaporozhye")
+                                  ("Europe/Uzhgorod"      "Uzhgorod")
+                                  ("Europe/Moscow"        "Moscow")
+                                  ("Europe/Minsk"         "Minsk")
+                                  ("Asia/Baku"            "Baku")
+                                  ("Asia/Tbilisi"         "Tbilisi")
+                                  ("Asia/Ashgabat"        "Ashgabat")
+                                  ("Asia/Almaty"          "Almaty")
+                                  ("Asia/Bangkok"         "Bangkok")
+                                  ("Asia/Krasnoyarsk"     "Krasnoyarsk")
+                                  ("Asia/Shanghai"        "China")
+                                  ("Asia/Irkutsk"         "Irkutsk")
+                                  ("Asia/Tokyo"           "Tokyo")
+                                  ("Asia/Vladivostok"     "Vladivostok")
+                                  ("Australia/Melbourne"  "Melbourne")
+                                  ("Asia/Magadan"         "Magadan")))
+
+  )
+
+
+
+;;; Time-stamp
+;; when there is a "Time-stamp:
+;; <Последнее обновление -- Sunday September 24 23:32:21 EEST 2017>"
+;; in the first 15 lines of the file,
+;; emacs will write time-stamp information there when saving the file.
+(use-package time-stamp
+  :hook
+  (before-save . time-stamp)
+  :custom
+  (time-stamp-active         t)
+  ;; check first 15 buffer lines for Time-stamp: <>
+  (time-stamp-line-limit     15)
+  (time-stamp-format "Последнее обновление -- %:a %:b %:d %:H:%:M:%:S %:Z %:Y")
+  :config
+  (message "Loading built-in \"time-stamp\"")
+  )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -854,20 +746,23 @@
 
 
 
-
+
 ;;; Disabled Commands **************************************
 
-;; (setq disabled-command-function  nil)                 ; novice.el
-;; Enable default disabled stuff
-;; Следующие команды выдают предупреждение при запуске.
-;; Для их отключения нужно раскомментировать нижеследующее
-(put 'downcase-region   'disabled nil)
-(put 'upcase-region     'disabled nil)
-(put 'erase-buffer      'disabled nil)
-(put 'scroll-left       'disabled nil)
+;; enable all commands
+(setq disabled-command-function  nil)                 ; novice.el
+
+;; ;; Enable default disabled stuff
+;; ;; Следующие команды выдают предупреждение при запуске.
+;; ;; Для их отключения нужно раскомментировать нижеследующее
+;; (put 'downcase-region   'disabled nil)
+;; (put 'upcase-region     'disabled nil)
+;; (put 'erase-buffer      'disabled nil)
+;; (put 'scroll-left       'disabled nil)
+;; (put 'narrow-to-page    'disabled nil)
+;; (put 'narrow-to-region  'disabled nil)
 ;; (put 'set-goal-column 'disabled nil)
 
-;; (setq disabled-command-function "overwrite-mode")
 
 ;;; my/enable-all-commands ()
 (defun my/enable-all-commands ()

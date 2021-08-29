@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Wednesday August 25 8:45:23 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Sunday August 29 15:17:16 EEST 2021>
 
 
 
@@ -36,31 +36,44 @@
 (defconst emacs-start-time (current-time))
 
 
+(defvar file-name-handler-alist-old file-name-handler-alist)
+(message "file-name-handler-alist-old == file-name-handler-alist")
+
+
 (load "~/.emacs.d/lisp/benchmark-init.el")
 
 
-
-(setq file-name-handler-alist       nil
-      message-log-max               t
-      ;; gc-cons-threshold             most-positive-fixnum
-      gc-cons-threshold             64000000
-      gc-cons-percentage            0.6
+(setq inhibit-default-init                 t                            ; startup.el
+      inhibit-startup-echo-area-message    t                            ; startup.el
+      inhibit-startup-message              t                            ; startup.el
+      initial-scratch-message              nil                          ; startup.el
+      inhibit-startup-screen               t                            ; startup.el
       )
 
 
-(defvar file-name-handler-alist-old file-name-handler-alist)
-(message "file-name-handler-alist-old == file-name-handler-alist")
+
+(setq package-enable-at-startup     nil
+      file-name-handler-alist       nil
+      message-log-max               16384
+      ;; gc-cons-threshold             most-positive-fixnum
+      gc-cons-threshold             64000000
+      gc-cons-percentage            0.6
+      auto-window-vscroll           nil                                 ; C-code (emacs)
+      )
+
+
+
 
 (add-hook 'after-init-hook
           `(lambda ()
              (setq file-name-handler-alist file-name-handler-alist-old
                    ;; gc-cons-threshold    (* 6 1024 1024)
+                   gc-cons-threshold 800000
                    gc-cons-percentage   0.1
                    garbage-collection-messages t
                    )
              (message "file-name-handler-alist == file-name-handler-alist-old")
              (garbage-collect)) t)
-
 
 
 
@@ -91,17 +104,16 @@
 (eval-and-compile
   (setq load-prefer-newer t
         package--init-file-ensured t
-        package-enable-at-startup nil))
+        ))
 
 
 
-
+
 (eval-when-compile
   (require 'package)
-  (unless (or (version= "27" emacs-version) package--initialized)
-    (package-initialize)
-    ;; (package-initialize nil)
-    )
+  ;; (unless (or (version= "27" emacs-version) package--initialized)
+  (package-initialize)
+  ;; )
 
   ;; for gnu repository
   (setq package-check-signature nil)
@@ -110,8 +122,6 @@
   (add-to-list 'package-archives '("melpa"          . "https://melpa.org/packages/") t)
   (add-to-list 'package-archives '("melpa-stable"   . "https://stable.melpa.org/packages/") t)
   (add-to-list 'package-archives '("org"            . "https://orgmode.org/elpa/") t)
-  ;; (add-to-list 'package-archives '("ELPA"           . "https://tromey.com/elpa/") t)
-  ;; (add-to-list 'package-archives '("marmalade"      . "https://marmalade-repo.org/packages/") t)
   (add-to-list 'package-archives '("gnu"            . "https://elpa.gnu.org/packages/") t)
 
 
@@ -119,8 +129,6 @@
   (setq package-archive-priorities '(("melpa"         . 150)
                                      ("melpa-stable"  . 100)
                                      ("org"           . 50)
-                                     ;; ("ELPA"          . 50)
-                                     ;; ("marmalade"     . 50)
                                      ("gnu"           . 10)))
 
   (unless (and (package-installed-p 'quelpa-use-package)
@@ -130,14 +138,13 @@
     (package-install 'quelpa-use-package)
     (message "EMACS install quelpa-use-package.el")
     (message "-------------------------------------------------------------------")
-    ;; `use-package' и `quelpa' ставятся как зависимости `quelpa-use-package'
-    ;; (message "-------------------------------------------------------------------")
-
-
     )
   )
 
 
+
+
+
 (use-package use-package
   :init
   ;; Предпочитаю контролировать всё наглядно
@@ -148,7 +155,7 @@
             use-package-expand-minimally nil
             use-package-compute-statistics t
             debug-on-error t)
-    (setq use-package-verbose nil
+    (setq use-package-verbose 'errors
           use-package-expand-minimally t))
   :config
   (message "Loading \"use-package\"")
@@ -180,7 +187,7 @@
 
 
 
-
+
 (use-package quelpa-use-package
   :init
   (unless (require 'quelpa nil t)
@@ -193,11 +200,11 @@
 
   (use-package quelpa
     :init
-    (setq       quelpa-checkout-melpa-p       t)
-    (setq       quelpa-upgrade-p              nil)
-    (setq       quelpa-update-melpa-p         nil)
-    (setq       quelpa-self-upgrade-p         nil)
-    (setq       quelpa-stable-p               t)
+    (setq quelpa-checkout-melpa-p t)
+    (setq quelpa-upgrade-p        nil)
+    (setq quelpa-update-melpa-p   nil)
+    (setq quelpa-self-upgrade-p   nil)
+    (setq quelpa-stable-p         t)
     :config
     (message "Loading \"quelpa\""))
   ;; (add-to-list 'quelpa-melpa-recipe-stores "/path/to/custom/recipe/dir")
@@ -205,7 +212,7 @@
 
 
 
-
+
 (use-package benchmark-init
   :ensure t
   :config
@@ -213,33 +220,35 @@
 
 
 
-;; GCMH - the Garbage Collector Magic Hack
-;; Применяйте скрытую стратегию сборки мусора,
-;; чтобы свести к минимуму вмешательство сборщика мусора в действия пользователя.
-(use-package gcmh
-  :ensure t
-  :init
-  (gcmh-mode 1)
-  :config
-  (message "Loading \"gcmh\"")
-  (setq gcmh-verbose t))
+;; ;; GCMH - the Garbage Collector Magic Hack
+;; ;; Применяйте скрытую стратегию сборки мусора,
+;; ;; чтобы свести к минимуму вмешательство сборщика мусора в действия пользователя.
+;; (use-package gcmh
+;;   :ensure t
+;;   :init
+;;   (gcmh-mode 1)
+;;   :config
+;;   (message "Loading \"gcmh\"")
+;;   (setq gcmh-verbose t))
+
+
 
 
-;; The idea of this simple package was taken from this Reddit post,
-;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/,
-;; all it does is temporary sets file-name-handler-alist to nil (or fnhh-initial-alist customizable)
-;; and restores the value on /’emacs-startup-hook/ (customizable fn-hook),
-;; so it can (sometimes) speed up emacs startup time a little bit.
-(use-package fnhh
-  :quelpa
-  (fnhh :repo "a13/fnhh" :fetcher github :stable nil)
-  :config
-  (message "Loading \"fnhh\"")
-  (fnhh-mode 1))
+;; ;; The idea of this simple package was taken from this Reddit post,
+;; ;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/,
+;; ;; all it does is temporary sets file-name-handler-alist to nil (or fnhh-initial-alist customizable)
+;; ;; and restores the value on /’emacs-startup-hook/ (customizable fn-hook),
+;; ;; so it can (sometimes) speed up emacs startup time a little bit.
+;; (use-package fnhh
+;;   :quelpa
+;;   (fnhh :repo "a13/fnhh" :fetcher github :stable nil)
+;;   :config
+;;   (message "Loading \"fnhh\"")
+;;   (fnhh-mode 1))
 
 
 
-
+
 (use-package diminish
   :ensure t
   :demand t
@@ -247,15 +256,14 @@
   (message "Loading \"diminish\""))
 
 
-
+
 (use-package bind-key
   :ensure t
   :init
-  ;;; my/describe-personal-keybindings ("<f6> b")
+  ;; my/describe-personal-keybindings ("<f6> b")
   (defun my/describe-personal-keybindings ()
-    "Функция вызывает ~describe-personal-keybindings~
-и перемещается в новое окно. Так реально удобнее!
-(Мне так кажется)."
+    "Вызывает `describe-personal-keybindings' и перемещается в новое окно. Так
+  реально удобнее! (Мне так кажется)."
     (interactive)
     (describe-personal-keybindings)
     (other-window 1))
@@ -277,19 +285,7 @@
 
 
 
-
-(defun my/minibuffer-setup-hook ()
-  (setq gc-cons-threshold most-positive-fixnum))
-
-(defun my/minibuffer-exit-hook ()
-  (setq gc-cons-threshold (* 6 1024 1024)))
-
-(add-hook 'minibuffer-setup-hook #'my/minibuffer-setup-hook)
-(add-hook 'minibuffer-exit-hook #'my/minibuffer-exit-hook)
-
-
-
-;;; Unset keys
+;; ;;; Unset keys
 (global-unset-key (kbd "C-c"))      ; Эта комбинация изначально предназначалась для пользователя
 (global-unset-key (kbd "C-d"))      ; `delete-char'
 (global-unset-key (kbd "C-x C-l"))  ; `downcase-region' - у меня для этого функция есть
@@ -300,47 +296,69 @@
 (global-unset-key (kbd "M-k"))      ; `kill-sentence' - назначил на `my/delete-line'
 (global-unset-key (kbd "M-m"))      ; `back-to-indentation'
 (global-unset-key (kbd "M-s h"))    ; `hi-lock-...', `highlight-...', `unhighlight-' - перебиндил
-(global-unset-key (kbd "M-s o"))    ; `occur' - сделал префикс
+(global-unset-key (kbd "M-s o"))    ; `occur'
 
+
+
+
+;; стартуем emacs на весь экран и устанавливаем цветовую тему в зависимости от того,
+;; где работаем - гуй или терминал
+(if (display-graphic-p)
+    (progn
+      (setq-default cursor-type     '(bar . 3))     ; C-code (emacs)
+      (set-scroll-bar-mode          'right)
+      (tool-bar-mode                -1)
+      (tooltip-mode                 -1)
+      ;; (global-tab-line-mode)
+      ;; Масштабируемые шрифты в графическом интерфейсе
+      ;; C-x C-+ or C-x C--
+      (setq scalable-fonts-allowed t)                          ; C-code (emacs)
+      (setq-default initial-frame-alist   (quote    ((fullscreen . maximized))))
+      ;; (require 'custom_section_gui)
+      (load-theme 'abunbux t)
+      ;; (require 'poet-theme_section_gui)
+      (message "Loading \"custom_section_gui\"")
+      )
+  (progn
+    (menu-bar-mode       -1)
+    ;; (load-theme 'abunbux t)
+    (load-theme 'leuven t)
+    ;; (require 'custom_section_tty)
+    (message "Loading \"custom_section_tty\"")))
 
 
 
 
 (require 'setq_built-in_config)
+(require 'built-in_window_config)
+(require 'built-in_frame_config)
 
-;; (use-package simple
-;;   :defer 0.1
-;;   :custom
-;;   (global-visual-line-mode   t)             ; simple.el
-;;   (line-number-mode          t)             ; simple.el
-;;   (column-number-mode        t)             ; simple.el
-;;   (size-indication-mode      t)             ; simple.el
-;;   (blink-matching-paren-distance nil)       ; simple.el
+
+(use-package simple
+  :defer t
+  :custom
+  (column-number-mode                   t)                                      ; simple.el
+  (global-visual-line-mode              t)                                      ; simple.el
+  (kill-whole-line                      t)                                      ; simple.el
+  (kill-ring-max                        1000)                                   ; simple.el
+  (next-line-add-newlines               nil)                                    ; simple.el
+  ;; Allows navigation through the mark ring by doing C-u C-SPC once, then C-SPC
+  ;; C-SPC.  instead of C-u C-SPC C-u C-SPC C-u C-SPC ...
+  (set-mark-command-repeat-pop          t)                                      ; simple.el
+  (save-interprogram-paste-before-kill  t)                                      ; simple.el
+  (blink-matching-paren-distance        nil)                                    ; simple.el
+  (interprogram-cut-function            (and (fboundp #'x-select-text)          ; simple.el
+                                             #'x-select-text))
+  (interprogram-paste-function          (and (fboundp #'x-selection-value)      ; simple.el
+                                             #'x-selection-value))
+  (line-number-mode                     t)                                      ; simple.el
 
-;;   (kill-whole-line  t)                   ; simple.el
-;;   (kill-ring-max    1000)                ; simple.el
-
-;;   (next-line-add-newlines   nil)             ; simple.el
-;;   (save-interprogram-paste-before-kill  t)   ; simple.el
-
-;;   ;; Allows navigation through the mark ring by doing C-u C-SPC once, then C-SPC
-;;   ;; C-SPC.  instead of C-u C-SPC C-u C-SPC C-u C-SPC ...
-;;   (set-mark-command-repeat-pop  t)           ; simple.el
-
-
-;;   (interprogram-cut-function (and (fboundp #'x-select-text)         ; simple.el
-;;                                   #'x-select-text))
-;;   (interprogram-paste-function (and (fboundp #'x-selection-value)   ; simple.el
-;;                                     #'x-selection-value))
-
-;;   :bind
-;;   (:map ctl-x-map
-;;         ("C-k" . kill-region)
-;;         ("K" . kill-current-buffer))
-;;   :config
-;;   (message "Loading built-in YASESCAPE34PROTECTGUARDsimpleYASESCAPE34PROTECTGUARD")
-;;   (toggle-truncate-lines 1)                 ; проверить - работает или нет!!!!
-;;   )
+  (size-indication-mode                 t)                                      ; simple.el
+  ;; (mark-ring-max                        16) ; 16 по умолчанию                ; simple.el
+  :config
+  (message "Loading built-in \"simple\"")
+  (toggle-truncate-lines 1)
+  )
 
 
 
@@ -350,6 +368,10 @@
   :hook
   (before-save . delete-trailing-whitespace)
   (before-save . force-backup-of-buffer)
+  :bind
+  (
+   ("C-c I" .   my/find-user-init-file)
+   )
 
   :custom
   (auto-save-default                nil)
@@ -398,26 +420,37 @@
     (let ((buffer-backed-up nil))
       (backup-buffer)))
 
-  (fset 'display-startup-echo-area-message #'ignore)    ; subr.el
 
-  ;; (defalias 'yes-or-no-p #'y-or-n-p)                    ; subr.el
-  (advice-add 'yes-or-no-p :override #'y-or-n-p)
+  ;;; Быстрое открытие init.el
+  ;; my/find-user-init-file ("C-c I")
+  (defun my/find-user-init-file ()
+    "Edit the `user-init-file'"
+    (interactive)
+    ;; (find-file-other-window user-init-file) ;; in another window.
+    (find-file user-init-file))
 
-  (defadvice yes-or-no-p (around hack-exit (prompt))
-    (if
-        (string= prompt "Active processes exist; kill them and exit anyway? ") t
-      ad-do-it))
-
-
-  (defun my/y-or-n-p-optional (prompt)
-    "Prompt the user for a yes or no response, but accept any non-y
-response as a no."
-    (let ((query-replace-map (copy-keymap query-replace-map)))
-      (define-key query-replace-map [t] 'skip)
-      (y-or-n-p prompt)))
-
+  ;; (bind-key "C-c I" 'my/find-user-init-file)
 
   )
+
+
+
+(fset 'display-startup-echo-area-message #'ignore)    ; subr.el
+
+;; (defalias 'yes-or-no-p #'y-or-n-p)                    ; subr.el
+;; (advice-add 'yes-or-no-p :override #'y-or-n-p)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(defadvice yes-or-no-p (around hack-exit (prompt))
+  (if
+      (string= prompt "Active processes exist; kill them and exit anyway? ") t
+    ad-do-it))
+(defun my/y-or-n-p-optional (prompt)
+  "Prompt the user for a yes or no response, but accept any non-y
+response as a no."
+  (let ((query-replace-map (copy-keymap query-replace-map)))
+    (define-key query-replace-map [t] 'skip)
+    (y-or-n-p prompt)))
 
 
 
@@ -438,13 +471,16 @@ response as a no."
   )
 
 
+
+
 
 ;;; savehist
 (use-package savehist
   :ensure nil
   :hook
   (after-init . savehist-mode)
-  :init
+  :config
+  (message "Loading built-in \"savehist\"")
   (setq savehist-additional-variables
         '(compile-history
           command-history
@@ -470,8 +506,6 @@ response as a no."
         savehist-save-minibuffer-history  t
         savehist-autosave-interval        60)
   (setq savehist-file     "~/.emacs.d/cache/savehist")
-  :config
-  (message "Loading built-in \"savehist\"")
   ;; (savehist-mode 1)
   )
 
@@ -613,13 +647,37 @@ response as a no."
 
 (require 'ivy_init)
 (require 'helm_init)
+
 ;; (require 'ido_init)
+
+;; (use-package selectrum
+;;   :quelpa (selectrum :fetcher github :repo "raxod502/selectrum")
+;;   :init (selectrum-mode +1))
+
 
 (require 'smartparens_init)
 (require 'company_init)
 
 (require 'which-key_init)
 (require 'amx_init)
+
+;; Enable richer annotations using the Marginalia package
+(use-package marginalia
+  :ensure t
+  ;; Either bind `marginalia-cycle` globally or only in the minibuffer
+  :bind (("M-A" . marginalia-cycle)
+         :map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+
+  :init
+  (marginalia-mode)
+  :config
+  (message "Loading \"marginalia\"")
+  ;; (add-to-list 'marginalia-prompt-categories '("sketch" . sketch))
+  (setq marginalia-align-offset 10)
+  )
+
+
 (require 'yasnippet_init)
 
 ;; (require 'smart-mode-line_init)
@@ -788,34 +846,11 @@ response as a no."
 
 (require 'defun_bind)
 
+
+
+
 (require 'easy-menu_init)
 
-
-
-
-;; стартуем emacs на весь экран и устанавливаем цветовую тему в зависимости от того,
-;; где работаем - гуй или терминал
-(if (display-graphic-p)
-    (progn
-      (set-scroll-bar-mode    'right)
-      (tool-bar-mode -1)
-      (tooltip-mode -1)
-      ;; (global-tab-line-mode)
-      ;; Масштабируемые шрифты в графическом интерфейсе
-      ;; C-x C-+ or C-x C--
-      (setq scalable-fonts-allowed t)                          ; C-code (emacs)
-      (setq-default initial-frame-alist   (quote    ((fullscreen . maximized))))
-      ;; (require 'custom_section_gui)
-      (load-theme 'abunbux t)
-      ;; (require 'poet-theme_section_gui)
-      (message "Loading \"custom_section_gui\"")
-      )
-  (progn
-    (menu-bar-mode       -1)
-    ;; (load-theme 'abunbux t)
-    (load-theme 'leuven t)
-    ;; (require 'custom_section_tty)
-    (message "Loading \"custom_section_tty\"")))
 
 
 

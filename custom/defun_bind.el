@@ -1,7 +1,7 @@
 ;;; defun_bind.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Sun Feb 09 16:18:21 EET 2020>
-;;; Time-stamp: <Последнее обновление -- Sunday July 18 15:44:50 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Sunday August 29 15:20:16 EEST 2021>
 
 
 
@@ -10,8 +10,7 @@
 ;;; Code:
 
 
-(bind-key "M-1"     'delete-other-windows)
-(bind-key "M-2"     'other-window)
+
 (bind-key "M-0"     'kill-this-buffer global-map)
 (bind-key "C-d - 1" 'kill-this-buffer global-map) ; в «konsole» и «yakuake» "M-0" не работает
 
@@ -25,7 +24,7 @@
 
 (bind-key "C-z t"   'toggle-truncate-lines)
 
-
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                                             ;;;
 ;;;             РЕДАКТИРОВАНИЕ ТЕКСТА                              ;;;
@@ -136,18 +135,19 @@ With argument, do this that many times."
 
 
 
-;;; Удаляет всю строку целиком, независимо от положения точки, и поднимается на строку вверх.
-;; my/delete-line ("M-k")
-(defun my/delete-line ()
-  "Удаляет всю строку целиком, независимо от положения точки."
-  (interactive)
-  (kill-region
-   (move-beginning-of-line 1)
-   (save-excursion (move-end-of-line 1) (point)))
-  (delete-char 1)
-  (message "line deleted"))
+;; ;;; Удаляет всю строку целиком, независимо от положения точки, и поднимается на строку вверх.
+;; ;; my/delete-line ("M-k")
+;; (defun my/delete-line ()
+;;   "Удаляет всю строку целиком, независимо от положения точки."
+;;   (interactive)
+;;   (kill-region
+;;    (move-beginning-of-line 1)
+;;    (save-excursion (move-end-of-line 1) (point)))
+;;   (delete-char 1)
+;;   (message "line deleted"))
 
-(bind-key "M-k" 'my/delete-line global-map)
+;; (bind-key "M-k" 'my/delete-line global-map)
+;; То же самое делает родное сочетание "C-S-backspase"
 
 
 
@@ -264,18 +264,18 @@ With argument, do this that many times."
 
 
 
-;; override insert key to change cursor in overwrite mode
-(defvar cursor-mode-status 0)
-(bind-key "<insert>"
-          (lambda () (interactive)
-            (cond ((eq cursor-mode-status 0)
-                   (setq cursor-type 'box)
-                   (overwrite-mode (setq cursor-mode-status 1))
-                   (message "overwrite-mode enabled"))
-                  (t
-                   (setq cursor-type '(bar . 3))
-                   (overwrite-mode (setq cursor-mode-status 0))
-                   (message "insert-mode enabled")))))
+;; ;; override insert key to change cursor in overwrite mode
+;; (defvar cursor-mode-status 0)
+;; (bind-key "<insert>"
+;;           (lambda () (interactive)
+;;             (cond ((eq cursor-mode-status 0)
+;;                    (setq cursor-type 'box)
+;;                    (overwrite-mode (setq cursor-mode-status 1))
+;;                    (message "overwrite-mode enabled"))
+;;                   (t
+;;                    (setq cursor-type '(bar . 3))
+;;                    (overwrite-mode (setq cursor-mode-status 0))
+;;                    (message "insert-mode enabled")))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -283,7 +283,7 @@ With argument, do this that many times."
 
 
 
-
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                                             ;;;
 ;;;             ПЕРЕМЕЩЕНИЕ ПО ТЕКСТУ                              ;;;
@@ -382,36 +382,12 @@ If point was already at that position, move point to beginning of line."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                                             ;;;
 ;;;                     РАБОТА С ФАЙЛАМИ                          ;;;
 ;;;                                                            ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-;;; Быстрое открытие init.el
-;; my/find-user-init-file ("C-c I")
-(defun my/find-user-init-file ()
-  "Edit the `user-init-file'"
-  (interactive)
-  ;; (find-file-other-window user-init-file) ;; in another window.
-  (find-file user-init-file))
-
-(bind-key "C-c I" 'my/find-user-init-file)
-
-
-
-;;; Быстрое открытие файла README.md
-;; my/find-readmy-file ("C-c i")
-(defun my/find-readmy-file ()
-  "..."
-  (interactive)
-  (find-file "~/.emacs.d/README.org"))
-
-(bind-key "C-c i" 'my/find-readmy-file)
-
 
 
 ;;; my/byte-recompile-config ()
@@ -555,14 +531,14 @@ Version 2019-02-26"
 (bind-key "C-c r f" 'xah-open-file-fast)
 
 
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                                             ;;;
 ;;;                    РАБОТА С БУФЕРАМИ                          ;;;
 ;;;                                                            ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
 
 ;;; Kill all other buffers
 ;; my/kill-other-buffers ("C-d - o")
@@ -594,133 +570,14 @@ Version 2019-02-26"
 
 
 
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;                                                             ;;;
 ;;;                      РАБОТА С ОКНАМИ                          ;;;
 ;;;                                                            ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
-
-;;; my/split-window-right ("C-x 3")
-(defun my/split-window-right ()
-  (interactive)
-  (split-window-right)
-  (balance-windows)
-  (other-window 1))
-
-(bind-key [remap split-window-right] 'my/split-window-right global-map)
-
-
-
-;;; 'ctrl + alt + \arrow keys\' ресайзит окна.
-;; my/win-resize-minimize-vert ("C-M-down")
-;; my/win-resize-enlarge-vert ("C-M-up")
-;; my/win-resize-minimize-horiz ("C-M-left")
-;; my/win-resize-enlarge-horiz ("C-M-right")
-;; my/win-resize-enlarge-horiz ("C-M-up")
-;; my/win-resize-minimize-horiz ("C-M-down")
-;; my/win-resize-enlarge-vert ("C-M-left")
-;; my/win-resize-minimize-vert ("C-M-right")
-
-(defun my/win-resize-top-or-bot ()
-  "Figure out if the current window is on top, bottom or in the
-middle"
-  (let* ((win-edges (window-edges))
-         (this-window-y-min (nth 1 win-edges))
-         (this-window-y-max (nth 3 win-edges))
-         (fr-height (frame-height)))
-    (cond
-     ((eq 0 this-window-y-min) "top")
-     ((eq (- fr-height 1) this-window-y-max) "bot")
-     (t "mid"))))
-
-(defun my/win-resize-left-or-right ()
-  "Figure out if the current window is to the left, right or in the
-middle"
-  (let* ((win-edges (window-edges))
-         (this-window-x-min (nth 0 win-edges))
-         (this-window-x-max (nth 2 win-edges))
-         (fr-width (frame-width)))
-    (cond
-     ((eq 0 this-window-x-min) "left")
-     ((eq (+ fr-width 4) this-window-x-max) "right")
-     (t "mid"))))
-
-;; [C-M-right] [C-M-up]
-(defun my/win-resize-enlarge-horiz ()
-  (interactive)
-  (cond
-   ((equal "top" (my/win-resize-top-or-bot)) (enlarge-window -1))
-   ((equal "bot" (my/win-resize-top-or-bot)) (enlarge-window 1))
-   ((equal "mid" (my/win-resize-top-or-bot)) (enlarge-window -1))
-   (t (message "nil"))))
-
-;; [C-M-left] [C-M-down]
-(defun my/win-resize-minimize-horiz ()
-  (interactive)
-  (cond
-   ((equal "top" (my/win-resize-top-or-bot)) (enlarge-window 1))
-   ((equal "bot" (my/win-resize-top-or-bot)) (enlarge-window -1))
-   ((equal "mid" (my/win-resize-top-or-bot)) (enlarge-window 1))
-   (t (message "nil"))))
-
-;; [C-M-up] [C-M-left]
-(defun my/win-resize-enlarge-vert ()
-  (interactive)
-  (cond
-   ((equal "left" (my/win-resize-left-or-right)) (enlarge-window-horizontally -1))
-   ((equal "right" (my/win-resize-left-or-right)) (enlarge-window-horizontally 1))
-   ((equal "mid" (my/win-resize-left-or-right)) (enlarge-window-horizontally -1))))
-
-;; [C-M-down] [C-M-right]
-(defun my/win-resize-minimize-vert ()
-  (interactive)
-  (cond
-   ((equal "left"   (my/win-resize-left-or-right)) (enlarge-window-horizontally 1))
-   ((equal "right"  (my/win-resize-left-or-right)) (enlarge-window-horizontally -1))
-   ((equal "mid"    (my/win-resize-left-or-right)) (enlarge-window-horizontally 1))))
-
-
-(bind-key [C-M-down]  'my/win-resize-minimize-vert)
-(bind-key [C-M-up]    'my/win-resize-enlarge-vert)
-(bind-key [C-M-left]  'my/win-resize-minimize-horiz)
-(bind-key [C-M-right] 'my/win-resize-enlarge-horiz)
-(bind-key [C-M-up]    'my/win-resize-enlarge-horiz)
-(bind-key [C-M-down]  'my/win-resize-minimize-horiz)
-(bind-key [C-M-left]  'my/win-resize-enlarge-vert)
-(bind-key [C-M-right] 'my/win-resize-minimize-vert)
-
-
-;;; Переключает отображение фреймов (двух) - с вертикального на горизонтальный и наоборот
-;; my/toggle-window-split ("C-x |")
-(defun my/toggle-window-split ()
-  (interactive)
-  (if (= (count-windows) 2)
-      (let* ((this-win-buffer (window-buffer))
-             (next-win-buffer (window-buffer (next-window)))
-             (this-win-edges (window-edges (selected-window)))
-             (next-win-edges (window-edges (next-window)))
-             (this-win-2nd (not (and (<= (car this-win-edges)
-                                         (car next-win-edges))
-                                     (<= (cadr this-win-edges)
-                                         (cadr next-win-edges)))))
-             (splitter
-              (if (= (car this-win-edges)
-                     (car (window-edges (next-window))))
-                  'split-window-horizontally
-                'split-window-vertically)))
-        (delete-other-windows)
-        (let ((first-win (selected-window)))
-          (funcall splitter)
-          (if this-win-2nd (other-window 1))
-          (set-window-buffer (selected-window) this-win-buffer)
-          (set-window-buffer (next-window) next-win-buffer)
-          (select-window first-win)
-          (if this-win-2nd (other-window 1))))))
-
-(bind-key "C-x |" 'my/toggle-window-split)
 
 
 
