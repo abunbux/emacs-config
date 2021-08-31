@@ -1,7 +1,7 @@
 ;;; defun_bind.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Sun Feb 09 16:18:21 EET 2020>
-;;; Time-stamp: <Последнее обновление -- Sunday August 29 15:20:16 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Monday August 30 17:4:9 EEST 2021>
 
 
 
@@ -324,22 +324,6 @@ If point was already at that position, move point to beginning of line."
 (bind-key "C-a" 'my/smart-beginning-of-line)
 
 
-;;; Перемещение по парным скобкам
-;; Emulation of the vi % command
-;; Переход к парной скобке по "%"
-;; my/match-paren ("%")
-(defun my/match-paren (arg)
-  "Go to the matching paren if on a paren; otherwise insert %."
-  (interactive "p")
-  (let ((prev-char (char-to-string (preceding-char)))
-        (next-char (char-to-string (following-char))))
-    (cond ((string-match "[[{(<]" next-char) (forward-sexp 1))
-          ((string-match "[\]})>]" prev-char) (backward-sexp 1))
-          (t (self-insert-command (or arg 1))))))
-
-(bind-key "%" 'my/match-paren)
-
-
 
 
 ;;; my/goto-line-with-feedback ("M-g M-g")
@@ -390,87 +374,6 @@ If point was already at that position, move point to beginning of line."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;; my/byte-recompile-config ()
-(defun my/byte-recompile-config (&optional arg)
-  (interactive "p")
-  "Recompile this Emacs configuration.
-If passed a non-nil or called interactively with a C-u, also recompile
-files with (apparently) up to date bytecodes."
-  (let* ((force (if (called-interactively-p 'any)
-                    (and (integerp arg) (= arg 4))
-                  arg))
-         (init-el-error
-          (progn
-            (when force
-              (delete-file (locate-user-emacs-file "init.elc")))
-            (not (byte-compile-file (locate-user-emacs-file "init.el")))))
-         (modules-error (string-match-p
-                         (rx "failed")
-                         (byte-recompile-directory
-                          (locate-user-emacs-file "custom/")
-                          0
-                          force))))
-    (or init-el-error modules-error)))
-
-
-
-;;; Перезагружает файл инициализации emacs
-;; Reload current emacs lisp file
-;; my/reload-current-init-file ()
-(defun my/reload-current-init-file ()
-  "Reloads the current initialization file into emacs."
-  (interactive)
-  (load-file buffer-file-name))
-
-
-
-;;; Переименовывает текущий буфер
-;; my/rename-current-buffer-file ()
-(defun my/rename-current-buffer-file ()
-  "Renames current buffer and file it is visiting."
-  (interactive)
-  (let ((name (buffer-name))
-        (filename (buffer-file-name)))
-    (if (not (and filename (file-exists-p filename)))
-        (error "Buffer '%s' is not visiting a file!" name)
-      (let ((new-name (read-file-name "New name: " filename)))
-        (if (get-buffer new-name)
-            (error "A buffer named '%s' already exists!" new-name)
-          (rename-file filename new-name 1)
-          (rename-buffer new-name)
-          (set-visited-file-name new-name)
-          (set-buffer-modified-p nil)
-          (message "File '%s' successfully renamed to '%s'"
-                   name (file-name-nondirectory new-name)))))))
-
-
-
-;;; Копирует имя текущего файла в буфер обмена
-;;; Копирует абсолютный путь к файлу и имя файла.
-;; my/copy-full-file-name-to-clipboard ()
-(defun my/copy-full-file-name-to-clipboard ()
-  "Copy the current buffer file name to the clipboard."
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (when filename
-      (kill-new filename)
-      (message "Copied buffer file name '%s' to the clipboard." filename))))
-
-
-
-;;; my/copy-buffer-file-name-nondirectory ()
-(defun my/copy-buffer-file-name-nondirectory ()
-  (interactive)
-  (kill-new (file-name-nondirectory buffer-file-name)))
-
-
-
-;;; my/copy-buffer-file-name-directory ()
-(defun my/copy-buffer-file-name-directory ()
-  (interactive)
-  (kill-new (file-name-directory buffer-file-name)))
 
 
 
@@ -567,17 +470,6 @@ Version 2019-02-26"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;                                                             ;;;
-;;;                      РАБОТА С ОКНАМИ                          ;;;
-;;;                                                            ;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 
 

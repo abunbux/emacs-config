@@ -1,7 +1,7 @@
 ;;; setq_built-in_config.el  -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Сб мая 11 07:59:33 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Sunday August 29 15:17:30 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Monday August 30 11:25:35 EEST 2021>
 
 
 
@@ -23,14 +23,12 @@
 	  user-full-name                "abunbux"                       ; C-code (emacs)
 	  user-mail-address             "abunbux@gmail.com")            ; startup.el
 
+;; auto-formatting in text-mode
+(add-hook 'text-mode-hook 'turn-on-auto-fill)                       ; text-mode.el
 
 
 
 (use-package emacs
-  :hook
-  ;; auto-formatting in text-mode
-  (text-mode-hook   . turn-on-auto-fill)                      ; text-mode.el
-
   :custom
   (inhibit-x-resources                  t)              ; C-code (emacs)
   ;; Не сжимать кеши шрифтов во время сборки мусора.
@@ -65,7 +63,7 @@
   (use-dialog-box                       nil)            ; C-code (emacs)
 
   :config
-  (message "Loading built-in \"C-code\" - \"pseudo-package emacs\"")
+  (message "Loading built-in \"C-code\" - \"pseudo emacs\"")
   (setq-default indent-tabs-mode        nil            ; C-code (emacs)
                 tab-width               4)             ; C-code (emacs)
   (setq-default fill-column             80)            ; C-code (emacs)
@@ -78,6 +76,12 @@
   (setq create-lockfiles              nil)             ; C-code (emacs)
   (setq auto-save-list-file-name      nil)             ; C-code (emacs)
   (setq auto-save-visited-file-name   nil)             ; C-code (emacs)
+
+  ;; C-v и M-v не отменяют друг друга, потому что положение точки не сохраняется.
+  ;; Исправим это.
+  (setq scroll-preserve-screen-position 'always)        ; C-code (emacs)
+  (setq  enable-recursive-minibuffers   t)              ; C-code (emacs))
+
   )
 
 
@@ -86,12 +90,26 @@
 (setq vc-make-backup-files          t)                 ; vc-hooks.el
 
 
-;; C-v и M-v не отменяют друг друга, потому что положение точки не сохраняется.
-;; Исправим это.
-(setq scroll-preserve-screen-position 'always)         ; C-code (emacs)
 
 
 
+
+(fset 'display-startup-echo-area-message #'ignore)    ; subr.el
+
+;; (defalias 'yes-or-no-p #'y-or-n-p)                    ; subr.el
+;; (advice-add 'yes-or-no-p :override #'y-or-n-p)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(defadvice yes-or-no-p (around hack-exit (prompt))
+  (if
+      (string= prompt "Active processes exist; kill them and exit anyway? ") t
+    ad-do-it))
+(defun my/y-or-n-p-optional (prompt)
+  "Prompt the user for a yes or no response, but accept any non-y
+response as a no."
+  (let ((query-replace-map (copy-keymap query-replace-map)))
+    (define-key query-replace-map [t] 'skip)
+    (y-or-n-p prompt)))
 
 
 
@@ -122,7 +140,6 @@
 
 (setq read-file-name-completion-ignore-case t)                      ; minibuffer.el
 (setq minibuffer-depth-indicate-mode        99)                     ; mb-depth.el
-(setq  enable-recursive-minibuffers         t)                      ; C-code (emacs))
 (minibuffer-depth-indicate-mode)                                    ; mb-depth.el
 
 
@@ -134,13 +151,6 @@
 (setq column-number-indicator-zero-based   nil)                      ; bindings.el
 
 
-;; Mouse & Smooth Scroll
-;; Scroll one line at a time (less "jumpy" than defaults)
-(when (display-graphic-p)
-  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))  ; mwheel.el
-        ;; mouse-wheel-scroll-amount '(1 ((shift) . hscroll))           ; mwheel.el
-        ;; mouse-wheel-scroll-amount '(1 ((shift) . 1))                 ; mwheel.el
-        mouse-wheel-progressive-speed nil))                             ; mwheel.el
 
 
 
@@ -228,35 +238,6 @@
 
 
 
-;;; whitespace.el
-;; built-in
-;; "M-h h W"  `whitespace-mode'
-(use-package whitespace
-  :ensure nil
-  :defer t
-  :bind (("M-h h W" . whitespace-mode))
-  :init
-  :config
-  (message "Loading \"whitespace\"")
-  (setq whitespace-style
-        '(face
-          empty
-          lines
-          newline
-          newline-mark
-          spaces
-          space-mark
-          tab-mark
-          tabs
-          trailing))
-
-  (setq whitespace-display-mappings
-        '((space-mark 32 [183] [46])
-          (space-mark 160 [164] [95])
-          (newline-mark 10 [36 10])
-          (tab-mark 9 [187 9] [92 9]))))
-
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -296,32 +277,32 @@
 
 
 
-;;; semantic.el
-(use-package semantic
-  :ensure nil
-  :defer t
-  :commands (semantic-mode)
-  :init
-  :config
-  (message "Loading \"semantic\"")
-  (with-eval-after-load 'semantic-mode
-    (progn
-      (message "semantic-mode loaded")
-      (setq semantic-idle-summary-function (quote semantic-format-tag-summarize))
-      (setq semantic-imenu-bucketize-file t)
-      (setq semantic-imenu-bucketize-type-members nil)
-      (setq semantic-imenu-buckets-to-submenu nil)
-      (setq semantic-imenu-expand-type-members nil)
-      (setq semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-type-increasing-ci))
-      (setq semantic-which-function-use-color t)
-      ))
+;; ;;; semantic.el
+;; (use-package semantic
+;;   :ensure nil
+;;   ;; :disabled
+;;   :commands (semantic-mode)
+;;   :init
+;;   :config
+;;   (message "Loading \"semantic\"")
+;;   (with-eval-after-load 'semantic-mode
+;;     (progn
+;;       (message "semantic-mode loaded")
+;;       (setq semantic-idle-summary-function (quote semantic-format-tag-summarize))
+;;       (setq semantic-imenu-bucketize-file t)
+;;       (setq semantic-imenu-bucketize-type-members nil)
+;;       (setq semantic-imenu-buckets-to-submenu nil)
+;;       (setq semantic-imenu-expand-type-members nil)
+;;       (setq semantic-imenu-sort-bucket-function (quote semantic-sort-tags-by-type-increasing-ci))
+;;       (setq semantic-which-function-use-color t)
+;;       ))
 
-  (add-hook 'semantic-mode-hook 'global-semantic-highlight-func-mode)
-  (add-hook 'semantic-mode-hook 'global-semantic-idle-completions-mode)
-  (add-hook 'semantic-mode-hook 'global-semanticdb-minor-mode)
-  (add-hook 'semantic-mode-hook 'global-semantic-highlight-edits-mode)
-  (add-hook 'semantic-mode-hook 'global-semantic-idle-summary-mode)
-  )
+;;   (add-hook 'semantic-mode-hook 'global-semantic-highlight-func-mode)
+;;   (add-hook 'semantic-mode-hook 'global-semantic-idle-completions-mode)
+;;   (add-hook 'semantic-mode-hook 'global-semanticdb-minor-mode)
+;;   (add-hook 'semantic-mode-hook 'global-semantic-highlight-edits-mode)
+;;   (add-hook 'semantic-mode-hook 'global-semantic-idle-summary-mode)
+;;   )
 
 
 
@@ -414,9 +395,9 @@
 ;; (add-hook 'grep-mode-hook   (lambda () (switch-to-buffer-other-window "*grep*")))
 
 ;; Focus on *Occur* window right away.
-(add-hook 'occur-hook (lambda () (other-window 1)))                                         ; replace.el
+(add-hook 'occur-hook (lambda () (other-window 1)))                             ; replace.el
 
-(setq query-replace-highlight       t)                                                       ; replace.el
+(setq query-replace-highlight       t)                                          ; replace.el
 
 
 
@@ -425,7 +406,7 @@
   :defer t
   :config
   (message "Loading built-in \"re-builder\"")
-  (setq-default reb-re-syntax 'string)                                    ; re-builder.el
+  (setq-default reb-re-syntax 'string)                                          ; re-builder.el
   )
 
 
@@ -450,163 +431,7 @@
   )
 
 
-
-;; grep.el
-;; Не использую - есть другие альтернативы, всё использовать невозможно, да и не нужно.
-(use-package grep
-  :defer t
-  :preface
-  ;;; https://github.com/mpolden/emacs.d/blob/master/lisp/init-grep.el
-  ;; grep-visit-buffer-other-window ("o")
-  ;; grep-visit-buffer-other-window-noselect ("C-o")
-  (defun grep-visit-buffer-other-window (&optional event noselect)
-    "Visit grep result in another window."
-    (interactive)
-    (let ((current-window (selected-window)))
-      (compile-goto-error event)
-      (when noselect
-        (select-window current-window))))
 
-  (defun grep-visit-buffer-other-window-noselect (&optional event)
-    "Visit grep result in another window, but don't select it."
-    (interactive)
-    (grep-visit-buffer-other-window event t))
-
-  :bind (
-         ("M-s g ." . grep-at-point)
-         ("M-s g s" . grep-selected-text)
-
-         :map grep-mode-map
-         ;; make C-o and o behave as in dired
-         ("o"   . grep-visit-buffer-other-window)
-         ("C-o" . grep-visit-buffer-other-window-noselect)
-         ;; n and p changes line as in ag-mode
-         ("n"   . compilation-next-error)
-         ("p"   . compilation-previous-error)
-         )
-  :init
-  :config
-  (message "Loading built-in \"grep\"")
-  (setq grep-command    "ack --with-filename --nofilter --nogroup ")
-  (setq-default grep-highlight-matches    t)
-  (add-hook 'grep-mode-hook
-            (lambda ()
-              ;; wrap lines
-              (setq-local truncate-lines nil)))
-  (setq grep-host-defaults-alist nil)
-  )
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;                                                      ;;;
-;;;                    DIFF, EDIFF                       ;;;
-;;;                                                      ;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; diff-mode.el
-(use-package diff-mode
-  :ensure nil
-  :defer t
-  :preface
-    ;;; my/diff-region ()
-  (defun my/diff-region ()
-    "Select a region to compare"
-    (interactive)
-    (when (use-region-p) ; there is a region
-      (let (buf)
-        (setq buf (get-buffer-create "*Diff-regionA*"))
-        (save-current-buffer
-          (set-buffer buf)
-          (erase-buffer))
-        (append-to-buffer buf (region-beginning) (region-end)))
-      )
-    (message "Now select other region to compare and run `my/diff-region-now`"))
-
-    ;;; my/diff-region-now ()
-  (defun my/diff-region-now ()
-    "Compare current region with region already selected by `diff-region`"
-    (interactive)
-    (when (use-region-p)
-      (let (bufa bufb)
-        (setq bufa (get-buffer-create "*Diff-regionA*"))
-        (setq bufb (get-buffer-create "*Diff-regionB*"))
-        (save-current-buffer
-          (set-buffer bufb)
-          (erase-buffer))
-        (append-to-buffer bufb (region-beginning) (region-end))
-        (ediff-buffers bufa bufb))))
-
-  ;; :bind (("---------" . diff-buffer-with-file))
-  :init
-  (autoload 'diff-mode "diff-mode" "Diff major mode" t)
-  :config
-  (message "Loading built-in \"diff-mode\"")
-  (setq diff-switches "-u")
-  ;; show important whitespace in diff-mode
-  (add-hook 'diff-mode-hook
-            (lambda ()
-              (setq-local whitespace-style
-                          '(face
-                            tabs
-                            tab-mark
-                            spaces
-                            space-mark
-                            trailing
-                            indentation::space
-                            indentation::tab
-                            newline
-                            newline-mark))
-              (whitespace-mode 1)))
-
-  )
-
-
-
-;; ediff.el
-(use-package ediff
-  :ensure nil
-  :defer t
-  ;; :bind (("----------" . ediff-current-file))
-  :config
-  (message "Loading built-in \"ediff\"")
-  (setq-default ediff-highlight-all-diffs t)
-  (setq-default ediff-forward-word-function 'forward-char)
-  (setq ediff-diff-options "-w")
-  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
-  (setq ediff-split-window-function 'split-window-horizontally)
-  (setq ediff-auto-refine-limit (* 2 14000))
-
-  (add-hook 'ediff-startup-hook
-            (lambda ()
-              (progn
-                (set-frame-size(selected-frame) 40 10))))
-
-  ;; (custom-set-faces
-  ;;  '(ediff-current-diff-A   ((t (:background "orange"       :foreground "brown"))))
-  ;;  '(ediff-current-diff-B   ((t (:background "red"          :foreground "blue"))))
-  ;;  '(ediff-current-diff-C   ((t (:background "Pink"         :foreground "Navy"))))
-  ;;  '(ediff-even-diff-A      ((t (:background "light grey"   :foreground "Black"))))
-  ;;  '(ediff-even-diff-B      ((t (:background "Grey"         :foreground "White"))))
-  ;;  '(ediff-even-diff-C      ((t (:background "light grey"   :foreground "Black"))))
-  ;;  '(ediff-fine-diff-A      ((t (:background "sky blue"     :foreground "Navy"  :weight bold))))
-  ;;  '(ediff-fine-diff-B      ((t (:background "cyan"         :foreground "Black" :weight bold))))
-  ;;  '(ediff-fine-diff-C      ((t (:background "Turquoise"    :foreground "Black" :weight bold))))
-  ;;  '(ediff-odd-diff-A       ((t (:background "Grey"         :foreground "White"))))
-  ;;  '(ediff-odd-diff-B       ((t (:background "light grey"   :foreground "Black"))))
-  ;;  '(ediff-odd-diff-C       ((t (:background "Grey"         :foreground "White"))))
-  ;;  )
-  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 
@@ -696,7 +521,7 @@
   (message "Loading built-in \"time\"")
   ;; (display-time-mode t)
   ;; https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  (setq display-time-world-list '(("Europe/Paris"         "Paris")                ; time.el
+  (setq display-time-world-list '(("Europe/Paris"         "Paris")
                                   ("Europe/Berlin"        "Berlin")
                                   ("Europe/Kiev"          "Kiev")
                                   ("Europe/Zaporozhye"    "Zaporozhye")
@@ -719,24 +544,6 @@
   )
 
 
-
-;;; Time-stamp
-;; when there is a "Time-stamp:
-;; <Последнее обновление -- Sunday September 24 23:32:21 EEST 2017>"
-;; in the first 15 lines of the file,
-;; emacs will write time-stamp information there when saving the file.
-(use-package time-stamp
-  :hook
-  (before-save . time-stamp)
-  :custom
-  (time-stamp-active         t)
-  ;; check first 15 buffer lines for Time-stamp: <>
-  (time-stamp-line-limit     15)
-  (time-stamp-format "Последнее обновление -- %:a %:b %:d %:H:%:M:%:S %:Z %:Y")
-  :config
-  (message "Loading built-in \"time-stamp\"")
-  )
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -750,32 +557,17 @@
 ;;; Disabled Commands **************************************
 
 ;; enable all commands
-(setq disabled-command-function  nil)                 ; novice.el
+;; (setq disabled-command-function  nil)                 ; novice.el
 
 ;; ;; Enable default disabled stuff
 ;; ;; Следующие команды выдают предупреждение при запуске.
 ;; ;; Для их отключения нужно раскомментировать нижеследующее
-;; (put 'downcase-region   'disabled nil)
-;; (put 'upcase-region     'disabled nil)
-;; (put 'erase-buffer      'disabled nil)
-;; (put 'scroll-left       'disabled nil)
-;; (put 'narrow-to-page    'disabled nil)
-;; (put 'narrow-to-region  'disabled nil)
-;; (put 'set-goal-column 'disabled nil)
+(put 'downcase-region   'disabled nil)
+(put 'upcase-region     'disabled nil)
+(put 'erase-buffer      'disabled nil)
+(put 'scroll-left       'disabled nil)
+(put 'set-goal-column   'disabled nil)
 
-
-;;; my/enable-all-commands ()
-(defun my/enable-all-commands ()
-  "Enable all commands, reporting on which were disabled."
-  (interactive)
-  (with-output-to-temp-buffer "*Commands that were disabled*"
-    (mapatoms
-     (function
-      (lambda (symbol)
-        (when (get symbol 'disabled)
-          (put symbol 'disabled nil)
-          (prin1 symbol)
-          (princ "\n")))))))
 
 
 

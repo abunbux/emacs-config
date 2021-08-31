@@ -1,7 +1,7 @@
 ;;; search_replace_config.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri May 24 19:11:57 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday December 3 3:12:37 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Wednesday August 25 19:2:38 EEST 2021>
 
 
 
@@ -203,13 +203,13 @@
 
 
 ;;; anzu.el
-;; anzu-isearch-query-replace
-;; anzu-isearch-query-replace-regexp
-;; anzu-query-replace
-;; anzu-query-replace-at-cursor
-;; anzu-query-replace-at-cursor-thing
-;; anzu-query-replace-regexp
-;; anzu-replace-at-cursor-thing
+;;     `anzu-isearch-query-replace'
+;;     `anzu-isearch-query-replace-regexp'
+;;     `anzu-query-replace'
+;;     `anzu-query-replace-at-cursor'
+;;     `anzu-query-replace-at-cursor-thing'
+;;     `anzu-query-replace-regexp'
+;;     `anzu-replace-at-cursor-thing'
 (use-package anzu
   :ensure t
   :diminish

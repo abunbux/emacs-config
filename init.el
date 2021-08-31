@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Sunday August 29 15:17:16 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Monday August 30 21:4:35 EEST 2021>
 
 
 
@@ -290,10 +290,9 @@
 (global-unset-key (kbd "C-d"))      ; `delete-char'
 (global-unset-key (kbd "C-x C-l"))  ; `downcase-region' - у меня для этого функция есть
 (global-unset-key (kbd "C-x C-u"))  ; `upcase-region' - у меня для этого функция есть
-(global-unset-key (kbd "C-x n"))    ; `narrow-...'
 (global-unset-key (kbd "C-z"))      ; `suspend-frame'
 (global-unset-key (kbd "M-h"))      ; `mark-paragraph'
-(global-unset-key (kbd "M-k"))      ; `kill-sentence' - назначил на `my/delete-line'
+(global-unset-key (kbd "M-k"))      ; `kill-sentence'
 (global-unset-key (kbd "M-m"))      ; `back-to-indentation'
 (global-unset-key (kbd "M-s h"))    ; `hi-lock-...', `highlight-...', `unhighlight-' - перебиндил
 (global-unset-key (kbd "M-s o"))    ; `occur'
@@ -301,18 +300,36 @@
 
 
 
+;; ;; Mouse & Smooth Scroll
+;; ;; Scroll one line at a time (less "jumpy" than defaults)
+;; (when (display-graphic-p)
+;;   (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))   ; mwheel.el
+;;         ;; mouse-wheel-scroll-amount '(1 ((shift) . hscroll))            ; mwheel.el
+;;         ;; mouse-wheel-scroll-amount '(1 ((shift) . 1))                  ; mwheel.el
+;;         mouse-wheel-progressive-speed nil))                              ; mwheel.el
+
+
 ;; стартуем emacs на весь экран и устанавливаем цветовую тему в зависимости от того,
 ;; где работаем - гуй или терминал
 (if (display-graphic-p)
     (progn
-      (setq-default cursor-type     '(bar . 3))     ; C-code (emacs)
+      (setq-default cursor-type     '(bar . 3))                             ; C-code (emacs)
       (set-scroll-bar-mode          'right)
       (tool-bar-mode                -1)
       (tooltip-mode                 -1)
       ;; (global-tab-line-mode)
+
       ;; Масштабируемые шрифты в графическом интерфейсе
       ;; C-x C-+ or C-x C--
-      (setq scalable-fonts-allowed t)                          ; C-code (emacs)
+      (setq scalable-fonts-allowed t)                                       ; C-code (emacs)
+
+      ;; Mouse & Smooth Scroll
+      ;; Scroll one line at a time (less "jumpy" than defaults)
+      (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))  ; mwheel.el
+            ;; mouse-wheel-scroll-amount '(1 ((shift) . hscroll))           ; mwheel.el
+            ;; mouse-wheel-scroll-amount '(1 ((shift) . 1))                 ; mwheel.el
+            mouse-wheel-progressive-speed nil)                              ; mwheel.el
+
       (setq-default initial-frame-alist   (quote    ((fullscreen . maximized))))
       ;; (require 'custom_section_gui)
       (load-theme 'abunbux t)
@@ -330,294 +347,27 @@
 
 
 (require 'setq_built-in_config)
+
 (require 'built-in_window_config)
 (require 'built-in_frame_config)
-
-
-(use-package simple
-  :defer t
-  :custom
-  (column-number-mode                   t)                                      ; simple.el
-  (global-visual-line-mode              t)                                      ; simple.el
-  (kill-whole-line                      t)                                      ; simple.el
-  (kill-ring-max                        1000)                                   ; simple.el
-  (next-line-add-newlines               nil)                                    ; simple.el
-  ;; Allows navigation through the mark ring by doing C-u C-SPC once, then C-SPC
-  ;; C-SPC.  instead of C-u C-SPC C-u C-SPC C-u C-SPC ...
-  (set-mark-command-repeat-pop          t)                                      ; simple.el
-  (save-interprogram-paste-before-kill  t)                                      ; simple.el
-  (blink-matching-paren-distance        nil)                                    ; simple.el
-  (interprogram-cut-function            (and (fboundp #'x-select-text)          ; simple.el
-                                             #'x-select-text))
-  (interprogram-paste-function          (and (fboundp #'x-selection-value)      ; simple.el
-                                             #'x-selection-value))
-  (line-number-mode                     t)                                      ; simple.el
-
-  (size-indication-mode                 t)                                      ; simple.el
-  ;; (mark-ring-max                        16) ; 16 по умолчанию                ; simple.el
-  :config
-  (message "Loading built-in \"simple\"")
-  (toggle-truncate-lines 1)
-  )
-
+(require 'built-in_simple_config)
+(require 'built-in_files_config)
+(require 'built-in_saveplace_config)
+(require 'built-in_savehist_config)
+(require 'built-in_delsel_config)
+(require 'built-in_recentf_config)
+(require 'built-in_bookmark_config)
+(require 'built-in_abbrev_config)
+(require 'built-in_narrow_config)
+(require 'built-in_whitespace_config)
+(require 'built-in_time-stamp_config)
+(require 'built-in_diff_config)         ; :disabled
+(require 'built-in_ediff_config)
+(require 'built-in_grep_config)         ; :disabled
+(require 'built-in_paren_config)
 
 
 
-;;; files
-(use-package files
-  :hook
-  (before-save . delete-trailing-whitespace)
-  (before-save . force-backup-of-buffer)
-  :bind
-  (
-   ("C-c I" .   my/find-user-init-file)
-   )
-
-  :custom
-  (auto-save-default                nil)
-  (auto-save-list-file-prefix       nil)
-  (backup-by-copying                t)
-  (backup-by-copying-when-linked    t)
-  ;; (confirm-kill-emacs               #'yes-or-no-p)
-  ;; (confirm-nonexistent-file-or-buffer nil)
-  (delete-old-versions              t)
-  (delete-auto-save-files           nil)
-  (kept-new-versions                40)
-  (kept-old-versions                10)
-  (require-final-newline            t)
-  (version-control                  t)
-
-  :config
-  (message "Loading buit-in \"files\"")
-  (setq-default find-file-visit-truename t)
-
-  (when (not (file-directory-p "~/.emacs.d/cache/backup"))
-    (make-directory "~/.emacs.d/cache/backup")
-    (message "make directory \"~/.emacs.d/cache/backup\""))
-  (if (file-directory-p "~/.emacs.d/cache/backup")
-      (setq backup-directory-alist '(("" . "~/.emacs.d/cache/backup"))))
-
-
-  ;; (when (not (file-directory-p "~/.emacs.d/cache/auto-save-list/"))
-  ;;   (make-directory "~/.emacs.d/cache/auto-save-list/")
-  ;;   (message "make directory \"~/.emacs.d/cache/auto-save-list/\""))
-  ;; (if (file-directory-p "~/.emacs.d/cache/auto-save-list/")
-  ;;     (setq auto-save-list-file-prefix "~/.emacs.d/cache/auto-save-list/"))
-
-
-  ;; force-backup-of-buffer ()
-  (defun force-backup-of-buffer ()
-    ;; Make a special "per session" backup at the first save of each
-    ;; emacs session.
-    (when (not buffer-backed-up)
-      ;; Override the default parameters for per-session backups.
-      (let ((backup-directory-alist '(("" . "~/.emacs.d/cache/backup/per-session")))
-            (kept-new-versions 10))
-        (backup-buffer)))
-    ;; Make a "per save" backup on each save.  The first save results in
-    ;; both a per-session and a per-save backup, to keep the numbering
-    ;; of per-save backups consistent.
-    (let ((buffer-backed-up nil))
-      (backup-buffer)))
-
-
-  ;;; Быстрое открытие init.el
-  ;; my/find-user-init-file ("C-c I")
-  (defun my/find-user-init-file ()
-    "Edit the `user-init-file'"
-    (interactive)
-    ;; (find-file-other-window user-init-file) ;; in another window.
-    (find-file user-init-file))
-
-  ;; (bind-key "C-c I" 'my/find-user-init-file)
-
-  )
-
-
-
-(fset 'display-startup-echo-area-message #'ignore)    ; subr.el
-
-;; (defalias 'yes-or-no-p #'y-or-n-p)                    ; subr.el
-;; (advice-add 'yes-or-no-p :override #'y-or-n-p)
-(fset 'yes-or-no-p 'y-or-n-p)
-
-(defadvice yes-or-no-p (around hack-exit (prompt))
-  (if
-      (string= prompt "Active processes exist; kill them and exit anyway? ") t
-    ad-do-it))
-(defun my/y-or-n-p-optional (prompt)
-  "Prompt the user for a yes or no response, but accept any non-y
-response as a no."
-  (let ((query-replace-map (copy-keymap query-replace-map)))
-    (define-key query-replace-map [t] 'skip)
-    (y-or-n-p prompt)))
-
-
-
-;;; saveplace
-(use-package saveplace
-  :ensure nil
-  :hook
-  (after-init . save-place-mode)
-
-  :init
-  (setq save-place-file   "~/.emacs.d/cache/saved-places"
-        save-place-forget-unreadable-files    t)
-  ;; (setq-default save-place    t)
-
-  :config
-  (message "Loading built-in \"saveplace\"")
-  ;; (save-place-mode t)
-  )
-
-
-
-
-
-;;; savehist
-(use-package savehist
-  :ensure nil
-  :hook
-  (after-init . savehist-mode)
-  :config
-  (message "Loading built-in \"savehist\"")
-  (setq savehist-additional-variables
-        '(compile-history
-          command-history
-          extended-command-history
-          file-name-history
-          global-mark-ring
-          ido-file-history
-          helm-grep-history
-          helm-M-x-input-history
-          kill-ring
-          log-edit-comment-ring
-          mark-ring
-          minibuffer-history
-          regexp-history
-          read-expression-history
-          regexp-search-ring
-          ring
-          savehist-minibuffer-history-variables
-          search
-          search-ring
-          set-variable-value-history
-          shell-command-history)
-        savehist-save-minibuffer-history  t
-        savehist-autosave-interval        60)
-  (setq savehist-file     "~/.emacs.d/cache/savehist")
-  ;; (savehist-mode 1)
-  )
-
-
-
-;;; delsel
-(use-package delsel
-  :bind
-  (:map mode-specific-map
-        ("C-g" . minibuffer-keyboard-quit)) ; C-c C-g always quits minubuffer
-
-  :init
-  (delete-selection-mode      -1)                                               ; delsel.el
-
-  :config
-  (message "Loading built-in \"delsel\"")
-  (bind-key
-   (kbd "d")
-   (lambda (arg)
-     (interactive "p")
-     (if (region-active-p)
-         (delete-active-region)
-       (self-insert-command arg))))
-
-  (bind-key
-   (kbd "w")
-   (lambda (arg)
-     (interactive "p")
-     (if (region-active-p)
-         (call-interactively 'kill-ring-save)
-       (self-insert-command arg))))
-
-  (bind-key
-   (kbd "c")
-   (lambda (arg)
-     (interactive "p")
-     (if (region-active-p)
-         (let ((str (buffer-substring-no-properties
-                     (region-beginning)
-                     (region-end))))
-           (goto-char (region-end))
-           (insert "\n" str))
-       (self-insert-command arg))))
-  )
-
-
-
-;;; recentf
-(use-package recentf
-  :ensure nil
-  :bind (
-         :map global-map
-         ("C-c r r" . recentf-open-files)
-         )
-  :hook
-  (after-init . recentf-mode)
-  :init
-  (setq-default recentf-save-file "~/.emacs.d/cache/recentf")
-  (setq
-   recentf-auto-cleanup    "11:00pm"
-   recentf-exclude         '("^/var/folders\\.*"
-                             "COMMIT_EDITMSG\\'"
-                             ".*-autoloads\\.el\\'"
-                             "\\.loaddefs\\.el"
-                             "[/\\]\\.elpa/"
-                             "ido.last"
-                             "\\/cache/")
-   recentf-keep            '(file-remote-p file-readable-p)
-   recentf-max-menu-items  100
-   recentf-max-saved-items 200)
-
-  :config
-  (message "Loading built-in \"recentf\""))
-
-
-
-;; paren
-(use-package paren
-  :ensure nil
-  :hook
-  (after-init . show-paren-mode)
-  :config
-  (message "Loading built-in \"paren\"")
-  (setq show-paren-style  'expression
-        ;; show-paren-style 'mixed
-        show-paren-when-point-inside-paren t
-        show-paren-when-point-in-periphery t
-        show-paren-delay                  0))
-
-
-
-;;; bookmark.el
-;; По-умолчанию команды "bookmark" работают с клавишами ("C-x r {M, b, l, m}")
-(use-package bookmark
-  :ensure nil
-  :preface
-  ;; Put Last-Selected Bookmark on Top
-  ;; Using this method you’ll find frequently used bookmarks easily
-  (defadvice bookmark-jump (after bookmark-jump activate)
-    (let ((latest (bookmark-get-bookmark bookmark)))
-      (setq bookmark-alist (delq latest bookmark-alist))
-      (add-to-list 'bookmark-alist latest)))
-
-  :config
-  (message "Loading built-in \"bookmark\"")
-  (setq-default bookmark-default-file "~/.emacs.d/cache/bookmarks")
-  ;; автоматически сохранять закладки в файл
-  (setq bookmark-save-flag t)
-  )
-
-
-(require 'abbrev_init)              ; built-in
 ;; (require 'encryption_config)     ; built-in
 
 (require 'help_config)
@@ -700,17 +450,17 @@ response as a no."
   (message "Loading \"all-the-icons-dired\"")
   )
 
-;; (use-package all-the-icons-ivy
-;;   :defer t
-;;   :ensure t
-;;   :hook
-;;   (after-init . all-the-icons-ivy-setup)
-;;   ;; :custom
-;;   ;; (all-the-icons-ivy-buffer-commands '() "Don't use for buffers.")
-;;   :config
-;;   (message "Loading \"all-the-icons-ivy\"")
-;;   ;; (all-the-icons-ivy-setup)
-;;   )
+(use-package all-the-icons-ivy
+  :defer t
+  :ensure t
+  :hook
+  (after-init . all-the-icons-ivy-setup)
+  ;; :custom
+  ;; (all-the-icons-ivy-buffer-commands '() "Don't use for buffers.")
+  :config
+  (message "Loading \"all-the-icons-ivy\"")
+  ;; (all-the-icons-ivy-setup)
+  )
 
 
 

@@ -1,7 +1,7 @@
 ;;; encryption_config.el -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Wed Apr 03 16:33:51 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Monday February 17 22:17:22 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Monday August 30 17:6:58 EEST 2021>
 
 
 
@@ -16,7 +16,7 @@
     :after epg
     :init
     :config
-    (message "Loading \"epg-config\"")
+    (message "Loading built-in \"epg-config\"")
     (setq epg-gpg-program "gpg2")
     (setq epg-gpg-home-directory "~/.gnupg")
     (setq epg-debug t)
@@ -30,7 +30,7 @@
   :defer t
   ;; :after epg
   :config
-  (message "Loading \"epa\"")
+  (message "Loading built-in \"epa\"")
   (setq epa-armor t)
   (setq epa-pinentry-mode 'loopback)
 
@@ -40,7 +40,7 @@
     :after epa
     :init
     :config
-    (message "Loading \"epa-file\"")
+    (message "Loading built-in \"epa-file\"")
     (require 'epa-file)
     (epa-file-enable)
     ;; (setq epa-file-name-regexp (rx (or ".gpg" ".asc") line-end))

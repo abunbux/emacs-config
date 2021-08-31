@@ -1,7 +1,7 @@
 ;;; which-key_init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Tue Feb 25 09:51:01 EET 2020>
-;;; Time-stamp: <Последнее обновление -- Sunday December 6 12:15:45 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Monday August 30 1:19:32 EEST 2021>
 
 
 
@@ -19,27 +19,15 @@
   :config
   (message "Loading \"which-key\"")
   ;; default
-  (setq which-key-sort-order 'which-key-key-order)
-  ;; same as default, except single characters are sorted alphabetically
-  ;; (setq which-key-sort-order 'which-key-key-order-alpha)
-  ;; same as default, except all prefix keys are grouped together at the end
-  ;; (setq which-key-sort-order 'which-key-prefix-then-key-order)
-  ;; same as default, except all keys from local maps shown first
-  ;; (setq which-key-sort-order 'which-key-local-then-key-order)
-  ;; sort based on the key description ignoring case
-  ;; (setq which-key-sort-order 'which-key-description-order)
 
-  ;; (which-key-setup-side-window-right)
   (which-key-setup-side-window-right-bottom)
-  ;; (setq which-key-popup-type 'side-window)
-  ;; (setq which-key-side-window-location 'right)
-  (setq which-key-side-window-max-width 1.1)
-  ;; (setq which-key-max-display-columns 1)
-  (setq which-key-show-prefix 'top)
-  (setq which-key-separator "  ")
-  ;; (setq which-key-max-description-length 40)
-  ;; (setq which-key-allow-imprecise-window-fit t)
-  (require 'which-key)
+  (setq which-key-allow-imprecise-window-fit    t)
+  (setq which-key-max-description-length        45)
+  (setq which-key-side-window-max-width         0.75)
+  (setq which-key-show-prefix                   'top)
+  (setq which-key-separator                     " ")
+  (setq which-key-sort-order                    'which-key-key-order)
+  ;; (require 'which-key)
 
 
   (setq which-key-highlighted-command-list

@@ -307,16 +307,32 @@ Semantic, and Ansi-Color faces are included -- and much more...")
    ;; SMerge
    `(smerge-refined-change ((,class (:background "#AAAAFF"))))
 
-   ;; Ediff
-   `(ediff-current-diff-A ((,class (:foreground "gray33" :background "#FFDDDD"))))
-   `(ediff-current-diff-B ((,class (:foreground "gray33" :background "#DDFFDD"))))
-   `(ediff-current-diff-C ((,class (:foreground "black" :background "cyan"))))
-   `(ediff-even-diff-A ((,class (:foreground "black" :background "light grey"))))
-   `(ediff-even-diff-B ((,class (:foreground "black" :background "light grey"))))
-   `(ediff-fine-diff-A ((,class (:foreground "#A60000" :background "#FFAAAA"))))
-   `(ediff-fine-diff-B ((,class (:foreground "#008000" :background "#55FF55"))))
-   `(ediff-odd-diff-A ((,class (:foreground "black" :background "light grey"))))
-   `(ediff-odd-diff-B ((,class (:foreground "black" :background "light grey"))))
+   ;; Ediff - не понравится - раскомментировать строчки ниже, эти удалить.
+   `(ediff-current-diff-A   ((,class (:foreground "gray33"  :background "#FFDDDD"))))
+   `(ediff-current-diff-B   ((,class (:foreground "gray33"  :background "#DDFFDD"))))
+   `(ediff-current-diff-C   ((,class (:foreground "black"   :background "cyan"))))
+   `(ediff-even-diff-A      ((,class (:foreground "black"   :background "light grey"))))
+   `(ediff-even-diff-B      ((,class (:foreground "black"   :background "light grey"))))
+   `(ediff-fine-diff-A      ((,class (:foreground "#A60000" :background "#FFAAAA"))))
+   `(ediff-fine-diff-B      ((,class (:foreground "#008000" :background "#55FF55"))))
+   `(ediff-odd-diff-A       ((,class (:foreground "black"   :background "light grey"))))
+   `(ediff-odd-diff-B       ((,class (:foreground "black"   :background "light grey"))))
+
+   ;; `(ediff-current-diff-A   ((,class (:background "orange"       :foreground "brown"))))
+   ;; `(ediff-current-diff-B   ((,class (:background "red"          :foreground "blue"))))
+   ;; `(ediff-current-diff-C   ((,class (:background "Pink"         :foreground "Navy"))))
+   ;; `(ediff-even-diff-A      ((,class (:background "light grey"   :foreground "Black"))))
+   ;; `(ediff-even-diff-B      ((,class (:background "Grey"         :foreground "White"))))
+   ;; `(ediff-even-diff-C      ((,class (:background "light grey"   :foreground "Black"))))
+   ;; `(ediff-fine-diff-A      ((,class (:background "sky blue"     :foreground "Navy"  :weight bold))))
+   ;; `(ediff-fine-diff-B      ((,class (:background "cyan"         :foreground "Black" :weight bold))))
+   ;; `(ediff-fine-diff-C      ((,class (:background "Turquoise"    :foreground "Black" :weight bold))))
+   ;; `(ediff-odd-diff-A       ((,class (:background "Grey"         :foreground "White"))))
+   ;; `(ediff-odd-diff-B       ((,class (:background "light grey"   :foreground "Black"))))
+   ;; `(ediff-odd-diff-C       ((,class (:background "Grey"         :foreground "White"))))
+
+
+
 
    ;; ;; Flyspell
    ;; ;; (when (version< emacs-version "24.XXX")
@@ -484,6 +500,28 @@ Semantic, and Ansi-Color faces are included -- and much more...")
    `(font-latex-verbatim-face ((,class (:foreground "#000088" :background "#FFFFE0" :inherit nil))))
    `(git-commit-summary-face ((,class (:foreground "#000000"))))
    `(git-commit-comment-face ((,class (:slant italic :foreground "#696969"))))
+
+
+
+   `(helm-source-header       ((,class (:foreground "white" :background "#511a1a" :weight bold :height 150))))
+   `(helm-buffer-file         ((,class (:foreground "White"))))
+   `(helm-buffer-directory    ((,class (:foreground "LimeGreen"))))           ;LimeGreen #32cd32
+   `(helm-ff-denied           ((,class (:foreground "red" :background nil :weight bold))))
+   `(helm-ff-directory        ((,class (:foreground "LimeGreen"))))           ;LimeGreen #32cd32
+   `(helm-ff-dotted-directory ((,class (:foreground "LimeGreen"))))
+   `(helm-ff-dotted-symlink-directory   ((,class (:foreground "#8b0000")))) ;DarkRed
+   `(helm-ff-file             ((,class (:foreground "gray75" :background nil))))
+   `(helm-ff-invalid-symlink  ((,class (:foreground "black" :background "red"))))
+   `(helm-ff-prefix           ((,class (:foreground "red" :background nil :weight bold))))
+   `(helm-ff-symlink          ((,class (:foreground "blue" :background "DarkOliveGreen"))))
+   `(helm-grep-match          ((,class (:foreground "#511a1a"))))
+   `(helm-match               ((,class (:foreground "#511a1a"))))
+   `(helm-match-item          ((,class (:foreground "#511a1a" :weight bold))))
+   `(helm-non-file-buffer     ((,class (:foreground "red"))))
+   `(helm-selection           ((,class (:background "#575757" :weight bold))))   ;:foreground "DarkCyan" :background "grey34"
+   `(helm-swoop-line-number-face ((,class (:foreground "GreenYellow"))))
+   `(helm-visible-mark        ((,class (:foreground "black" :background "goldenrod"))))
+
 
 
    `(highlight-symbol-face ((,class (:background "#FFFFA0"))))

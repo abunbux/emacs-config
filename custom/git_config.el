@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Thu Jun 20 05:47:58 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Wednesday July 7 20:10:1 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Wednesday August 25 17:36:35 EEST 2021>
 
 
 
@@ -45,6 +45,10 @@
         ;; Show status buffer in fullscreen
         magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1
         )
+
+  (setq transient-history-file "~/.emacs.d/cache/history.el")                             ; transient.el
+  (setq-default transient-history-file "~/.emacs.d/cache/history.el")                     ; transient.el
+
 
     ;;; https://github.com/magit/magit/wiki/Tips-and-Tricks
     ;;; Show staged and unstaged changes, but nothing else
