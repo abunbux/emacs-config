@@ -2,7 +2,7 @@
 ;;; --- insert here summary
 
 ;;; CREATED: <Sun Aug 29 18:10:13 EEST 2021>
-;;; Time-stamp: <Последнее обновление -- Sunday August 29 18:12:55 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Sunday October 3 22:56:16 EEST 2021>
 
 
 
@@ -32,6 +32,8 @@
           file-name-history
           global-mark-ring
           ido-file-history
+          Info-history-list
+          ivy-views
           helm-grep-history
           helm-M-x-input-history
           kill-ring

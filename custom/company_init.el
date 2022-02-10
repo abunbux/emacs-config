@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Wed May 15 20:00:16 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday March 4 22:40:19 EET 2021>
+;;; Time-stamp: <Последнее обновление -- Tuesday October 5 23:6:35 EEST 2021>
 
 
 
@@ -59,6 +59,13 @@
     :after company
     :config
     (message "Loading \"company-shell\"")
+    )
+
+  (use-package company-flx
+    :ensure t
+    :after company
+    :config
+    (message "Loading \"company-flx\"")
     )
 
 

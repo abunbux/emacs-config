@@ -84,7 +84,8 @@ Semantic, and Ansi-Color faces are included -- and much more...")
 
 
 
-  (custom-set-faces
+  (custom-theme-set-faces
+   'abunbux
    `(default ((,class (
                        :inherit             nil
                        :stipple             nil
@@ -107,7 +108,6 @@ Semantic, and Ansi-Color faces are included -- and much more...")
    `(cursor ((,class (:background "#ced23a"))))                                 ; поменял
    ;; `(cursor ((,class (:background "#0FB300"))))
 
-
    ;; Highlighting faces
    `(fringe ((,class (:foreground "#9B9B9B" :background "#EDEDED"))))
 
@@ -126,7 +126,7 @@ Semantic, and Ansi-Color faces are included -- and much more...")
    `(secondary-selection ((,class ,match)))                                     ; поменял
 
 
-   ;; '(isearch ((,class ())))
+   ;; '(isearch ((((class color) (min-colors 89)) ())))
    `(isearch ((,class (:weight bold :underline "#FF9632" :foreground "#eeeeec" :background "#ce5c00"))))        ; поменял
    `(isearch-fail ((,class (:weight bold :foreground "black" :background "#FF9999"))))
 
@@ -791,7 +791,22 @@ Semantic, and Ansi-Color faces are included -- and much more...")
    `(yas/field-highlight-face ((,class (:background "DarkSeaGreen1"))))
    ))
 
-(provide 'abunbux-theme)
+(custom-theme-set-variables 'abunbux
+                            '(ansi-color-faces-vector
+                              [default default default italic underline success warning error])
+                            '(ansi-color-names-vector
+                              ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
+                                        ; colors used in Shell mode
+                            )
+
+;;;###autoload
+(when (and (boundp 'custom-theme-load-path)
+           load-file-name)
+  ;; add theme folder to `custom-theme-load-path' when installing over MELPA
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name))))
+
+(provide-theme 'abunbux)
 
 ;; Local Variables:
 ;; time-stamp-format: "%:y%02m%02d.%02H%02M"

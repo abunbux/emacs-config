@@ -1,7 +1,7 @@
 ;;; custom_section_gui.el.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Friday July 30 20:0:9 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Thursday February 3 1:19:27 EET 2022>
 
 
 
@@ -36,7 +36,7 @@
                             :underline nil
                             :slant     normal
                             :weight    normal
-                            :height    135
+                            :height    125
                             :width     normal
                             ))))
  ;; ----------------------------------------------------------------

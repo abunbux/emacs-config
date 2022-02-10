@@ -2,7 +2,7 @@
 ;;; --- insert here summary
 
 ;;; CREATED: <Sun Aug 29 17:59:02 EEST 2021>
-;;; Time-stamp: <Последнее обновление -- Sunday August 29 18:0:4 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Monday September 6 19:33:49 EEST 2021>
 
 
 
@@ -14,9 +14,10 @@
 
 
 ;;; Code:
+
+
+
 
-
-
 ;;; files
 (use-package files
   :hook
@@ -42,7 +43,7 @@
   (version-control                  t)
 
   :config
-  (message "Loading buit-in \"files\"")
+  (message "Loading built-in \"files\"")
   (setq-default find-file-visit-truename t)
 
   (when (not (file-directory-p "~/.emacs.d/cache/backup"))
@@ -75,7 +76,7 @@
       (backup-buffer)))
 
 
-  ;;; Быстрое открытие init.el
+  ;; Быстрое открытие init.el
   ;; my/find-user-init-file ("C-c I")
   (defun my/find-user-init-file ()
     "Edit the `user-init-file'"
@@ -85,7 +86,7 @@
   ;; (bind-key "C-c I" 'my/find-user-init-file)
 
 
-  ;;; my/byte-recompile-config ()
+  ;; my/byte-recompile-config ()
   (defun my/byte-recompile-config (&optional arg)
     (interactive "p")
     "Recompile this Emacs configuration.
@@ -109,7 +110,7 @@ files with (apparently) up to date bytecodes."
 
 
 
-;;; Перезагружает файл инициализации emacs
+  ;; Перезагружает файл инициализации emacs
   ;; Reload current emacs lisp file
   ;; my/reload-current-init-file ()
   (defun my/reload-current-init-file ()
@@ -119,7 +120,7 @@ files with (apparently) up to date bytecodes."
 
 
 
-;;; Переименовывает текущий буфер
+  ;; Переименовывает текущий буфер
   ;; my/rename-current-buffer-file ()
   (defun my/rename-current-buffer-file ()
     "Renames current buffer and file it is visiting."
@@ -167,8 +168,6 @@ files with (apparently) up to date bytecodes."
   )
 
 
-
-
 
 (provide 'built-in_files_config)
 

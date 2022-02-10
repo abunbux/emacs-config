@@ -2,7 +2,7 @@
 ;;; --- insert here summary
 
 ;;; CREATED: <Sun Aug 29 18:08:19 EEST 2021>
-;;; Time-stamp: <Последнее обновление -- Sunday August 29 18:8:56 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Tuesday October 5 20:12:12 EEST 2021>
 
 
 
@@ -16,7 +16,9 @@
 ;;; Code:
 
 
+
 ;;; saveplace
+;; Save point position in files
 (use-package saveplace
   :ensure nil
   :hook

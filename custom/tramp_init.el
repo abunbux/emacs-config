@@ -1,7 +1,7 @@
 ;;;tramp_init.el -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Thu May 16 09:53:18 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday August 19 23:41:36 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Thursday September 2 23:39:56 EEST 2021>
 
 
 
@@ -16,19 +16,19 @@
   :defer t
   :preface
 
-  ;;; my/sudired (C-d s d)
+  ;;; my/sudired
   (defun my/sudired ()
     (interactive)
     (dired "/su::/"))
 
-  ;; my/su-find-file ("C-d s f")
+  ;; my/su-find-file
   (defun my/su-find-file (file-name)
     "Like find file, but opens the file as root."
     (interactive "FSu Find File: ")
     (let ((tramp-file-name (concat "/su::" (expand-file-name file-name))))
       (find-file tramp-file-name)))
 
-  ;; my/su-find-alternative-file ("C-d s a")
+  ;; my/su-find-alternative-file
   ;; Открывает уже открытый файл с правами root (su)
   (defun my/su-find-alternative-file ()
     (interactive)
@@ -66,11 +66,6 @@ This function is suitable to add to `find-file-hook'."
 
 
   :defer t
-  ;; :bind (
-  ;;        ("C-d s d" . my/sudired)
-  ;;        ("C-d s f" . my/su-find-file)
-  ;;        ("C-d s a" . my/su-find-alternative-file)
-  ;;        )
   :init
 
   (defvar tramp-backup-directory "~/.emacs.d/cache/tramp-backups/")
@@ -101,10 +96,17 @@ This function is suitable to add to `find-file-hook'."
                  ""
                  "abunbux"
                  "ssh"))
+
+  (use-package tramp-sh
+    :defer t
+    :config
+    (message "Loading built-in \"tramp-sh\"")
+    (require 'tramp-sh nil t)
+    (setf tramp-ssh-controlmaster-options (concat "-o SendEnv TRAMP=yes " tramp-ssh-controlmaster-options))
+    )
+
   )
 
-(require 'tramp-sh nil t)
-(setf tramp-ssh-controlmaster-options (concat "-o SendEnv TRAMP=yes " tramp-ssh-controlmaster-options))
 
 
 

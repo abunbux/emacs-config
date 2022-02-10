@@ -2,7 +2,7 @@
 ;;; --- insert here summary
 
 ;;; CREATED: <Sun Aug 29 18:05:48 EEST 2021>
-;;; Time-stamp: <Последнее обновление -- Sunday August 29 18:6:7 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Thursday September 2 22:9:38 EEST 2021>
 
 
 
@@ -20,7 +20,6 @@
 (use-package simple
   :defer t
   :custom
-  (column-number-mode                   t)                                      ; simple.el
   (global-visual-line-mode              t)                                      ; simple.el
   (kill-whole-line                      t)                                      ; simple.el
   (kill-ring-max                        1000)                                   ; simple.el
@@ -34,9 +33,7 @@
                                              #'x-select-text))
   (interprogram-paste-function          (and (fboundp #'x-selection-value)      ; simple.el
                                              #'x-selection-value))
-  (line-number-mode                     t)                                      ; simple.el
 
-  (size-indication-mode                 t)                                      ; simple.el
   ;; (mark-ring-max                        16) ; 16 по умолчанию                ; simple.el
   :config
   (message "Loading built-in \"simple\"")

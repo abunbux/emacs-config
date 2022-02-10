@@ -1,7 +1,7 @@
 ;;; help_config.el -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Sun Jul 14 12:50:34 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Sunday February 16 20:3:51 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Friday September 3 15:2:37 EEST 2021>
 
 
 
@@ -9,21 +9,6 @@
 
 
 ;; Code:
-
-
-
-;;; interaction-log.el
-(use-package interaction-log
-  :ensure t
-  :preface
-  (defun my/ilog-buffer-name ()
-    (interactive)
-    (display-buffer ilog-buffer-name))
-  :bind (("<f6> l"   . my/ilog-buffer-name))
-  :hook
-  (after-init . interaction-log-mode)
-  :config
-  (message "Loading \"interaction-log\""))
 
 
 

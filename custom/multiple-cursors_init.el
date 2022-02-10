@@ -1,7 +1,7 @@
 ;;; multiple-cursors_init.el -*- lexical-binding: t -*-
 
 ;;; CREATED: <Tue Jun 11 20:55:05 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Wednesday February 26 22:52:41 EET 2020>
+;;; Time-stamp: <Последнее обновление -- Friday October 15 21:37:45 EEST 2021>
 
 
 

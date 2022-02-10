@@ -2,7 +2,7 @@
 ;;; --- insert here summary
 
 ;;; CREATED: <Sun Aug 29 19:46:29 EEST 2021>
-;;; Time-stamp: <Последнее обновление -- Sunday August 29 20:2:37 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Tuesday October 5 20:10:32 EEST 2021>
 
 
 
@@ -33,7 +33,6 @@
   ;; автоматически сохранять закладки в файл
   (setq bookmark-save-flag t)
   )
-
 
 
 

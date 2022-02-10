@@ -2,7 +2,7 @@
 ;;; --- insert here summary
 
 ;;; CREATED: <Sun Aug 29 19:44:33 EEST 2021>
-;;; Time-stamp: <Последнее обновление -- Sunday August 29 19:45:5 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Tuesday October 5 20:7:58 EEST 2021>
 
 
 
@@ -31,7 +31,8 @@
   (setq-default recentf-save-file "~/.emacs.d/cache/recentf")
   (setq
    recentf-auto-cleanup    "11:00pm"
-   recentf-exclude         '("^/var/folders\\.*"
+   recentf-exclude         '("/\\.git/.*\\'"            ; Git contents
+                             "^/var/folders\\.*"
                              "COMMIT_EDITMSG\\'"
                              ".*-autoloads\\.el\\'"
                              "\\.loaddefs\\.el"
@@ -48,8 +49,6 @@
 
 
 
-
-
 
 (provide 'built-in_recentf_config)
 
