@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday February 10 8:25:6 EET 2022>
+;;; Time-stamp: <Последнее обновление -- Thursday March 17 20:45:5 EET 2022>
 
 
 
@@ -249,20 +249,6 @@
 
 
 
-
-;; ;; The idea of this simple package was taken from this Reddit post,
-;; ;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/,
-;; ;; all it does is temporary sets file-name-handler-alist to nil (or fnhh-initial-alist customizable)
-;; ;; and restores the value on /’emacs-startup-hook/ (customizable fn-hook),
-;; ;; so it can (sometimes) speed up emacs startup time a little bit.
-;; (use-package fnhh
-;;   :quelpa
-;;   (fnhh :repo "a13/fnhh" :fetcher github :stable nil)
-;;   :config
-;;   (message "Loading \"fnhh\"")
-;;   (fnhh-mode 1))
-
-
 
 
 (use-package diminish
@@ -372,15 +358,17 @@ response as a no."
             mouse-wheel-progressive-speed nil)                              ; mwheel.el
 
       (setq-default initial-frame-alist   (quote    ((fullscreen . maximized))))
-      ;; (require 'custom_section_gui)
-      ;; (load-theme 'abunbux t)
+
+
+      ;; ;; Следующие две строчки делают одно и то же -
+      ;; ;; загружают мою тему из файла `abunbux-theme.el'
+      ;; ;; (load-theme 'abunbux t)
       (require 'abunbux-theme)
-      ;; (require 'poet-theme_section_gui)
+
       (message "Loading \"custom_section_gui\"")
       )
   (progn
     (menu-bar-mode       -1)
-    ;; (load-theme 'abunbux t)
     ;; (load-theme 'leuven t)
     ;; (require 'custom_section_tty)
     (message "Loading \"custom_section_tty\"")))
@@ -664,7 +652,16 @@ response as a no."
   (message "Loading \"interaction-log\""))
 
 
+
+
+
+
+
+
 (require 'dired_init)
+
+
+
 
 
 
@@ -1348,6 +1345,10 @@ With argument, do this that many times."
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (require 'org-mode_config)
+
+
+
+
 (require 'markdown-mode_init)
 
 
