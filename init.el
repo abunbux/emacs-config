@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday March 17 20:45:5 EET 2022>
+;;; Time-stamp: <Последнее обновление -- Friday March 25 16:31:30 EET 2022>
 
 
 
@@ -260,6 +260,16 @@
 
 
 
+
+;;; server.el
+;; built-in
+;; (use-package server
+;;   :ensure nil
+;;   :hook (after-init . server-mode))
+
+
+
+
 (use-package bind-key
   :ensure t
   :preface
@@ -276,15 +286,6 @@
   (message "Loading \"bind-key\"")
   (setq bind-key-describe-special-forms t)
   )
-
-
-
-;;; server.el
-;; built-in
-;; (use-package server
-;;   :ensure nil
-;;   :hook (after-init . server-mode))
-
 
 
 
@@ -369,8 +370,7 @@ response as a no."
       )
   (progn
     (menu-bar-mode       -1)
-    ;; (load-theme 'leuven t)
-    ;; (require 'custom_section_tty)
+    (require 'custom_section_tty)
     (message "Loading \"custom_section_tty\"")))
 
 
@@ -403,6 +403,7 @@ response as a no."
 ;;                 ;; jit-lock-stealth-time         16                    ; jit-lock.el
 ;;                 )
 ;;   )
+
 
 ;; Подсвечивать выделенные текст, между двумя метками
 (add-hook 'after-init-hook 'transient-mark-mode)                    ; startup.el
@@ -452,6 +453,7 @@ response as a no."
 ;; (require 'centaur-tabs_init)
 ;; (require 'smart-mode-line_init)
 (require 'doom-modeline_init)
+
 
 
 
@@ -505,6 +507,7 @@ response as a no."
   )
 
 
+
 
 
 (require 'built-in_window_config)
@@ -524,9 +527,9 @@ response as a no."
 
 
 (setq browse-url-browser-function   'browse-url-generic             ; browse-url.el
-	  ;; browse-url-generic-program    "google-chrome-stable"       ; browse-url.el
 	  ;; browse-url-generic-program    "firefox-bin"                ; browse-url.el
-	  browse-url-generic-program    "google-chrome-stable"          ; browse-url.el
+	  ;; browse-url-generic-program    "google-chrome-stable"       ; browse-url.el
+	  browse-url-generic-program    "brave-bin"                     ; browse-url.el
 	  user-full-name                "abunbux"                       ; C-code (emacs)
 	  user-mail-address             "abunbux@gmail.com")            ; startup.el
 
@@ -565,8 +568,7 @@ response as a no."
                 "\\([。、！？]\\|……\\|[,.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
 (setq           sentence-end-double-space   nil)                    ; paragraphs.el
 
-(setq-default compilation-ask-about-save    nil                     ; compile.el
-              )
+(setq-default compilation-ask-about-save    nil)                    ; compile.el
 
 
 (setq js-indent-level   4                                           ; js.el
@@ -686,7 +688,73 @@ response as a no."
 
 ;; (require 'ido_init)
 
-(require 'company_init)
+
+
+(use-package company
+  :ensure t
+  :diminish
+  :hook
+  (after-init . company-mode)
+  :config
+  (setq company-auto-complete-chars       '(32 40 41 119 46 34 36 47 124 33)
+        company-backends                  '((company-yasnippet
+                                             company-semantic
+                                             company-capf
+                                             company-etags
+                                             company-files
+                                             company-keywords
+                                             company-dabbrev-code
+                                             company-dabbrev
+                                             company-shell
+                                             company-shell-env
+                                             company-fish-shell
+                                             ))
+        ;; company-begin-commands            '(self-insert-command)
+        company-dabbrev-code-everywhere   t
+        company-dabbrev-code-ignore-case  t
+        company-dabbrev-downcase          nil
+        company-dabbrev-other-buffers     t
+        company-echo-delay                0
+        company-idle-delay                0
+        company-minimum-prefix-length     2
+        company-selection-wrap-around     t
+        company-show-numbers              nil
+        company-tooltip-limit             20
+        company-tooltip-align-annotations t)
+
+  (global-company-mode 1)
+  (eval-after-load 'company
+    '(progn
+       (bind-key "TAB" 'company-complete-common-or-cycle company-active-map)
+       (bind-key "<tab>" 'company-complete-common-or-cycle company-active-map)
+       (message "Loading \"company\"")))
+  (bind-key "M-s" 'company-search-candidates  company-active-map)
+  (bind-key "M-f" 'company-filter-candidates  company-active-map)
+  (bind-key "M-l" 'company-show-location      company-active-map)
+  (bind-key "M-n" 'company-select-next        company-active-map)
+  (bind-key "M-p" 'company-select-previous    company-active-map)
+  (bind-key "C-d" 'company-show-doc-buffer    company-active-map)
+
+  (bind-key "C-c & c" 'company-yasnippet)
+
+
+  (use-package company-shell
+    :defer t
+    :ensure t
+    :after company
+    :config
+    (message "Loading \"company-shell\"")
+    )
+
+  (use-package company-flx
+    :ensure t
+    :after company
+    :config
+    (message "Loading \"company-flx\"")
+    )
+  )
+
+
 
 (require 'which-key_init)
 (require 'amx_init)
@@ -969,8 +1037,7 @@ and M-n or M-<down> for moving down."
   (message "Loading \"iedit\"")
   (setq iedit-is-narrowed t)
   (setq iedit-auto-narrow t)
-  (custom-set-faces
-   '(iedit-occurrence ((t :foreground "red" :background "YELLOW" )))))
+  )
 
 
 ;;; bind, defun for edit, «pseudo emacs»
@@ -1323,6 +1390,7 @@ With argument, do this that many times."
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (require 'web-mode_init)
+
 
 
 (use-package lisp-mode
