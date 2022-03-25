@@ -396,10 +396,28 @@ Semantic, and Ansi-Color faces are included -- and much more...")
    `(comint-highlight-input ((,class (:weight bold :foreground "#0000FF" :inherit nil))))
    ;; `(comint-highlight-prompt ((,class (:weight bold :foreground "black" :background "gold"))))
    `(comint-highlight-prompt ((,class (:weight bold :foreground "#0000FF" :inherit nil))))
+
+
    `(company-preview-common ((,class (:foreground "#C0C0C0" :background "#FFFFD7")))) ; same background as highlight-line
    `(company-tooltip-annotation ((,class (:foreground "#999999" :background "cornsilk"))))
    `(company-tooltip-common ((,class (:weight bold :inherit company-tooltip))))
    `(company-tooltip-common-selection ((,class (:weight bold :inherit company-tooltip-selection))))
+
+
+
+   ;; '(company-preview-common     ((t (:inherit company-preview :foreground "brightcyan"))))
+   ;; '(company-preview-search     ((t (:inherit company-preview :background "black"))))
+   ;; '(company-scrollbar-bg       ((t (:background "dark green"))))
+   ;; '(company-scrollbar-fg       ((t (:background "red"))))
+   ;; '(company-template-field     ((t (:background "black" :foreground "chartreuse"))))
+   ;; '(company-tooltip            ((t (:background "black" :foreground "yellow green"))))
+   ;; '(company-tooltip-search     ((t (:foreground "dark khaki" :underline "blue"))))
+   ;; '(company-tooltip-selection  ((t (:background "honeydew" :foreground "dark green"))))
+
+
+
+
+
    `(compare-windows ((,class (:background "#FFFF00"))))
    `(compilation-error ((,class (:weight bold :foreground "red"))))
    `(compilation-info ((,class (:weight bold :foreground "#2A489E")))) ; used for grep
@@ -532,6 +550,9 @@ Semantic, and Ansi-Color faces are included -- and much more...")
    `(html-helper-italic-face ((,class (:slant italic :foreground "black"))))
    `(html-helper-underline-face ((,class (:underline t :foreground "black"))))
    `(html-tag-face ((,class (:foreground "blue"))))
+
+   `(iedit-occurrence ((,class (:foreground "red" :background "yellow" ))))
+
    `(ilog-non-change-face ((,class (:height 1.0 :foreground "#6434A3"))))
    `(ilog-change-face ((,class (:height 1.0 :foreground "#008200"))))
    `(ilog-echo-face ((,class (:height 1.0 :foreground "#006FE0"))))
