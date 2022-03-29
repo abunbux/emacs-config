@@ -398,24 +398,20 @@ Semantic, and Ansi-Color faces are included -- and much more...")
    `(comint-highlight-prompt ((,class (:weight bold :foreground "#0000FF" :inherit nil))))
 
 
-   `(company-preview-common ((,class (:foreground "#C0C0C0" :background "#FFFFD7")))) ; same background as highlight-line
-   `(company-tooltip-annotation ((,class (:foreground "#999999" :background "cornsilk"))))
-   `(company-tooltip-common ((,class (:weight bold :inherit company-tooltip))))
-   `(company-tooltip-common-selection ((,class (:weight bold :inherit company-tooltip-selection))))
 
 
 
-   ;; '(company-preview-common     ((t (:inherit company-preview :foreground "brightcyan"))))
-   ;; '(company-preview-search     ((t (:inherit company-preview :background "black"))))
-   ;; '(company-scrollbar-bg       ((t (:background "dark green"))))
-   ;; '(company-scrollbar-fg       ((t (:background "red"))))
-   ;; '(company-template-field     ((t (:background "black" :foreground "chartreuse"))))
-   ;; '(company-tooltip            ((t (:background "black" :foreground "yellow green"))))
-   ;; '(company-tooltip-search     ((t (:foreground "dark khaki" :underline "blue"))))
-   ;; '(company-tooltip-selection  ((t (:background "honeydew" :foreground "dark green"))))
-
-
-
+   ;; `(company-preview            ((,class (:foreground "brightcyan"))))
+   ;; `(company-preview-common     ((,class (:foreground "#C0C0C0" :background "#FFFFD7"))))
+   ;; `(company-preview-search     ((,class (:background "black"))))
+   ;; `(company-scrollbar-bg       ((,class (:background "dark green"))))
+   ;; `(company-scrollbar-fg       ((,class (:background "LightGreen"))))
+   ;; `(company-template-field     ((,class (:background "black" :foreground "chartreuse"))))
+   ;; `(company-tooltip            ((,class (:background "#002129" :foreground "yellow green"))))
+   ;; `(company-tooltip-annotation ((,class (:foreground "#c5c9d1" :background "#002b36"))))
+   ;; `(company-tooltip-search     ((,class (:foreground "peru" :underline "blue"))))
+   ;; `(company-tooltip-common     ((,class (:weight bold :foreground "DarkOrange"))))
+   ;; `(company-tooltip-selection  ((,class (:weight bold :foreground "dark green" :background "honeydew"))))
 
 
    `(compare-windows ((,class (:background "#FFFF00"))))

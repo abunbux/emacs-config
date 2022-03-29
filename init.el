@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Friday March 25 16:31:30 EET 2022>
+;;; Time-stamp: <Последнее обновление -- Wednesday March 30 0:46:5 EEST 2022>
 
 
 
@@ -688,74 +688,6 @@ response as a no."
 
 ;; (require 'ido_init)
 
-
-
-(use-package company
-  :ensure t
-  :diminish
-  :hook
-  (after-init . company-mode)
-  :config
-  (setq company-auto-complete-chars       '(32 40 41 119 46 34 36 47 124 33)
-        company-backends                  '((company-yasnippet
-                                             company-semantic
-                                             company-capf
-                                             company-etags
-                                             company-files
-                                             company-keywords
-                                             company-dabbrev-code
-                                             company-dabbrev
-                                             company-shell
-                                             company-shell-env
-                                             company-fish-shell
-                                             ))
-        ;; company-begin-commands            '(self-insert-command)
-        company-dabbrev-code-everywhere   t
-        company-dabbrev-code-ignore-case  t
-        company-dabbrev-downcase          nil
-        company-dabbrev-other-buffers     t
-        company-echo-delay                0
-        company-idle-delay                0
-        company-minimum-prefix-length     2
-        company-selection-wrap-around     t
-        company-show-numbers              nil
-        company-tooltip-limit             20
-        company-tooltip-align-annotations t)
-
-  (global-company-mode 1)
-  (eval-after-load 'company
-    '(progn
-       (bind-key "TAB" 'company-complete-common-or-cycle company-active-map)
-       (bind-key "<tab>" 'company-complete-common-or-cycle company-active-map)
-       (message "Loading \"company\"")))
-  (bind-key "M-s" 'company-search-candidates  company-active-map)
-  (bind-key "M-f" 'company-filter-candidates  company-active-map)
-  (bind-key "M-l" 'company-show-location      company-active-map)
-  (bind-key "M-n" 'company-select-next        company-active-map)
-  (bind-key "M-p" 'company-select-previous    company-active-map)
-  (bind-key "C-d" 'company-show-doc-buffer    company-active-map)
-
-  (bind-key "C-c & c" 'company-yasnippet)
-
-
-  (use-package company-shell
-    :defer t
-    :ensure t
-    :after company
-    :config
-    (message "Loading \"company-shell\"")
-    )
-
-  (use-package company-flx
-    :ensure t
-    :after company
-    :config
-    (message "Loading \"company-flx\"")
-    )
-  )
-
-
-
 (require 'which-key_init)
 (require 'amx_init)
 
@@ -763,8 +695,6 @@ response as a no."
 
 
 (require 'yasnippet_init)
-
-
 
 
 (require 'all-the-icons_init)
@@ -999,13 +929,14 @@ response as a no."
 ;; auto-formatting in text-mode
 (add-hook 'text-mode-hook 'turn-on-auto-fill)                       ; text-mode.el
 
+
 ;;; duplicate-thing.el
 (use-package duplicate-thing
   :ensure t
   :bind (:map global-map ("C-x <down>" . duplicate-thing))
   :config (message "Loading \"duplicate-thing\""))
 
-
+
 ;;; move-lines.el
 ;; up M-<up>" or M-<down>"
 (use-package move-lines
@@ -1021,10 +952,10 @@ and M-n or M-<down> for moving down."
     (bind-key "M-<down>"        'move-lines-down)
     ))
 
-
+
 (require 'multiple-cursors_init)
 
-
+
 ;;; iedit.el
 ;; Выделить текст, либо поставить точку на необходимое слово,
 ;; нажать "C-c ;" - будут выделены все вхождения.
@@ -1039,7 +970,7 @@ and M-n or M-<down> for moving down."
   (setq iedit-auto-narrow t)
   )
 
-
+
 ;;; bind, defun for edit, «pseudo emacs»
 ;; Клавиатурные сочетания и функции для редактирования текста.
 ;;
@@ -1287,13 +1218,6 @@ With argument, do this that many times."
 ;;; "РЕДАКТИРОВАНИЕ ТЕКСТА" ends here <<<<<<<<<<<<<<<<<<<<<<
 
 
-
-
-;;; defer
-;;; эти моды загружаются по вызову или по необходимости
-
-
-
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;;                                                      >>>
@@ -1385,37 +1309,11 @@ With argument, do this that many times."
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;;                                                      >>>
-;;;                  ПРОГРАММНЫЕ МОДЫ                    >>>
-;;;                     PROG-MODES                       >>>
-;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-(require 'web-mode_init)
-
-
-
-(use-package lisp-mode
-  :custom
-  (lisp-body-indent  2)                                         ; lisp-mode.el
-  :config
-  (message "Loading built-in \"lisp-mode\"")
-  )
-
-
-;;; PROG-MODES ends here <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
-
-
-;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-;;;                                                      >>>
 ;;;                 ЯЗЫКИ РАЗМЕТКИ                       >>>
 ;;;                MARKUP LANGUAGES                      >>>
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (require 'org-mode_config)
-
-
-
 
 (require 'markdown-mode_init)
 
@@ -1480,10 +1378,155 @@ With argument, do this that many times."
 
 
 
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;;                                                      >>>
+;;;          ПРОГРАММНЫЕ И ВСПОМОГАТЕЛЬНЫЕ МОДЫ          >>>
+;;;             SOFTWARE AND ASSISTANT MODES             >>>
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(require 'web-mode_init)
+
+
+(use-package lisp-mode
+  :custom
+  (lisp-body-indent  2)                                         ; lisp-mode.el
+  :config
+  (message "Loading built-in \"lisp-mode\"")
+  )
+
+
+
+
 (require 'syslog-mode_init)
 (require 'emmet_init)
-(require 'flycheck_init)
 
+
+(use-package flycheck
+  :ensure t
+  :defer t
+  :bind
+  (
+   :map flycheck-mode-map
+   ("C-c C-n" . flycheck-next-error    )
+   ("C-c C-p" . flycheck-previous-error)
+   ("C-c f"   . flycheck-list-errors   )
+   )
+  :commands (flycheck-mode)
+  :config
+  (message "Loading \"flycheck\"")
+  (setq flycheck-check-syntax-automatically '(mode-enabled save idle-change)
+        flycheck-highlighting-mode          'lines
+        flycheck-indication-mode            'left-fringe
+        flycheck-checker-error-threshold    2000)
+
+  ;; (setq flycheck-python-pycompile-executable    "python3")
+  ;; (setq flycheck-python-pycompile-executable    "python3"
+  ;;       flycheck-python-pylint-executable       "python3"
+  ;;       flycheck-python-flake8-executable       "python3")
+  )
+
+
+
+(use-package company
+  :ensure t
+  :diminish
+  :bind
+  (("C-c & c" . company-yasnippet))
+
+  (:map company-active-map
+        ("M-s"      . company-search-candidates)
+        ("M-f"      . company-filter-candidates)
+        ("M-l"      . company-show-location    )
+        ("M-n"      . company-select-next      )
+        ("M-p"      . company-select-previous  )
+        ("C-d"      . company-show-doc-buffer  )
+        ("TAB"      . company-complete-common-or-cycle)
+        ("<tab>"    . company-complete-common-or-cycle))
+
+  :hook
+  ;; (after-init . company-mode)
+  (after-init . global-company-mode)
+  :config
+  (message "Loading \"company\"")
+  (setq company-auto-complete-chars       '(32 40 41 119 46 34 36 47 124 33)
+        company-backends                  '((company-yasnippet
+                                             company-semantic
+                                             company-capf
+                                             company-etags
+                                             company-files
+                                             company-keywords
+                                             company-dabbrev-code
+                                             company-dabbrev
+                                             company-shell
+                                             company-shell-env
+                                             company-fish-shell
+                                             ))
+        ;; company-begin-commands            '(self-insert-command)
+        company-dabbrev-code-everywhere   t
+        company-dabbrev-code-ignore-case  t
+        company-dabbrev-downcase          nil
+        company-dabbrev-other-buffers     t
+        company-echo-delay                0
+        company-idle-delay                0.1
+        company-minimum-prefix-length     2
+        company-selection-wrap-around     t
+        company-show-numbers              nil
+        company-tooltip-limit             20
+        company-tooltip-align-annotations t)
+
+
+  (use-package company-shell
+    :defer t
+    :ensure t
+    :after company
+    :config
+    (message "Loading \"company-shell\"")
+    )
+
+  (use-package company-flx
+    :ensure t
+    :after company
+    :config
+    (message "Loading \"company-flx\"")
+    )
+  )
+
+
+(setq python-shell-interpreter "/usr/bin/python")
+
+(use-package python-mode
+  :ensure t
+  :config
+  (message "Loading \"python-mode\"")
+  )
+
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode 1)
+  )
+
+
+
+(use-package company-jedi             ;;; company-mode completion back-end for Python JEDI
+  :ensure t
+  :config
+  ;; (setq jedi:environment-virtualenv
+  ;;       (append python-environment-virtualenv
+  ;;               '("--no-site-packages" "--python" "/usr/bin/python3.8")))
+  ;;(setq jedi:environment-virtualenv (list (expand-file-name "~/.emacs.d/.python-environments/")))
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (setq jedi:complete-on-dot t)
+  (setq jedi:use-shortcuts t)
+  (defun config/enable-company-jedi ()
+    (add-to-list 'company-backends 'company-jedi))
+  (add-hook 'python-mode-hook 'config/enable-company-jedi)
+  )
+
+
+
+
+
 
 (setq kmacro-ring-max 30)                                   ; kmacro.el
 
@@ -1517,11 +1560,6 @@ With argument, do this that many times."
    my/elmacro-menu)
 
   )
-
-
-
-
-
 
 
 
@@ -1581,7 +1619,6 @@ With argument, do this that many times."
 
   (auto-insert-mode 1)
   )
-
 
 
 
