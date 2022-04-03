@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Wednesday March 30 0:46:5 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Sunday April 3 21:49:55 EEST 2022>
 
 
 
@@ -1492,38 +1492,86 @@ With argument, do this that many times."
   )
 
 
-(setq python-shell-interpreter "/usr/bin/python")
+;; Если есть - rm -r ~/.emacs.d/.python-environments/default in Terminal
+;; virtualenv -p python2 ~/.emacs.d/.python-environments/default in Terminal
+;; M-x jedi:install-server in emacs
+
+(use-package jedi-core
+  :defer t
+  :config
+  (message "Loading \"jedi-core\"")
+  (setq jedi:complete-on-dot t)
+  (setq jedi:use-shortcuts t)
+  )
+
+
+
+(use-package company-jedi
+  :ensure t
+  ;; :defer t
+  :preface
+  (defun config/enable-company-jedi ()
+    (add-to-list 'company-backends 'company-jedi)
+    (message "Loading \"config/enable-company-jedi\""))
+
+  :hook (python-mode . config/enable-company-jedi)
+
+  ;; (defun config/enable-company-jedi ()
+  ;;   (add-to-list 'company-backends 'company-jedi))
+
+  ;; (add-hook 'python-mode-hook 'config/enable-company-jedi)
+  )
+
 
 (use-package python-mode
   :ensure t
+  :hook (python-mode . jedi:setup)
   :config
   (message "Loading \"python-mode\"")
+  (setq python-shell-interpreter        "ipython"
+        python-shell-interpreter-args   "--simple-prompt"
+        python-shell-prompt-detect-failure-warning nil)
   )
 
+
+;;; `elpy' устанавливает как зависимости
+;;          `highlight-indentation'
+;;          `pyvenv'
+(use-package elpy
+  :ensure t
+  :defer t
+  :init
+  (advice-add 'python-mode :before 'elpy-enable)
+  :config
+  (message "Loading \"elpy\"")
+  )
+
+
+(use-package python-environment
+  :defer t
+  :config
+  (message "Loading \"python-environment\"")
+  )
+
+
+
+;;; Устанавливается вместе с `elpy', поэтому `:ensure' закомментировал.
+;; python -m venv env в Терминале
+;; M-x pyvenv-activate RET dir_to_the_environment/env
 (use-package pyvenv
-  :ensure t
+  ;; :ensure t
+  :hook (python-mode . pyvenv-mode)
   :config
-  (pyvenv-mode 1)
+  (message "Loading \"pyvenv-mode\"")
+
+  ;; Set correct Python interpreter
+  (setq pyvenv-post-activate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")))))
+  (setq pyvenv-post-deactivate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter "python3"))))
   )
-
-
-
-(use-package company-jedi             ;;; company-mode completion back-end for Python JEDI
-  :ensure t
-  :config
-  ;; (setq jedi:environment-virtualenv
-  ;;       (append python-environment-virtualenv
-  ;;               '("--no-site-packages" "--python" "/usr/bin/python3.8")))
-  ;;(setq jedi:environment-virtualenv (list (expand-file-name "~/.emacs.d/.python-environments/")))
-  (add-hook 'python-mode-hook 'jedi:setup)
-  (setq jedi:complete-on-dot t)
-  (setq jedi:use-shortcuts t)
-  (defun config/enable-company-jedi ()
-    (add-to-list 'company-backends 'company-jedi))
-  (add-hook 'python-mode-hook 'config/enable-company-jedi)
-  )
-
-
 
 
 

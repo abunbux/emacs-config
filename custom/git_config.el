@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Thu Jun 20 05:47:58 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Wednesday August 25 17:36:35 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Wednesday March 30 17:17:23 EEST 2022>
 
 
 
@@ -14,6 +14,7 @@
 
 (use-package magit
   :ensure t
+  ;; Эта функция здесь не по ошибке!!!
   :preface
   (defun my/delete-other-windows ()
     (interactive)
@@ -84,15 +85,14 @@
       (magit-process-buffer)))
 
   (advice-add 'magit-process-insert-section :before #'auto-display-magit-process-buffer)
+  )
 
 
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(magit-diff-added ((t (:background "black" :foreground "green3"))))
-   '(magit-diff-removed ((t (:background "black" :foreground "red3"))))))
+(use-package git-modes
+  :ensure t
+  :defer t
+  )
+
 
 
 ;;; gitattributes-mode
@@ -101,10 +101,10 @@
 ;; .git/info/attributes, and
 ;; git/attributes files.
 (use-package gitattributes-mode
-  :ensure t
   :defer t
+  :mode ("/\\.gitattributes$")
   :config
-  (message "Loading \"gitattributes-mode\"")
+  (message "Loading \"gitattributes from git-modes\"")
   )
 
 
@@ -117,10 +117,10 @@
 ;; .gitmodules files.
 ;; gitconfig-mode derives from conf-unix-mode.
 (use-package gitconfig-mode
-  :ensure t
   :defer t
+  :mode ("/\\.?git/?config$" "/\\.gitmodules$")
   :config
-  (message "Loading \"gitconfig-mode\"")
+  (message "Loading \"gitconfig from git-modes\"")
   )
 
 
@@ -133,10 +133,11 @@
 ;; git/ignore files.
 ;; gitignore-mode derives from conf-unix-mode.
 (use-package gitignore-mode
-  :ensure t
   :defer t
+  :mode ("/\\.gitignore$" "/\\.git/info/exclude$" "/git/ignore$")
   :config
-  (message "Loading \"gitignore-mode\""))
+  (message "Loading \"gitignore from git-modes\"")
+  )
 
 
 

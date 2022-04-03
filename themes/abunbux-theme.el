@@ -571,18 +571,26 @@ Semantic, and Ansi-Color faces are included -- and much more...")
    `(lui-button-face ((,class ,link)))
    `(lui-highlight-face ((,class (:box '(:line-width 1 :color "#CC0000") :foreground "#CC0000" :background "#FFFF88")))) ; my nickname
    `(lui-time-stamp-face ((,class (:foreground "purple"))))
-   `(magit-branch ((,class ,vc-branch)))
-   `(magit-diff-add ((,class ,diff-added)))
-   `(magit-diff-del ((,class ,diff-removed)))
+
+
+   `(magit-branch       ((,class ,vc-branch)))
+   `(magit-diff-add     ((,class ,diff-added)))
+   `(magit-diff-added   ((,class (:background "black" :foreground "green3"))))
+   `(magit-diff-added-highlight ((,class (:extend t :background "gray20" :foreground "green3" :weight bold))))
+   `(magit-diff-del     ((,class ,diff-removed)))
    `(magit-diff-file-header ((,class (:family "Sans Serif" :height 1.1 :weight bold :foreground "#4183C4"))))
    `(magit-diff-hunk-header ((,class ,diff-hunk-header)))
-   `(magit-diff-none ((,class ,diff-none)))
-   `(magit-header ((,class (:foreground "white" :background "#FF4040"))))
+   `(magit-diff-none    ((,class ,diff-none)))
+   `(magit-diff-removed ((,class (:background "black" :foreground "red3"))))
+   `(magit-header       ((,class (:foreground "white" :background "#FF4040"))))
    `(magit-item-highlight ((,class (:background "#EAF2F5"))))
-   `(magit-item-mark ((,class ,marked-line)))
+   `(magit-item-mark    ((,class ,marked-line)))
    `(magit-log-head-label ((,class (:box (:line-width 1 :color "blue" :style nil)))))
    `(magit-log-tag-label ((,class (:box (:line-width 1 :color "#00CC00" :style nil)))))
    `(magit-section-title ((,class (:family "Sans Serif" :height 1.8 :weight bold :foreground "cornflower blue" :inherit nil))))
+
+
+
    `(makefile-space-face ((,class (:background "hot pink"))))
    `(makefile-targets ((,class (:weight bold :foreground "blue"))))
    `(match ((,class ,match)))                                                           ; поменял
