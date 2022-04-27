@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Sunday April 3 21:49:55 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Thursday April 28 2:3:33 EEST 2022>
 
 
 
@@ -1418,11 +1418,8 @@ With argument, do this that many times."
         flycheck-highlighting-mode          'lines
         flycheck-indication-mode            'left-fringe
         flycheck-checker-error-threshold    2000)
-
-  ;; (setq flycheck-python-pycompile-executable    "python3")
-  ;; (setq flycheck-python-pycompile-executable    "python3"
-  ;;       flycheck-python-pylint-executable       "python3"
-  ;;       flycheck-python-flake8-executable       "python3")
+  (setq flycheck-python-flake8-executable "/usr/bin/flake8"
+        flycheck-python-pylint-executable "/usr/bin/pylint")
   )
 
 
@@ -1492,9 +1489,23 @@ With argument, do this that many times."
   )
 
 
-;; Если есть - rm -r ~/.emacs.d/.python-environments/default in Terminal
-;; virtualenv -p python2 ~/.emacs.d/.python-environments/default in Terminal
+;; `virtualenv' создаёт папку, которая содержит все необходимые библиотеки
+;; и библиотеки для использования пакетов, которые потребуются для проекта Python.
+;; virtualenv -p python ~/.emacs.d/.python-environments/default in Terminal
+;; По указанному пути будет создана папка и после команды:
 ;; M-x jedi:install-server in emacs
+;; в эту папку `jedi' (default/lib/python3.9/site-packages/ и default/bin/)
+;; устанавливает server.
+;; Чтобы начать использовать виртуальную среду, ее необходимо активировать:
+;; source ~/.emacs.d/.python-environments/default/bin/activate in Terminal,
+;; либо:
+;; M-x pyvenv-activate RET ~/.emacs.d/.python-environments/default in emacs.
+;; Чтобы выйти из виртуального пространства, просто введите:
+;; deactivate in Terminal,
+;; либо:
+;; M-x pyvenv-deactivate in emacs.
+;; И, понятное дело, если действия выполняем в терминале (там где это возможно),
+;; в том же терминале запускаем emacs.
 
 (use-package jedi-core
   :defer t
@@ -1515,12 +1526,9 @@ With argument, do this that many times."
     (message "Loading \"config/enable-company-jedi\""))
 
   :hook (python-mode . config/enable-company-jedi)
-
-  ;; (defun config/enable-company-jedi ()
-  ;;   (add-to-list 'company-backends 'company-jedi))
-
-  ;; (add-hook 'python-mode-hook 'config/enable-company-jedi)
   )
+
+
 
 
 (use-package python-mode
@@ -1529,7 +1537,7 @@ With argument, do this that many times."
   :config
   (message "Loading \"python-mode\"")
   (setq python-shell-interpreter        "ipython"
-        python-shell-interpreter-args   "--simple-prompt"
+        python-shell-interpreter-args   "-m IPython --simple-prompt -i"
         python-shell-prompt-detect-failure-warning nil)
   )
 
@@ -1544,6 +1552,7 @@ With argument, do this that many times."
   (advice-add 'python-mode :before 'elpy-enable)
   :config
   (message "Loading \"elpy\"")
+  (delete 'elpy-module-highlight-indentation elpy-modules)
   )
 
 
