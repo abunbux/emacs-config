@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Wed May 22 21:44:32 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Monday August 30 16:58:47 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Friday June 10 22:44:44 EEST 2022>
 
 
 
@@ -321,7 +321,15 @@
     :defer t
     :config
     (message "Loading \"helm-utils\"")
-    (setq helm-su-or-sudo "su")))
+    (setq helm-su-or-sudo "su"))
+
+(use-package helm-adaptive
+  :init
+  :config
+  (message "Loading \"helm-adaptive\"")
+  )
+
+  )
 
 
 

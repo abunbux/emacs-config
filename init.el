@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Thursday April 28 2:3:33 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Friday June 10 22:21:11 EEST 2022>
 
 
 
@@ -301,6 +301,8 @@
 (global-unset-key (kbd "M-s h"))    ; `hi-lock-...', `highlight-...', `unhighlight-' - перебиндил
 (global-unset-key (kbd "M-s o"))    ; `occur'
 
+;; Выключить кнопку Insert (включение overwrite-mode):
+(define-key global-map [(insert)] nil)
 
 
 
@@ -484,6 +486,7 @@ response as a no."
   (scroll-step                          1)              ; C-code (emacs)
   (select-active-regions                t)              ; C-code (emacs)
   (tab-width                            4)              ; C-code (emacs)
+
   (truncate-partial-width-windows       nil)            ; C-code (emacs)
   (visible-bell                         nil)            ; C-code (emacs)
   (visible-cursor                       nil)            ; C-code (emacs)
@@ -494,7 +497,9 @@ response as a no."
   (message "Loading built-in \"C-code\" - \"pseudo emacs\"")
   (setq-default indent-tabs-mode        nil            ; C-code (emacs)
                 tab-width               4)             ; C-code (emacs)
-  (setq-default fill-column             80)            ; C-code (emacs)
+  (setq-default fill-column             100)            ; C-code (emacs)
+
+  (setq-default truncate-lines t)
 
   ;; ignore case
   (setq-default case-fold-search        t)             ; C-code (emacs)
@@ -566,6 +571,8 @@ response as a no."
 
 (setq           sentence-end                                        ; paragraphs.el
                 "\\([。、！？]\\|……\\|[,.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
+
+;; У нас не принято разделять предложения двойным пробелом:
 (setq           sentence-end-double-space   nil)                    ; paragraphs.el
 
 (setq-default compilation-ask-about-save    nil)                    ; compile.el
@@ -913,6 +920,7 @@ response as a no."
   (message "Loading \"volatile-highlights\"")
   (vhl/ext/kill/on)
   (vhl/ext/delete/on))
+
 
 ;;; HIGHLIGHT ends here <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
