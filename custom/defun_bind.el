@@ -1,7 +1,7 @@
 ;;; defun_bind.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Sun Feb 09 16:18:21 EET 2020>
-;;; Time-stamp: <Последнее обновление -- Friday September 3 14:38:59 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Thursday June 23 22:44:5 EEST 2022>
 
 
 
@@ -481,8 +481,6 @@ Version 2017-09-22"
 ;; Нашёл  на https://github.com/hjking/emacs.d/blob/master/init.el defadvice,
 ;; которая позволяет, при отсутствии выделенния, по "C-w" и "M-w" вырезать текущую строку
 ;; или скопировать её, поэтому "my/copy-line" закомментировал,
-;; "my/delete-line" оставил - так как она полностью удаляет строку и перемещает следующую
-;; за удаляемой вверх, найденная же этого не делает.
 ;; (defun my/copy-line (arg)
 ;;   "Copy lines (as many as prefix argument) in the kill ring"
 ;;   (interactive "p")

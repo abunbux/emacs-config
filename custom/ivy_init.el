@@ -1,7 +1,7 @@
 ;;; ivy_init.el -*- coding: utf-8; lexical-binding: t -*-
 
 ;;; CREATED: <Fri May 17 14:23:40 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Tuesday October 5 23:1:31 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Friday June 24 20:37:46 EEST 2022>
 
 
 
@@ -136,7 +136,7 @@
 
          ("M-s a c"     . counsel-ag)
          ("M-s g c"     . counsel-grep)
-         ("M-s f c"       . counsel-locate)
+         ("M-s f c"     . counsel-locate)
          ("M-s s r"     . counsel-rg)
 
          ;;; Этими командами не пользуюсь (или почти не пользуюсь)

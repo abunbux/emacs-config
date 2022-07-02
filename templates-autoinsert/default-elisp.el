@@ -2,7 +2,7 @@
 ;;; --- ${2:insert here summary}
 
 ;;; `(my/insert-current-date-time)`
-;;; Time-stamp: <Последнее обновление -- Sunday July 18 19:47:17 EEST 2021>
+;;; Time-stamp: <>
 
 
 

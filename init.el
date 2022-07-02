@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Friday June 10 22:21:11 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Saturday July 2 17:54:43 EEST 2022>
 
 
 
@@ -232,7 +232,10 @@
 (use-package benchmark-init
   :ensure t
   :config
-  (message "Loading \"benchmark-init\""))
+  (message "Loading \"benchmark-init\"")
+  ;; To disable collection of benchmark data after init is done.
+  (add-hook 'after-init-hook 'benchmark-init/deactivate)
+  )
 
 
 
@@ -374,7 +377,6 @@ response as a no."
     (menu-bar-mode       -1)
     (require 'custom_section_tty)
     (message "Loading \"custom_section_tty\"")))
-
 
 
 
@@ -850,6 +852,28 @@ response as a no."
 
 (require 'defun_bind)
 
+;; Взято у `xuchunyang'
+
+(use-package chunyang-scratch
+  :preface
+  (defun chunyang-scratch-save ()
+    (ignore-errors
+      (with-current-buffer "*scratch*"
+        (write-region nil nil "~/.emacs.d/cache/scratch"))))
+
+  (defun chunyang-scratch-restore ()
+    (let ((f "~/.emacs.d/cache/scratch"))
+      (when (file-exists-p f)
+        (with-current-buffer "*scratch*"
+          (insert-file-contents f)
+          (set-buffer-modified-p nil)))))
+  :init
+  (add-hook 'kill-emacs-hook #'chunyang-scratch-save)
+  (add-hook 'after-init-hook #'chunyang-scratch-restore)
+  ;; This is not a real package so don't load it
+  :defer t)
+
+
 ;; (require 'easy-menu_init)
 
 
@@ -1221,6 +1245,15 @@ With argument, do this that many times."
   )
 
 
+;; expand-region
+;; https://github.com/magnars/expand-region.el
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region)
+  :config
+  (message "Loading \"expand-region\"")
+  )
+
 
 
 ;;; "РЕДАКТИРОВАНИЕ ТЕКСТА" ends here <<<<<<<<<<<<<<<<<<<<<<
@@ -1306,7 +1339,6 @@ With argument, do this that many times."
 
 (require 'loccur_init)
 (require 'hide-lines_init)
-(require 'vimish-fold_init)
 (require 'built-in_narrow_config)
 
 

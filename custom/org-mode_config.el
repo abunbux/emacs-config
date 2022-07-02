@@ -1,7 +1,7 @@
 ;;; org-mode_config.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Sat Feb 29 16:27:41 EET 2020>
-;;; Time-stamp: <Последнее обновление -- Friday June 10 22:1:25 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Wednesday June 29 19:20:55 EEST 2022>
 
 
 
@@ -21,9 +21,6 @@
   :mode (
          ("\\.org$" . org-mode))
   :init
-  (add-hook 'org-mode 'org-wiki-mode)
-
-
   ;; Хочу видеть дату+время, когда пункт был закрыт (CLOSED):
   (setq org-log-done t)
 
@@ -60,8 +57,7 @@
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAIT(w)" "|" "DONE(d)" "CANCELED(c@)")))
 
-  ;; (setq org-agenda-files '("~/HELP/python/modules/mod_watchdog"))
-  (setq org-agenda-files (directory-files-recursively "~/HELP/python/" "\\.org$"))
+  (setq org-agenda-files (directory-files-recursively "~/opt/python/" "\\.org$"))
 
   ;; Не показывать DONE в агенде:
   (setq org-agenda-skip-scheduled-if-done 't)

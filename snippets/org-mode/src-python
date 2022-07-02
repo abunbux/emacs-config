@@ -2,9 +2,8 @@
 # name: src-python
 # key: src
 # --
-#+NAME:
 #+BEGIN_SRC python
 
-
+$0
 
 #+END_SRC
