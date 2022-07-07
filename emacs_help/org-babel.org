@@ -1,0 +1,24 @@
+# -*- mode: org; -*-
+#+TITLE: org-babel
+#+DESCRIPTION:
+#+KEYWORDS:
+#+AUTHOR:
+#+email:
+#+INFOJS_OPT:
+#+STARTUP:  content
+
+#+DATE: CREATED: <Thu Jul 22 12:33:14 EEST 2021>
+# Time-stamp: <Последнее обновление -- Thursday July 22 12:36:43 EEST 2021>
+
+
+https://orgmode.org/worg/org-contrib/babel/intro.html
+
+https://orgmode.org/manual/Literal-Examples.html
+
+https://orgmode.org/manual/Structure-Templates.html#FOOT148
+
+https://qastack.ru/emacs/46795/is-it-possible-to-add-templates-other-than-begin-end-to-org-structure-temp
+
+https://zzamboni.org/post/beautifying-org-mode-in-emacs/
+
+https://zhangda.wordpress.com/2016/02/15/configurations-for-beautifying-emacs-org-mode/

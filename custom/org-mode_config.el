@@ -1,7 +1,7 @@
 ;;; org-mode_config.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Sat Feb 29 16:27:41 EET 2020>
-;;; Time-stamp: <Последнее обновление -- Wednesday June 29 19:20:55 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Tuesday July 5 22:52:50 EEST 2022>
 
 
 
@@ -64,6 +64,10 @@
 
   :config
   (message "Loading \"org-mode\"")
+
+  ;; с версии 9.5 `org-adapt-indentation' теперь по умолчанию равен `nil'.
+  ;; Очень удивился, когда emacs перестал в org-файлах делать отступы:
+  (setq org-adapt-indentation t)
 
   (org-babel-do-load-languages
    'org-babel-load-languages

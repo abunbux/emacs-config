@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Wed May 22 21:44:32 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Friday June 10 22:44:44 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Tuesday July 5 22:59:4 EEST 2022>
 
 
 
@@ -195,10 +195,10 @@
         helm-buffer-details-flag    t
         helm-buffer-skip-remote-checking nil
         helm-buffers-truncate-lines t
-        helm-mini-default-sources '(helm-source-buffers-list
+        helm-mini-default-sources '(helm-source-recentf
+                                    helm-source-buffers-list
                                     helm-source-bookmarks
                                     helm-source-files-in-current-dir
-                                    helm-source-recentf
                                     ;; helm-source-ido-virtual-buffers
                                     helm-source-buffer-not-found)
         helm-buffers-end-truncated-string "...")

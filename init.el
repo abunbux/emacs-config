@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Saturday July 2 17:54:43 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Tuesday July 5 19:27:3 EEST 2022>
 
 
 
@@ -41,8 +41,6 @@
 (defvar file-name-handler-alist-old file-name-handler-alist)
 (message "file-name-handler-alist-old == file-name-handler-alist")
 
-
-;; (load "~/.emacs.d/lisp/benchmark-init.el")
 
 
 
@@ -1192,7 +1190,6 @@ With argument, do this that many times."
         (let ((fill-column (point-max)))
           (fill-region (region-beginning) (region-end)))
       (join-line -1)))
-  ;; (bind-key "C-M-^" 'my/join-following-line global-map)
 
   ;; M-u - upcase word or region
   ;; M-l - lowercase word or region

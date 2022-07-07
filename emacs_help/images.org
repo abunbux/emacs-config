@@ -1,0 +1,20 @@
+# -*- mode: org; -*-
+#+TITLE: images
+#+DESCRIPTION:
+#+KEYWORDS:
+#+AUTHOR:
+#+email:
+#+INFOJS_OPT:
+#+STARTUP:  content
+
+#+DATE: CREATED: <Thu Jul 22 09:03:50 EEST 2021>
+# Time-stamp: <Последнее обновление -- Thursday July 22 9:5:0 EEST 2021>
+
+
+https://orgmode.org/manual/Images.html
+
+https://qastack.ru/emacs/390/display-pdf-images-in-org-mode
+
+https://coderoad.ru/17621495/Emacs-org-display-inline-images
+
+https://llazarek.github.io/2018/10/images-in-org-mode.html
