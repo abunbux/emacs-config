@@ -1,7 +1,7 @@
 ;;; org-mode_config.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Sat Feb 29 16:27:41 EET 2020>
-;;; Time-stamp: <Последнее обновление -- Tuesday July 5 22:52:50 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Monday July 18 21:40:50 EEST 2022>
 
 
 
@@ -57,7 +57,7 @@
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAIT(w)" "|" "DONE(d)" "CANCELED(c@)")))
 
-  (setq org-agenda-files (directory-files-recursively "~/opt/python/" "\\.org$"))
+  ;; (setq org-agenda-files (directory-files-recursively "~/opt/python/" "\\.org$"))
 
   ;; Не показывать DONE в агенде:
   (setq org-agenda-skip-scheduled-if-done 't)
