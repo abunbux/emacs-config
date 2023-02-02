@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Tuesday July 5 19:27:3 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Saturday October 1 18:34:52 MSK 2022>
 
 
 
@@ -53,7 +53,7 @@
       auto-window-vscroll           nil                                 ; C-code (emacs)
       )
 
-
+;; (server-start)
 
 
 (add-hook 'after-init-hook
@@ -262,12 +262,14 @@
 
 
 
-;;; server.el
-;; built-in
+;; ;;; server.el
+;; ;; built-in
 ;; (use-package server
 ;;   :ensure nil
-;;   :hook (after-init . server-mode))
-
+;;   :hook (after-init . server-mode)
+;;   :config
+;;   (message "Loading \"server\"")
+;;   )
 
 
 
@@ -1031,26 +1033,26 @@ and M-n or M-<down> for moving down."
         (indent-region (region-beginning) (region-end) nil)))
 
 
-  ;; <http://www.zafar.se/bkz/Articles/EmacsTips>
-  ;; "M-w" если выделения нет - копирует всю строку.
-  ;; "C-w" если выделения нет - вырезает всю строку
-  ;; и остаётся на этой (пустой) строке:
-  (defadvice kill-ring-save (before slickcopy activate compile)
-    "When called interactively with no active region, copy the current line instead."
-    (interactive
-     (if mark-active
-         (list (region-beginning) (region-end))
-       (progn
-         (message "Current line is copied")
-         (list (line-beginning-position) (line-end-position))))))
-  (defadvice kill-region (before slickcut activate compile)
-    "When called interactively with no active region, cut the current line instead."
-    (interactive
-     (if mark-active
-         (list (region-beginning) (region-end))
-       (progn
-         (message "Current line is cut.")
-         (list (line-beginning-position) (line-end-position))))))
+  ;; ;; <http://www.zafar.se/bkz/Articles/EmacsTips>
+  ;; ;; "M-w" если выделения нет - копирует всю строку.
+  ;; ;; "C-w" если выделения нет - вырезает всю строку
+  ;; ;; и остаётся на этой (пустой) строке:
+  ;; (defadvice kill-ring-save (before slickcopy activate compile)
+  ;;   "When called interactively with no active region, copy the current line instead."
+  ;;   (interactive
+  ;;    (if mark-active
+  ;;        (list (region-beginning) (region-end))
+  ;;      (progn
+  ;;        (message "Current line is copied")
+  ;;        (list (line-beginning-position) (line-end-position))))))
+  ;; (defadvice kill-region (before slickcut activate compile)
+  ;;   "When called interactively with no active region, cut the current line instead."
+  ;;   (interactive
+  ;;    (if mark-active
+  ;;        (list (region-beginning) (region-end))
+  ;;      (progn
+  ;;        (message "Current line is cut.")
+  ;;        (list (line-beginning-position) (line-end-position))))))
 
 
   ;; fill-paragraph

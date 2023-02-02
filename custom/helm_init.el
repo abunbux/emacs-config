@@ -47,7 +47,7 @@
 
   :init
   (require 'helm)
-  (require 'helm-config)
+  ;; (require 'helm-config)
   (helm-mode 1)
   (require 'helm-command)
   (require 'helm-files)
