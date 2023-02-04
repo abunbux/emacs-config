@@ -10,7 +10,7 @@
  '(anzu-replace-to-string-separator " => ")
  '(anzu-search-threshold 1000)
  '(package-selected-packages
-   '(visual-regexp-steroids winnow which-key wgrep-helm wgrep-ag web-mode volatile-highlights visual-regexp syslog-mode swiper-helm smartparens quelpa-use-package python-mode phi-grep peep-dired page-break-lines occur-x multiple-cursors move-lines markdown-mode magit loccur interaction-log iedit htmlize highlight-symbol highlight-parentheses highlight helpful help-fns+ helm-swoop helm-ls-git helm-helm-commands helm-describe-modes helm-descbinds helm-company helm-backup helm-ag git-modes free-keys flycheck expand-region emmet-mode elpy elmacro duplicate-thing doom-modeline dired-subtree dired-narrow diminish counsel company-shell company-jedi company-flx benchmark-init backup-each-save anzu amx all-the-icons-ivy all-the-icons-dired ag)))
+   '(helm-autoloads helm company hide-lines wgrep all-the-icons yasnippet flx ivy visual-regexp-steroids winnow which-key wgrep-helm wgrep-ag web-mode volatile-highlights visual-regexp syslog-mode swiper-helm smartparens quelpa-use-package python-mode phi-grep peep-dired page-break-lines occur-x multiple-cursors move-lines markdown-mode magit loccur interaction-log iedit htmlize highlight-symbol highlight-parentheses highlight helpful help-fns+ helm-swoop helm-ls-git helm-helm-commands helm-describe-modes helm-descbinds helm-company helm-backup helm-ag git-modes free-keys flycheck expand-region emmet-mode elpy elmacro duplicate-thing doom-modeline dired-subtree dired-narrow diminish counsel company-shell company-jedi company-flx benchmark-init backup-each-save anzu amx all-the-icons-ivy all-the-icons-dired ag)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -221,7 +221,7 @@
  '(highlight-parentheses-highlight ((t (:weight bold :height 1.0 :background "#1d2014"))) t)
  '(highlight-symbol-face ((((class color) (min-colors 89)) (:background "#FFFFA0"))))
  '(hl-line ((((class color) (min-colors 89)) (:inherit t :background "#3d4753" :foreground nil))))
- '(hl-tags-face ((((class color) (min-colors 89)) (:background "#FEFCAE"))))
+ '(hl-tags-face ((((class color) (min-colors 89)) (:background "#FEFCAE"))) t)
  '(holiday-face ((((class color) (min-colors 89)) (:foreground "#777777" :background "#E4EBFE"))))
  '(homoglyph ((((class color) (min-colors 89)) (:foreground "#008ED1"))))
  '(html-helper-bold-face ((((class color) (min-colors 89)) (:weight bold :foreground "black"))))
@@ -282,7 +282,8 @@
  '(makefile-space-face ((((class color) (min-colors 89)) (:background "hot pink"))))
  '(makefile-targets ((((class color) (min-colors 89)) (:weight bold :foreground "blue"))))
  '(match ((((class color) (min-colors 89)) (:weight bold :background "#1f1f1f"))))
- '(message-cited-text ((((class color) (min-colors 89)) (:foreground "#5050B0"))))
+ '(message-cited-text ((((class color) (min-colors 89)) (:foreground "#5050B0"))) t)
+ '(message-cited-text-1 ((((class color) (min-colors 89)) (:foreground "#5050B0"))))
  '(message-header-cc ((((class color) (min-colors 89)) (:family "Sans Serif" :underline nil :foreground "#006DAF"))))
  '(message-header-name ((((class color) (min-colors 89)) (:family "Sans Serif" :weight normal :foreground "#A3A3A2"))))
  '(message-header-newsgroups ((((class color) (min-colors 89)) (:family "Sans Serif" :foreground "#3399CC"))))
@@ -356,7 +357,7 @@
  '(org-mode-line-clock ((((class color) (min-colors 89)) (:box (:line-width 1 :color "#335EA8") :foreground "black" :background "#EEC900"))))
  '(org-mode-line-clock-overrun ((((class color) (min-colors 89)) (:weight bold :box (:line-width 1 :color "#335EA8") :foreground "white" :background "#FF4040"))))
  '(org-number-of-items ((((class color) (min-colors 89)) (:weight bold :foreground "white" :background "#79BA79"))))
- '(org-property-value ((((class color) (min-colors 89)) (:foreground "#00A000"))))
+ '(org-property-value ((((class color) (min-colors 89)) (:foreground "#00A000"))) t)
  '(org-quote ((((class color) (min-colors 89)) (:slant italic :foreground "dim gray" :background "#FFFFE0"))))
  '(org-scheduled ((((class color) (min-colors 89)) (:foreground "#333333"))))
  '(org-scheduled-previously ((((class color) (min-colors 89)) (:foreground "#F22659"))))
@@ -425,7 +426,7 @@
  '(show-paren-match ((((class color) (min-colors 89)) (:background "#3e3b32" :foreground "white"))))
  '(show-paren-match-expression ((t (:background "#021f26" :foreground nil))))
  '(show-paren-mismatch ((((class color) (min-colors 89)) (:underline "red" :background "navy" :foreground "white"))))
- '(smerge-refined-change ((((class color) (min-colors 89)) (:background "#AAAAFF"))))
+ '(smerge-refined-change ((((class color) (min-colors 89)) (:background "#AAAAFF"))) t)
  '(sml-modeline-end-face ((((class color) (min-colors 89)) (:background "#6BADF6"))))
  '(sml-modeline-vis-face ((((class color) (min-colors 89)) (:background "#1979CA"))))
  '(speedbar-button-face ((((class color) (min-colors 89)) (:foreground "green4"))))

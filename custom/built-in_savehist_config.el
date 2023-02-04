@@ -2,7 +2,7 @@
 ;;; --- insert here summary
 
 ;;; CREATED: <Sun Aug 29 18:10:13 EEST 2021>
-;;; Time-stamp: <Последнее обновление -- Sunday October 3 22:56:16 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Saturday February 4 19:46:59 MSK 2023>
 
 
 
@@ -28,16 +28,16 @@
   (setq savehist-additional-variables
         '(compile-history
           command-history
-          extended-command-history
+          ;; extended-command-history
           file-name-history
           global-mark-ring
-          ido-file-history
-          Info-history-list
-          ivy-views
-          helm-grep-history
+          ;; ido-file-history
+          ;; Info-history-list
+          ;; ivy-views
+          ;; helm-grep-history
           helm-M-x-input-history
           kill-ring
-          log-edit-comment-ring
+          ;; log-edit-comment-ring
           mark-ring
           minibuffer-history
           regexp-history
@@ -50,7 +50,7 @@
           set-variable-value-history
           shell-command-history)
         savehist-save-minibuffer-history  t
-        savehist-autosave-interval        60)
+        savehist-autosave-interval        180)
   (setq savehist-file     "~/.emacs.d/cache/savehist")
   ;; (savehist-mode 1)
   )

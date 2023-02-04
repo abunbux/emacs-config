@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Wed May 22 21:44:32 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Tuesday July 5 22:59:4 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Saturday February 4 20:2:41 MSK 2023>
 
 
 
@@ -10,13 +10,14 @@
 (use-package helm
   :ensure t
   :diminish (helm-mode)
-  :bind (("C-x C-b"     . helm-mini)
+  :bind (
+         ;; ("C-x C-b"     . helm-mini)
          ("C-x F"       . helm-find-files)
 
          ("M-h b f"     . helm-filtered-bookmarks)
          ("C-x r b"     . helm-bookmarks)
          ("M-h b r"     . helm-register)
-         ("M-h b s"     . helm-surfraw)
+         ;; ("M-h b s"     . helm-surfraw)
 
          ("M-y"         . helm-show-kill-ring)
          ("M-h M-y"     . helm-all-mark-rings)
@@ -26,14 +27,12 @@
          ("<end>"       . helm-resume)
 
          ("M-s s o"     . helm-occur)
-         ("M-s f l"     . helm-locate)
          ("M-s f f"     . helm-find)
          ("M-s g a"     . helm-do-grep-ag)
 
          ("C-h a"       . helm-apropos)
 
-         ("<f6> h I"    . helm-info)
-         ("<f6> h i"    . helm-info-at-point)
+
          ("<f6> h d"    . helm-documentation)
 
          :map helm-buffer-map
@@ -46,83 +45,48 @@
          )
 
   :init
-  (require 'helm)
-  ;; (require 'helm-config)
-  (helm-mode 1)
-  (require 'helm-command)
-  (require 'helm-files)
-  (require 'helm-bookmark)
-  (require 'helm-imenu)
-  (require 'helm-semantic)
-  (require 'helm-elisp)
-  (require 'helm-locate)
-  (require 'helm-info)
-  ;; (require 'helm-grep)
-  (require 'helm-ring)
-
-
-
-  ;; helm-lib.el
-  (setq helm-boring-file-regexp-list
-        (append helm-boring-file-regexp-list
-                '(
-                  "/\\.$"
-                  "/\\.\\.$"
-                  "\\.undo\\.xz$"
-                  "\\.elc$"
-                  "\\#$"
-                  "\\~$"
-                  "\\.zwc\\.old$"
-                  "\\.zwc$"))
-        helm-scroll-amount          8
-        helm-describe-variable-function 'helpful-variable
-        helm-describe-function-function 'helpful-function)
-
   ;; helm.el
-  (setq helm-candidate-number-limit nil
-        helm-case-fold-search       'smart
-        helm-display-header-line    nil
+  (setq helm-candidate-number-limit     nil
+        helm-case-fold-search           'smart
+        helm-display-header-line        nil
         helm-echo-input-in-header-line  t
-        helm-exit-idle-delay        0.1
-        helm-input-idle-delay       0.1
-        ;; helm-follow-mode-persistent t                               ; в случае непонятных явлений - убрать
+        helm-exit-idle-delay            0.1
+        helm-input-idle-delay           0.1
+        ;; helm-follow-mode-persistent t               ; в случае непонятных явлений - убрать
         ;; helm-move-to-line-cycle-in-source    t
         helm-reuse-last-window-split-state  t
-        helm-split-window-in-side-p t
-        helm-split-window-default-side 'right
+        helm-split-window-in-side-p     t
+        helm-split-window-default-side  'right
         helm-split-window-preferred-function 'split-window-sensibly)  ; в случае непонятных явлений - убрать
 
 
-  ;; https://github.com/emacs-helm/helm/wiki/FAQ#slow-frame-and-window-popup-in-emacs-26
-  ;; This is an emacs bug which have been fixed in emacs-27 (development version),
-  ;; to fix it in emacs-26, use
-  (setq x-wait-for-event-timeout nil)                               ; в версии emacs-27 нужно убрать
+  ;; ;; https://github.com/emacs-helm/helm/wiki/FAQ#arrow-keys-behavior-have-changed
+  ;; ;; В новой версии helm изменились клавиш, следующие далее строки возвращают
+  ;; ;; прежнее поведение.
+  ;; (define-key helm-map (kbd "<left>") 'helm-previous-source)
+  ;; (define-key helm-map (kbd "<right>") 'helm-next-source)
 
-
-  ;; https://github.com/emacs-helm/helm/wiki/FAQ#arrow-keys-behavior-have-changed
-  ;; В новой версии helm изменились клавиш, следующие далее строки возвращают
-  ;; прежнее поведение.
-  (define-key helm-map (kbd "<left>") 'helm-previous-source)
-  (define-key helm-map (kbd "<right>") 'helm-next-source)
   ;; for helm-find-files
   (customize-set-variable 'helm-ff-lynx-style-map t)
+
   ;; for helm-imenu
   (customize-set-variable 'helm-imenu-lynx-style-map t)
+
   ;; for semantic
   (customize-set-variable 'helm-semantic-lynx-style-map t)
+
   ;; for helm-occur
   (customize-set-variable 'helm-occur-use-ioccur-style-keys t)
-  ;; for helm-grep
-  (customize-set-variable 'helm-grep-use-ioccur-style-keys t)
 
-  ;; helm-external.el
-  ;; Files that helm should know how to open
-  (setq helm-external-programs-associations
-        '(("avi"  . "smplayer")
-          ("part" . "smplayer")
-          ("mkv"  . "smplayer")
-          ("webm" . "smplayer")
-          ("mp4"  . "smplayer")))
+
+  ;; ;; helm-external.el
+  ;; ;; Files that helm should know how to open
+  ;; (setq helm-external-programs-associations
+  ;;       '(("avi"  . "smplayer")
+  ;;         ("part" . "smplayer")
+  ;;         ("mkv"  . "smplayer")
+  ;;         ("webm" . "smplayer")
+  ;;         ("mp4"  . "smplayer")))
 
   (setq helm-ff-file-name-history-use-recentf t)    ; helm-files.el
   (setq helm-minibuffer-history 100)                ; helm-misc.el
@@ -138,25 +102,32 @@
         helm-recentf-fuzzy-match    t               ; helm-for-files.el
         helm-semantic-fuzzy-match   t)
 
-  ;; helm-grep.el
-  (setq helm-grep-default-command
-        "grep --color=always -d skip %e -n%cH -e %p %f"
-        helm-grep-default-recurse-command
-        "grep --color=always -d recurse %e -n%cH -e %p %f")
-
-  ;; helm-grep.el
-  (setq helm-grep-ag-command
-        "rg --color=always --colors 'match:fg:black' --colors 'match:bg:yellow' --smart-case --no-heading --line-number %s %s %s"
-        helm-grep-ag-pipe-cmd-switches
-        '("--colors 'match:fg:black'" "--colors 'match:bg:yellow'"))
-
-  ;; helm-grep.el
-  (setq helm-ls-git-grep-command
-        "git grep -n%cH --color=always --full-name -e %p %f")
+  (require 'helm)
 
 
   :config
-  (message "Loading \"helm\"")
+  (with-eval-after-load 'helm
+    (message "Loading \"helm\""))
+
+  (helm-mode 1)
+
+
+  ;; helm-lib.el
+  (setq helm-boring-file-regexp-list
+        (append helm-boring-file-regexp-list
+                '(
+                  "/\\.$"
+                  "/\\.\\.$"
+                  "\\.undo\\.xz$"
+                  "\\.elc$"
+                  "\\#$"
+                  "\\~$"
+                  "\\.zwc\\.old$"
+                  "\\.zwc$"))
+        helm-scroll-amount              8
+        helm-describe-variable-function 'helpful-variable
+        helm-describe-function-function 'helpful-function)
+
 
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 
@@ -180,64 +151,58 @@
   (when (executable-find "curl")
     (setq helm-google-suggest-use-curl-p t))
 
+
+  
+
+  ;; helm-bookmark.el
+  (with-eval-after-load 'helm-bookmark
+    (message "Loading \"helm-bookmark\""))
+
+  
+
+  ;; helm-buffers.el
+  (with-eval-after-load 'helm-buffers
+    (setq helm-buffers-favorite-modes '(lisp-interaction-mode
+                                        emacs-lisp-mode
+                                        text-mode
+                                        org-mode)
+          helm-buffer-max-length      22
+          helm-buffer-details-flag    t
+          helm-buffer-skip-remote-checking nil
+          helm-buffers-truncate-lines t
+          helm-mini-default-sources '(helm-source-recentf
+                                      helm-source-buffers-list
+                                      helm-source-bookmarks
+                                      helm-source-files-in-current-dir
+                                      ;; helm-source-ido-virtual-buffers
+                                      helm-source-buffer-not-found)
+          helm-buffers-end-truncated-string "...")
+    (message "Loading \"helm-buffers\""))
+
   ;; helm-buffers.el
   (with-eval-after-load 'helm-buffers
     (unless helm-source-buffers-list
       (setq helm-source-buffers-list
             (helm-make-source "Buffers" 'helm-source-buffers))))
 
-  ;; helm-buffers.el
-  (setq helm-buffers-favorite-modes '(lisp-interaction-mode
-                                      emacs-lisp-mode
-                                      text-mode
-                                      org-mode)
-        helm-buffer-max-length      22
-        helm-buffer-details-flag    t
-        helm-buffer-skip-remote-checking nil
-        helm-buffers-truncate-lines t
-        helm-mini-default-sources '(helm-source-recentf
-                                    helm-source-buffers-list
-                                    helm-source-bookmarks
-                                    helm-source-files-in-current-dir
-                                    ;; helm-source-ido-virtual-buffers
-                                    helm-source-buffer-not-found)
-        helm-buffers-end-truncated-string "...")
+  
 
+  ;; helm-files.el
   (with-eval-after-load 'helm-files
     (setq helm-ff-skip-boring-files    t
           helm-ff-file-compressed-list '("gz" "bz2" "zip" "tgz" "xz" "txz")
           helm-ff-file-name-history-use-recentf    t
           helm-ff-newfile-prompt-p                 nil
           helm-ff-search-library-in-sexp           t
-          helm-ff-transformer-show-only-basename   nil))
+          helm-ff-transformer-show-only-basename   nil)
+    (message "Loading \"helm-files\""))
 
-  ;; helm-locate.el
-  (with-eval-after-load 'helm-locate
-    (setq helm-source-locate
-          (helm-make-source "Locate" 'helm-locate-source
-            :pattern-transformer 'helm-locate-pattern-transformer
-            :candidate-number-limit 200)
-          helm-locate-command     "locate %s --regex -i %s -e -l 200"))
-
-  ;; helm-bookmark.el
-  (use-package helm-bookmark
-    :config
-    (message "Loading \"helm-bookmark\""))
-
-  ;; helm-buffers.el
-  (use-package helm-buffers
-    :config
-    (message "Loading \"helm-buffers\""))
+  
 
   ;; helm-command.el
   (use-package helm-command
     :config
     (message "Loading \"helm-command\""))
-
-  ;; helm-files.el
-  (use-package helm-files
-    :config
-    (message "Loading \"helm-files\""))
 
   ;; helm-for-files.el
   (use-package helm-for-files
@@ -246,26 +211,25 @@
 
   ;; helm-elisp.el
   (use-package helm-elisp
-    ;; :commands helm-apropos
     :config
     (message "Loading \"helm-elisp\""))
 
-  ;; helm-imenu.el
-  (use-package helm-imenu
-    :commands helm-imenu
-    :config
-    (message "Loading \"helm-imenu\""))
 
   ;; helm-info.el
   (use-package helm-info
+    :defer t
+    :bind (("<f6> h I"    . helm-info)
+           ("<f6> h i"    . helm-info-at-point))
     :commands (helm-info
                helm-info-history
                helm-info-emacs
                helm-info-find
                helm-info-at-point)
     :config
-    (message "Loading \"helm-info\""))
+    (with-eval-after-load 'helm-info
+      (message "Loading \"helm-info\"")))
 
+  
 
   ;; helm-grep.el
   ;; From helm-find-files (<helm-prefix> C-x C-f),
@@ -277,13 +241,57 @@
   (use-package helm-grep
     :disabled
     :config
-    (message "Loading \"helm-grep\""))
+    (with-eval-after-load 'helm-grep
+      (message "Loading \"helm-grep\"")
+      ;; for helm-grep
+      (customize-set-variable 'helm-grep-use-ioccur-style-keys t)
 
 
-  ;; helm-locate.el
+      ;; helm-grep.el
+      (setq helm-grep-default-command
+            "grep --color=always -d skip %e -n%cH -e %p %f"
+            helm-grep-default-recurse-command
+            "grep --color=always -d recurse %e -n%cH -e %p %f")
+
+      ;; helm-grep.el
+      (setq helm-grep-ag-command
+            "rg --color=always --colors 'match:fg:black' --colors 'match:bg:yellow' --smart-case --no-heading --line-number %s %s %s"
+            helm-grep-ag-pipe-cmd-switches
+            '("--colors 'match:fg:black'" "--colors 'match:bg:yellow'"))
+
+      ;; helm-grep.el
+      (setq helm-ls-git-grep-command
+            "git grep -n%cH --color=always --full-name -e %p %f")
+      ))
+
+
+  
+
+  ;; ;; helm-locate.el
   (use-package helm-locate
+    :disabled
     :config
-    (message "Loading \"helm-locate\""))
+    (message "Loading \"helm-locate\"")
+
+    (with-eval-after-load 'helm-locate
+      (setq helm-source-locate
+            (helm-make-source "Locate" 'helm-locate-source
+              :pattern-transformer 'helm-locate-pattern-transformer
+              :candidate-number-limit 200)
+            helm-locate-command     "locate %s --regex -i %s -e -l 200")
+      (message "Loading \"helm-locate\"")))
+
+
+  
+
+  ;; helm-imenu.el
+  (use-package helm-imenu
+    :disabled
+    ;; :commands helm-imenu
+    :config
+    (message "Loading \"helm-imenu\""))
+
+  
 
   ;; helm-man.el
   (use-package helm-man
@@ -318,20 +326,19 @@
 
   ;; helm-utils.el
   (use-package helm-utils
-    :defer t
     :config
     (message "Loading \"helm-utils\"")
     (setq helm-su-or-sudo "su"))
 
-(use-package helm-adaptive
-  :init
-  :config
-  (message "Loading \"helm-adaptive\"")
-  )
+  (use-package helm-adaptive
+    :init
+    :config
+    (message "Loading \"helm-adaptive\"")
+    )
 
   )
 
-
+
 
 (use-package helm-ag
   :ensure t
@@ -357,67 +364,6 @@
         helm-ag-insert-at-point   'symbol
         helm-ag-use-temp-buffer   t))
 
-
-
-
-
-
-;; helm-company.el
-(use-package helm-company
-  :ensure t
-  :defer t
-  :after company
-  :commands (helm-company)
-  :bind (
-         :map company-mode-map
-         ("C-:" . helm-company)
-
-         :map company-active-map
-         ("C-:" . helm-company)
-         )
-  :config
-  (message "Loading \"helm-company\""))
-
-
-;; helm-descbinds.el
-(use-package helm-descbinds
-  :ensure t
-  :defer t
-  :commands (helm-descbinds)
-  :bind (("C-h b" . helm-descbinds))
-  :config
-  (message "Loading \"helm-descbinds\""))
-
-
-;; helm-describe-modes.el
-(use-package helm-describe-modes
-  :ensure t
-  :defer t
-  :commands (helm-describe-modes)
-  :bind (([remap describe-mode] . helm-describe-modes))     ; "C-h m"
-  :config
-  (message "Loading \"helm-describe-modes\""))
-
-
-(use-package helm-helm-commands
-  :ensure t
-  :defer t
-  :commands (helm-helm-commands)
-  :bind ("<f6> h h" . helm-helm-commands)
-  :config
-  (message "Loading \"helm-helm-commands\""))
-
-
-;; helm-ls-git.el
-(use-package helm-ls-git
-  :ensure t
-  :defer t
-  :commands (helm-ls-git-ls)
-  :bind (("C-c g g" . helm-ls-git-ls))
-  :init
-  :config
-  (message "Loading \"helm-ls-git\"")
-  (require 'helm-ls-git))
 
 
 (use-package swiper-helm
@@ -488,6 +434,65 @@
   (setq helm-swoop-use-line-number-face t)
   )
 
+
+
+
+;; helm-company.el
+(use-package helm-company
+  :ensure t
+  :defer t
+  :after company
+  :commands (helm-company)
+  :bind (
+         :map company-mode-map
+         ("C-:" . helm-company)
+
+         :map company-active-map
+         ("C-:" . helm-company)
+         )
+  :config
+  (message "Loading \"helm-company\""))
+
+
+;; helm-descbinds.el
+(use-package helm-descbinds
+  :ensure t
+  :defer t
+  :commands (helm-descbinds)
+  :bind (("C-h b" . helm-descbinds))
+  :config
+  (message "Loading \"helm-descbinds\""))
+
+
+;; helm-describe-modes.el
+(use-package helm-describe-modes
+  :ensure t
+  :defer t
+  :commands (helm-describe-modes)
+  :bind (([remap describe-mode] . helm-describe-modes))     ; "C-h m"
+  :config
+  (message "Loading \"helm-describe-modes\""))
+
+
+(use-package helm-helm-commands
+  :ensure t
+  :defer t
+  :commands (helm-helm-commands)
+  :bind ("<f6> h h" . helm-helm-commands)
+  :config
+  (message "Loading \"helm-helm-commands\""))
+
+
+;; helm-ls-git.el
+(use-package helm-ls-git
+  :ensure t
+  :defer t
+  :commands (helm-ls-git-ls)
+  :bind (("C-c g g" . helm-ls-git-ls))
+  :init
+  :config
+  (message "Loading \"helm-ls-git\"")
+  (require 'helm-ls-git))
 
 
 
@@ -604,31 +609,3 @@
 ;; C-x c <tab>       helm-lisp-completion-at-point	Provides a list of available functions
 
 ;; C-x c C-:	     helm-eval-expression-with-eldoc	Get instant results for Emacs lisp expressions in the helm buffer
-
-
-
-
-
-;;; Настройки вида (`faces') перенесены в `abunbux-theme', а это оставлено на всякий случай.
-;; (eval-after-load 'helm
-;;   (custom-set-faces
-;;    '(helm-source-header
-;;      ((t (:foreground "white" :background "#511a1a" :weight bold :height 150))))
-;;    '(helm-buffer-file         ((t (:foreground "White"))))
-;;    '(helm-buffer-directory    ((t (:foreground "LimeGreen"))))           ;LimeGreen #32cd32
-;;    '(helm-ff-denied           ((t (:foreground "red" :background nil :weight bold))))
-;;    '(helm-ff-directory        ((t (:foreground "LimeGreen"))))           ;LimeGreen #32cd32
-;;    '(helm-ff-dotted-directory ((t (:foreground "LimeGreen"))))
-;;    '(helm-ff-dotted-symlink-directory   ((((class color) (background dark)) :foreground "#8b0000"))) ;DarkRed
-;;    '(helm-ff-file             ((t (:foreground "gray75" :background nil))))
-;;    '(helm-ff-invalid-symlink            ((((class color) (background dark)) :foreground "black" :background "red")))
-;;    '(helm-ff-prefix           ((t (:foreground "red" :background nil :weight bold))))
-;;    '(helm-ff-symlink          ((t (:foreground "blue" :background "DarkOliveGreen"))))
-;;    '(helm-grep-match          ((t (:foreground "#511a1a"))))
-;;    '(helm-match               ((t (:foreground "#511a1a"))))
-;;    '(helm-match-item          ((t (:foreground "#511a1a" :weight bold))))
-;;    '(helm-non-file-buffer     ((t (:foreground "red"))))
-;;    '(helm-selection           ((t (:background "#575757" :weight bold))))   ;:foreground "DarkCyan" :background "grey34"
-;;    '(helm-swoop-line-number-face ((t (:foreground "GreenYellow"))))
-;;    '(helm-visible-mark        ((t (:foreground "black" :background "goldenrod"))))
-;;    ))

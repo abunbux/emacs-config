@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Mon May 27 11:52:22 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Sunday August 1 20:47:29 EEST 2021>
+;;; Time-stamp: <Последнее обновление -- Saturday February 4 20:36:12 MSK 2023>
 
 
 
@@ -314,6 +314,7 @@ Version 2019-01-18"
 
 
 ;;; dired+.el
+;; файл "dired+.el" находится в директории "lisp"
 (use-package dired+
   :init
   (setq diredp-bind-problematic-terminal-keys nil)
