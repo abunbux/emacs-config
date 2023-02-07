@@ -1,7 +1,7 @@
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Saturday February 4 19:41:52 MSK 2023>
+;;; Time-stamp: <Последнее обновление -- Tuesday February 7 19:28:33 MSK 2023>
 
 
 
@@ -1700,6 +1700,14 @@ With argument, do this that many times."
   (message "Loading \"conf-mode\"")
   (bind-key "RET" 'newline global-map)
   (bind-key "C-j" 'newline-and-indent global-map)
+  )
+
+
+(use-package nginx-mode
+  :ensure t
+  :mode ("/etc/nginx/*" . nginx-mode)
+  :config
+  (message "Loading \"nginx-mode\"")
   )
 
 
