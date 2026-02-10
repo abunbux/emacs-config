@@ -96,7 +96,7 @@ Semantic, and Ansi-Color faces are included -- and much more...")
                        :foreground          "#c5c9d1"
                        :distant-foreground  "orange"
                        :background          "#002b36"
-                       :height              120
+                       :height              160
                        :slant               normal
                        :weight              normal
                        :width               normal))))
@@ -520,13 +520,13 @@ Semantic, and Ansi-Color faces are included -- and much more...")
    `(helm-source-header       ((,class (:foreground "white" :background "#511a1a" :weight bold :height 150))))
    `(helm-buffer-file         ((,class (:foreground "White"))))
    `(helm-buffer-directory    ((,class (:foreground "LimeGreen"))))           ;LimeGreen #32cd32
-   `(helm-ff-denied           ((,class (:foreground "red" :background nil :weight bold))))
+   `(helm-ff-denied           ((,class (:foreground "red" :background "unspecified" :weight bold))))
    `(helm-ff-directory        ((,class (:foreground "LimeGreen"))))           ;LimeGreen #32cd32
    `(helm-ff-dotted-directory ((,class (:foreground "LimeGreen"))))
    `(helm-ff-dotted-symlink-directory   ((,class (:foreground "#8b0000")))) ;DarkRed
-   `(helm-ff-file             ((,class (:foreground "gray75" :background nil))))
+   `(helm-ff-file             ((,class (:foreground "gray75" :background "unspecified"))))
    `(helm-ff-invalid-symlink  ((,class (:foreground "black" :background "red"))))
-   `(helm-ff-prefix           ((,class (:foreground "red" :background nil :weight bold))))
+   `(helm-ff-prefix           ((,class (:foreground "red" :background "unspecified" :weight bold))))
    `(helm-ff-symlink          ((,class (:foreground "blue" :background "DarkOliveGreen"))))
    `(helm-grep-match          ((,class (:foreground "#511a1a"))))
    `(helm-match               ((,class (:foreground "#511a1a"))))
@@ -539,7 +539,7 @@ Semantic, and Ansi-Color faces are included -- and much more...")
 
 
    `(highlight-symbol-face ((,class (:background "#FFFFA0"))))
-   `(hl-line ((,class (:inherit t :background "#3d4753" :foreground nil))))     ; поменял
+   `(hl-line ((,class (:inherit t :background "#3d4753" :foreground "unspecified"))))     ; поменял
    `(hl-tags-face ((,class (:background "#FEFCAE"))))
    `(holiday-face ((,class (:foreground "#777777" :background "#E4EBFE"))))
    `(html-helper-bold-face ((,class (:weight bold :foreground "black"))))
@@ -747,7 +747,7 @@ Semantic, and Ansi-Color faces are included -- and much more...")
 
    `(show-paren-match ((,class ,paren-matched)))                                ; поменял
    `(show-paren-mismatch ((,class ,paren-unmatched)))                           ; поменял
-   '(show-paren-match-expression ((t (:background "#021f26" :foreground nil)))) ; добавил
+   '(show-paren-match-expression ((t (:background "#021f26" :foreground "unspecified")))) ; добавил
 
 
 

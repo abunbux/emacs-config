@@ -1,7 +1,7 @@
 ;;; defun_bind.el -*- coding: utf-8; lexical-binding: t; -*-
 
 ;;; CREATED: <Sun Feb 09 16:18:21 EET 2020>
-;;; Time-stamp: <Последнее обновление -- Tuesday July 5 18:33:21 EEST 2022>
+;;; Time-stamp: <Последнее обновление -- Thursday August 29 19:49:39 MSK 2024>
 
 
 
@@ -310,7 +310,6 @@ Uses `current-date-time-format' for the formatting the date/time."
 (bind-key "e" 'occur-edit-mode occur-mode-map)
 
 
-
 ;;; https://www.reddit.com/r/emacs/comments/4rif8d/emacs_lisp_listnonmatchinglines/
 ;; my/invert-occur () запрашивает regexp и в соседнем буфере 'read-only'
 ;; отображает весь текст за исключением строк, совпавших с regexp.
@@ -335,14 +334,14 @@ Uses `current-date-time-format' for the formatting the date/time."
 
 (defun invert-occur--find (regexp)
   (save-excursion
-    (setf (point) (point-min))
+    (setf (goto-char) (point-min))
     (cl-loop while (< (point) (point-max))
              for line upfrom 1
              for beg = (point)
              for end = (line-end-position)
              unless (re-search-forward regexp end :noerror)
              collect (list line beg end)
-             do (setf (point) (1+ end)))))
+             do (setf (goto-char) (1+ end)))))
 
 (define-derived-mode invert-occur-mode special-mode "ioccur"
   "Major more for displaying `invert-occur' results.")
@@ -363,14 +362,14 @@ Uses `current-date-time-format' for the formatting the date/time."
                do (insert button)
                do (insert-buffer-substring source-buffer beg end)
                do (insert "\n"))
-      (setf (point) (point-min))
+      (setf (goto-char) (point-min))
       (pop-to-buffer (current-buffer)))))
 
 (defun invert-occur--follow ()
   (interactive)
   (let ((marker (get-text-property (point) 'target)))
     (pop-to-buffer (marker-buffer marker))
-    (setf (point) (marker-position marker))))
+    (setf (goto-char) (marker-position marker))))
 
 (bind-key "M-s s i"   'my/invert-occur)
 

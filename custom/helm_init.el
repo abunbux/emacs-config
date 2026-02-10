@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
 ;;; CREATED: <Wed May 22 21:44:32 EEST 2019>
-;;; Time-stamp: <Последнее обновление -- Saturday February 4 20:2:41 MSK 2023>
+;;; Time-stamp: <Последнее обновление -- Saturday February 18 22:15:11 MSK 2023>
 
 
 
@@ -11,7 +11,7 @@
   :ensure t
   :diminish (helm-mode)
   :bind (
-         ;; ("C-x C-b"     . helm-mini)
+         ("C-x C-b"     . helm-mini)
          ("C-x F"       . helm-find-files)
 
          ("M-h b f"     . helm-filtered-bookmarks)

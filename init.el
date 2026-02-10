@@ -1,7 +1,12 @@
+;;; early-init.el --- Emacs config -*- lexical-binding: t; no-byte-compile: t; -*-
+
 ;;; init.el -*- coding: utf-8; lexical-binding: t; -*-
 
+
+
+
 ;;; CREATED: <Fri Feb 01 16:50:27 EET 2019>
-;;; Time-stamp: <Последнее обновление -- Tuesday February 7 19:28:33 MSK 2023>
+;;; Time-stamp: <Последнее обновление -- Tuesday February 10 15:16:3 MSK 2026>
 
 
 
@@ -95,10 +100,10 @@
 
 
 ;;;; ????????????????????? - может убрать?
-(eval-and-compile
-  (setq load-prefer-newer t
-        package--init-file-ensured t)
-  )
+;; (eval-and-compile
+;;   (setq load-prefer-newer t
+;;         package--init-file-ensured t)
+;;   )
 
 
 
@@ -226,13 +231,13 @@
 
 
 
-(use-package benchmark-init
-  :ensure t
-  :config
-  (message "Loading \"benchmark-init\"")
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate)
-  )
+;; (use-package benchmark-init
+  ;; :ensure t
+  ;; :config
+  ;; (message "Loading \"benchmark-init\"")
+  ;; ;; To disable collection of benchmark data after init is done.
+  ;; (add-hook 'after-init-hook 'benchmark-init/deactivate)
+  ;; )
 
 
 
@@ -358,7 +363,7 @@ response as a no."
       ;; ;; (load-theme 'abunbux t)
       (require 'abunbux-theme)
 
-      (message "Loading \"custom_section_gui\"")
+      ;; (message "Loading \"custom_section_gui\"")
       )
   (progn
     (menu-bar-mode       -1)
@@ -432,6 +437,35 @@ response as a no."
 ;; (require 'smart-mode-line_init)
 (require 'doom-modeline_init)
 
+(use-package nerd-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode)
+
+  :config
+  (message "Loading \"nerd-icons-ibuffer\"")
+  ;; Whether display the icons.
+  (setq nerd-icons-ibuffer-icon t)
+
+  ;; Whether display the colorful icons.
+  ;; It respects `nerd-icons-color-icons'.
+  (setq nerd-icons-ibuffer-color-icon t)
+
+  ;; The default icon size in ibuffer.
+  (setq nerd-icons-ibuffer-icon-size 1.0)
+
+  ;; Use human readable file size in ibuffer.
+  (setq  nerd-icons-ibuffer-human-readable-size t)
+
+  ;; A list of ways to display buffer lines with `nerd-icons'.
+  ;; See `ibuffer-formats' for details.
+  nerd-icons-ibuffer-formats
+
+  ;; Slow Rendering
+  ;; If you experience a slow down in performance when rendering multiple icons simultaneously,
+  ;; you can try setting the following variable
+  (setq inhibit-compacting-font-caches t)
+
+  )
 
 
 
@@ -848,7 +882,7 @@ response as a no."
   :hook
   (after-init . global-hl-line-mode)
   :custom-face
-  (hl-line ((((class color) (min-colors 89)) (:inherit t :background "#3d4753" :foreground nil))))
+  (hl-line ((((class color) (min-colors 89)) (:inherit t :background "#3d4753" :foreground "unspecified"))))
   (hl-tags-face ((((class color) (min-colors 89)) (:background "#FEFCAE"))))
 
   :config
@@ -1461,6 +1495,7 @@ With argument, do this that many times."
         company-tooltip-align-annotations t)
 
 
+
   (use-package company-shell
     :defer t
     :ensure t
@@ -1652,15 +1687,16 @@ With argument, do this that many times."
     "Replace text in yasnippet template."
     (yas-expand-snippet (buffer-string) (point-min) (point-max)))
 
+  (define-auto-insert "\\.c$" ["default-C.c" autoinsert-yas-expand])
+  (define-auto-insert "\\.clj$" ["default-clojure.clj" autoinsert-yas-expand])
+  (define-auto-insert "\\.cpp$" ["default-C++.cpp" autoinsert-yas-expand])
   (define-auto-insert "\\.el$" ["default-elisp.el" autoinsert-yas-expand])
   (define-auto-insert "\\.lisp$" ["default-lisp.lisp" autoinsert-yas-expand])
-  (define-auto-insert "\\.clj$" ["default-clojure.clj" autoinsert-yas-expand])
+  (define-auto-insert "\\.html?$" ["default-html.html" autoinsert-yas-expand])
+  (define-auto-insert "\\.org?$" ["default-org.org" autoinsert-yas-expand])
   (define-auto-insert "\\.py$" ["default-python.py" autoinsert-yas-expand])
   (define-auto-insert "\\.rb$" ["default-ruby.rb" autoinsert-yas-expand])
-  (define-auto-insert "\\.c$" ["default-C.c" autoinsert-yas-expand])
-  (define-auto-insert "\\.cpp$" ["default-C++.cpp" autoinsert-yas-expand])
   (define-auto-insert "\\.java$" ["default-Java.java" autoinsert-yas-expand])
-  (define-auto-insert "\\.org?$" ["default-org.org" autoinsert-yas-expand])
 
   (auto-insert-mode 1)
   )
@@ -1705,11 +1741,19 @@ With argument, do this that many times."
 
 (use-package nginx-mode
   :ensure t
+  :defer t
   :mode ("/etc/nginx/*" . nginx-mode)
   :config
   (message "Loading \"nginx-mode\"")
   )
 
+(use-package company-nginx
+  :ensure t
+  :after nginx-mode
+  :config
+  (message "Loading \"company-nginx\"")
+  (add-hook 'nginx-mode-hook (lambda () (add-to-list 'company-backends #'company-nginx)))
+  )
 
 
 ;;; add-to-list ****************************************************

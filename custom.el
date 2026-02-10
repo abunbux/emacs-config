@@ -10,13 +10,21 @@
  '(anzu-replace-to-string-separator " => ")
  '(anzu-search-threshold 1000)
  '(package-selected-packages
-   '(helm-autoloads helm company hide-lines wgrep all-the-icons yasnippet flx ivy visual-regexp-steroids winnow which-key wgrep-helm wgrep-ag web-mode volatile-highlights visual-regexp syslog-mode swiper-helm smartparens quelpa-use-package python-mode phi-grep peep-dired page-break-lines occur-x multiple-cursors move-lines markdown-mode magit loccur interaction-log iedit htmlize highlight-symbol highlight-parentheses highlight helpful help-fns+ helm-swoop helm-ls-git helm-helm-commands helm-describe-modes helm-descbinds helm-company helm-backup helm-ag git-modes free-keys flycheck expand-region emmet-mode elpy elmacro duplicate-thing doom-modeline dired-subtree dired-narrow diminish counsel company-shell company-jedi company-flx benchmark-init backup-each-save anzu amx all-the-icons-ivy all-the-icons-dired ag)))
+   '(ag all-the-icons-dired all-the-icons-ivy amx anzu backup-each-save company-flx company-jedi
+        company-nginx company-shell counsel diminish dired-narrow dired-subtree doom-modeline
+        duplicate-thing elmacro elpy emmet-mode expand-region flycheck free-keys git-modes helm-ag
+        helm-backup helm-company helm-descbinds helm-describe-modes helm-helm-commands helm-ls-git
+        helm-swoop help-fns+ helpful highlight highlight-parentheses highlight-symbol htmlize iedit
+        interaction-log loccur magit markdown-mode move-lines multiple-cursors nerd-icons-ibuffer
+        nginx-mode occur-x page-break-lines peep-dired phi-grep pkg-info plz popup python-mode
+        quelpa-use-package smartparens swiper-helm syslog-mode visual-regexp-steroids
+        volatile-highlights web-mode wgrep-ag wgrep-helm which-key winnow)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 89)) (:inherit nil :stipple nil :inverse-vidppeo nil :box nil :strike-through nil :overline nil :underline nil :foreground "#c5c9d1" :distant-foreground "orange" :background "#002b36" :height 120 :slant normal :weight normal :width normal))))
+ '(default ((((class color) (min-colors 89)) (:inherit nil :stipple nil :inverse-vidppeo nil :box nil :strike-through nil :overline nil :underline nil :foreground "#c5c9d1" :distant-foreground "orange" :background "#002b36" :height 160 :slant normal :weight normal :width normal))))
  '(Info-title-1-face ((((class color) (min-colors 89)) (:height 1.0 :weight bold :overline "#A7A7A7" :foreground "#3C3C3C" :background "#F0F0F0"))))
  '(Info-title-2-face ((((class color) (min-colors 89)) (:height 1.0 :weight bold :overline "#123555" :foreground "#123555" :background "#E5F4FB"))))
  '(Info-title-3-face ((((class color) (min-colors 89)) (:height 1.0 :weight bold :foreground "#005522" :background "#EFFFEF"))))
@@ -201,13 +209,13 @@
  '(header-line ((((class color) (min-colors 89)) (:inherit mode-line :weight bold :underline "black" :overline "black" :box nil :background "#073642" :foreground "#93a1a1"))))
  '(helm-buffer-directory ((((class color) (min-colors 89)) (:foreground "LimeGreen"))))
  '(helm-buffer-file ((((class color) (min-colors 89)) (:foreground "White"))))
- '(helm-ff-denied ((((class color) (min-colors 89)) (:foreground "red" :background nil :weight bold))))
+ '(helm-ff-denied ((((class color) (min-colors 89)) (:foreground "red" :background "unspecified" :weight bold))))
  '(helm-ff-directory ((((class color) (min-colors 89)) (:foreground "LimeGreen"))))
  '(helm-ff-dotted-directory ((((class color) (min-colors 89)) (:foreground "LimeGreen"))))
  '(helm-ff-dotted-symlink-directory ((((class color) (min-colors 89)) (:foreground "#8b0000"))))
- '(helm-ff-file ((((class color) (min-colors 89)) (:foreground "gray75" :background nil))))
+ '(helm-ff-file ((((class color) (min-colors 89)) (:foreground "gray75" :background "unspecified"))))
  '(helm-ff-invalid-symlink ((((class color) (min-colors 89)) (:foreground "black" :background "red"))))
- '(helm-ff-prefix ((((class color) (min-colors 89)) (:foreground "red" :background nil :weight bold))))
+ '(helm-ff-prefix ((((class color) (min-colors 89)) (:foreground "red" :background "unspecified" :weight bold))))
  '(helm-ff-symlink ((((class color) (min-colors 89)) (:foreground "blue" :background "DarkOliveGreen"))))
  '(helm-grep-match ((((class color) (min-colors 89)) (:foreground "#511a1a"))))
  '(helm-match ((((class color) (min-colors 89)) (:foreground "#511a1a"))))
@@ -218,9 +226,8 @@
  '(helm-swoop-line-number-face ((((class color) (min-colors 89)) (:foreground "GreenYellow"))))
  '(helm-visible-mark ((((class color) (min-colors 89)) (:foreground "black" :background "goldenrod"))))
  '(highlight ((((class color) (min-colors 89)) (:underline nil :background "#586e75" :foreground "#002b36"))))
- '(highlight-parentheses-highlight ((t (:weight bold :height 1.0 :background "#1d2014"))) t)
  '(highlight-symbol-face ((((class color) (min-colors 89)) (:background "#FFFFA0"))))
- '(hl-line ((((class color) (min-colors 89)) (:inherit t :background "#3d4753" :foreground nil))))
+ '(hl-line ((((class color) (min-colors 89)) (:inherit t :background "#3d4753" :foreground "unspecified"))))
  '(hl-tags-face ((((class color) (min-colors 89)) (:background "#FEFCAE"))) t)
  '(holiday-face ((((class color) (min-colors 89)) (:foreground "#777777" :background "#E4EBFE"))))
  '(homoglyph ((((class color) (min-colors 89)) (:foreground "#008ED1"))))
@@ -283,7 +290,6 @@
  '(makefile-targets ((((class color) (min-colors 89)) (:weight bold :foreground "blue"))))
  '(match ((((class color) (min-colors 89)) (:weight bold :background "#1f1f1f"))))
  '(message-cited-text ((((class color) (min-colors 89)) (:foreground "#5050B0"))) t)
- '(message-cited-text-1 ((((class color) (min-colors 89)) (:foreground "#5050B0"))))
  '(message-header-cc ((((class color) (min-colors 89)) (:family "Sans Serif" :underline nil :foreground "#006DAF"))))
  '(message-header-name ((((class color) (min-colors 89)) (:family "Sans Serif" :weight normal :foreground "#A3A3A2"))))
  '(message-header-newsgroups ((((class color) (min-colors 89)) (:family "Sans Serif" :foreground "#3399CC"))))
@@ -357,7 +363,7 @@
  '(org-mode-line-clock ((((class color) (min-colors 89)) (:box (:line-width 1 :color "#335EA8") :foreground "black" :background "#EEC900"))))
  '(org-mode-line-clock-overrun ((((class color) (min-colors 89)) (:weight bold :box (:line-width 1 :color "#335EA8") :foreground "white" :background "#FF4040"))))
  '(org-number-of-items ((((class color) (min-colors 89)) (:weight bold :foreground "white" :background "#79BA79"))))
- '(org-property-value ((((class color) (min-colors 89)) (:foreground "#00A000"))) t)
+ '(org-property-value ((((class color) (min-colors 89)) (:foreground "#00A000"))))
  '(org-quote ((((class color) (min-colors 89)) (:slant italic :foreground "dim gray" :background "#FFFFE0"))))
  '(org-scheduled ((((class color) (min-colors 89)) (:foreground "#333333"))))
  '(org-scheduled-previously ((((class color) (min-colors 89)) (:foreground "#F22659"))))
@@ -424,9 +430,9 @@
  '(shell-output-3-face ((((class color) (min-colors 89)) (:foreground "purple"))))
  '(shell-output-face ((((class color) (min-colors 89)) (:foreground "black"))))
  '(show-paren-match ((((class color) (min-colors 89)) (:background "#3e3b32" :foreground "white"))))
- '(show-paren-match-expression ((t (:background "#021f26" :foreground nil))))
+ '(show-paren-match-expression ((t (:background "#021f26" :foreground "unspecified"))))
  '(show-paren-mismatch ((((class color) (min-colors 89)) (:underline "red" :background "navy" :foreground "white"))))
- '(smerge-refined-change ((((class color) (min-colors 89)) (:background "#AAAAFF"))) t)
+ '(smerge-refined-change ((((class color) (min-colors 89)) (:background "#AAAAFF"))))
  '(sml-modeline-end-face ((((class color) (min-colors 89)) (:background "#6BADF6"))))
  '(sml-modeline-vis-face ((((class color) (min-colors 89)) (:background "#1979CA"))))
  '(speedbar-button-face ((((class color) (min-colors 89)) (:foreground "green4"))))

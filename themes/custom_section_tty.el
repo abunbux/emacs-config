@@ -64,7 +64,7 @@
  '(secondary-selection ((((class color) (min-colors 89)) (:background "#204a87"))))
  '(show-paren-match ((t (:weight bold :background "#3e3b32" :foreground "white" :weight bold))))
  '(show-paren-mismatch-face ((t (:background "navy" :foreground "white"))))
- '(show-paren-match-expression ((t (:background "color-16" :inherit default :foreground nil))))
+ '(show-paren-match-expression ((t (:background "color-16" :inherit default :foreground "unspecified"))))
  '(semantic-decoration-on-includes ((((class color) (min-colors 89)) (:underline "#888a85"))))
  '(semantic-decoration-on-private-members-face ((((class color) (min-colors 89)) (:background "#5c3566"))))
  '(semantic-decoration-on-protected-members-face ((((class color) (min-colors 89)) (:background "#8f5902"))))

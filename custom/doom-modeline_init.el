@@ -2,7 +2,7 @@
 ;;; --- insert here summary
 
 ;;; CREATED: <Thu Feb 10 06:00:27 EET 2022>
-;;; Time-stamp: <Последнее обновление -- Thursday February 10 6:1:16 EET 2022>
+;;; Time-stamp: <Последнее обновление -- Tuesday February 10 15:7:35 MSK 2026>
 
 
 
@@ -29,18 +29,25 @@
   (setq doom-modeline-buffer-file-name-style 'buffer-name)
   ;; Отображать ли значки в строке режима.
   ;; При использовании режима сервера в графическом интерфейсе необходимо явно установить значение.
-  (setq doom-modeline-icon (display-graphic-p))
+  ;; (setq doom-modeline-icon (display-graphic-p))
   ;; (setq doom-modeline-major-mode-icon t)
   ;; (setq doom-modeline-major-mode-color-icon t)
   (setq doom-modeline-indent-info t)
   ;; (doom-modeline-set-timemachine-modeline)
 
-  (setq doom-modeline-height 15)
+  ;; How tall the mode-line should be. It's only respected in GUI.
+  ;; If the actual char height is larger, it respects the actual height.
+  (setq doom-modeline-height 20)
 
-  ;; Как указать специфический шрифт:
-  ;; (setq doom-modeline-height 1)
-  ;; (set-face-attribute 'mode-line nil :family "Noto Sans" :height 120)
-  ;; (set-face-attribute 'mode-line-inactive nil :family "Noto Sans" :height 110)
+  ;; How wide the mode-line bar should be. It's only respected in GUI.
+  (setq doom-modeline-bar-width 7)
+
+  ;; Override attributes of the face used for padding.
+  ;; If the space character is very thin in the modeline, for example if a
+  ;; variable pitch font is used there, then segments may appear unusually close.
+  ;; To use the space character from the `fixed-pitch' font family instead, set
+  ;; this variable to `(list :family (face-attribute 'fixed-pitch :family))'.
+  (setq doom-modeline-spc-face-overrides nil)
   )
 
 

@@ -8,7 +8,7 @@
 #+STARTUP:  content
 
 #+DATE: CREATED: <Wed Jul 28 20:20:51 EEST 2021>
-# Time-stamp: <Последнее обновление -- Saturday February 4 20:57:57 MSK 2023>
+# Time-stamp: <Последнее обновление -- Sunday February 5 22:3:10 MSK 2023>
 
 
 * Это мои настройки для ~emacs~.
